@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>نقشه‌ی املاک تجاری — هایپراستار / مایلی</title>
+<style>
+:root,[data-theme="dark"]{
+  --bg:#0B0D10;--panel:#14171C;--panel2:#1B1F26;--line:rgba(255,255,255,.08);
+  --txt:#ECEEF1;--muted:#98A1AB;--accent:#43A047;--danger:#E5484D;--gold:#C9A15C;
+  --ring:#F6F4EF;--shadow:0 10px 30px rgba(0,0,0,.45);}
+[data-theme="light"]{
+  --bg:#F6F4EF;--panel:#FFF;--panel2:#FBFAF7;--line:#E7E2D9;
+  --txt:#1A1D21;--muted:#5B6472;--accent:#1B5E20;--danger:#C62828;--gold:#8A6B2F;
+  --ring:#1A1D21;--shadow:0 10px 30px rgba(31,26,12,.14);}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);
+  font-family:Vazirmatn,"Segoe UI",Tahoma,sans-serif;font-size:13px;overflow:hidden}
+#app{display:flex;height:100vh;height:100dvh;overflow:hidden}
+#side{width:375px;min-width:375px;height:100%;overflow-y:auto;background:var(--panel);
+  border-inline-start:1px solid var(--line);padding:14px}
+#app>main{flex:1;height:100%;min-width:0;overflow:hidden;position:relative}
+#map{width:100%;height:100%}
+#brandPanel{width:320px;min-width:320px;height:100%;overflow:hidden;background:var(--panel);
+  border-inline-end:1px solid var(--line);display:flex;flex-direction:column}
+#brandPanel .bp-head{padding:12px 14px;border-bottom:1px solid var(--line);flex:none}
+#brandPanel .bp-head h2{margin:0 0 6px;font-size:13px}
+#brandPanel .bp-tabs{display:flex;gap:6px}
+#brandPanel .bp-tabs button{flex:1;padding:7px;font-size:11px}
+#brandPanel .bp-tabs button.active{border-color:var(--accent);color:var(--accent);font-weight:700}
+#brandPanel .bp-meta{padding:8px 12px;font-size:10px;color:var(--muted);border-bottom:1px solid var(--line);line-height:1.7}
+#brandList{flex:1;overflow-y:auto;padding:8px}
+.bp-item{padding:9px 10px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;
+  background:var(--bg);cursor:pointer}
+.bp-item:hover{border-color:var(--accent)}
+.bp-item .bp-top{display:flex;align-items:center;gap:8px}
+.bp-item .bp-score{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center;font-weight:900;font-size:14px;color:#fff;flex:none}
+.bp-item .bp-name{font-weight:700;font-size:12px}
+.bp-item .bp-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.bp-item .bp-row{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:5px;font-size:10px;color:var(--muted)}
+.bp-item .bp-row b{color:var(--txt)}
+#brandToggle{inset-inline-end:12px;top:12px}
+h1{font-size:15px;margin:0 0 4px}
+h2{font-size:12px;margin:0 0 8px;color:var(--accent);font-weight:800}
+.sub{color:var(--muted);font-size:11px;margin-bottom:12px;line-height:1.9}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px}
+label{display:block;font-size:11px;color:var(--muted);margin:6px 0 3px}
+input,select,button{width:100%;background:var(--bg);color:var(--txt);border:1px solid var(--line);
+  border-radius:9px;padding:7px 8px;font-family:inherit;font-size:12px}
+button{cursor:pointer}button:hover{border-color:var(--accent)}
+.row{display:flex;gap:6px}.row>*{flex:1}
+.chk{display:flex;align-items:center;gap:6px;margin-top:8px}.chk input{width:auto}
+.kv{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px dashed var(--line)}
+.kv:last-child{border-bottom:0}.kv b{color:var(--accent);font-variant-numeric:tabular-nums}
+.status{font-size:11px;line-height:1.9;color:var(--muted)}.status b{color:var(--txt)}
+.hint{font-size:10px;color:var(--muted);margin-top:6px;line-height:1.8}
+.kpi-row{display:flex;gap:8px;margin-bottom:10px}
+.kpi{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px}
+.kpi .v{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.kpi .l{font-size:10px;color:var(--muted);margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);
+  background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+.chip i{width:9px;height:9px;border-radius:50%}
+.price-legend .bar{height:12px;border-radius:6px;border:1px solid var(--line)}
+.price-legend .labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px}
+.float-btn{position:absolute;top:12px;z-index:1000;width:42px;height:42px;
+  border-radius:14px;border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow);
+  cursor:pointer;font-size:18px;color:var(--txt);display:flex;align-items:center;justify-content:center}
+#themeToggle{inset-inline-start:12px}
+#menuToggle{inset-inline-end:12px;display:none}
+#side-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:none}
+.mm-map{position:relative;overflow:hidden;background:var(--bg);touch-action:none;cursor:grab}
+.mm-map:active{cursor:grabbing}
+.mm-tileroot,.mm-canvas{position:absolute;inset:0}
+.mm-tilepane{position:absolute;inset:0}
+.mm-tile{position:absolute;left:0;top:0;transform-origin:0 0;pointer-events:none;user-select:none}
+[data-theme="dark"] .mm-tile{filter:invert(1) hue-rotate(180deg) saturate(.45) brightness(.88) contrast(.92)}
+.mm-canvas{z-index:2}
+.mm-popup{position:absolute;z-index:5;transform:translate(-50%,-100%);margin-top:-10px;max-width:320px;
+  max-height:min(70vh,520px);overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:10px 12px;padding-top:28px;background:var(--panel);color:var(--txt);border:1px solid var(--line);
+  border-radius:10px;font:12px/1.9 Vazirmatn,Tahoma,sans-serif;box-shadow:var(--shadow);direction:rtl;
+  box-sizing:border-box}
+.mm-popup .mm-close{position:sticky;float:left;inset-inline-start:0;top:0;z-index:2;
+  background:var(--panel);border:0;margin:-4px 0 4px;padding:2px 6px;
+  color:var(--muted);font-size:16px;cursor:pointer;line-height:1}
+.mm-zoom{position:absolute;inset-inline-end:10px;top:64px;z-index:6;display:flex;flex-direction:column;gap:4px}
+.mm-zoom button{width:32px;height:32px;cursor:pointer;background:var(--panel);color:var(--txt);
+  border:1px solid var(--line);border-radius:8px;font:600 17px/1 Tahoma}
+.mm-attr{position:absolute;inset-inline-end:6px;bottom:4px;z-index:6;font:11px Vazirmatn,Tahoma;
+  color:var(--muted);background:var(--panel);padding:2px 6px;border-radius:6px;opacity:.8}
+.popup{font-size:12px;line-height:1.9;direction:rtl;text-align:right;min-width:250px}
+.score-banner{color:#fff;border-radius:12px;padding:10px 12px;margin:8px 0;display:flex;
+  align-items:center;justify-content:space-between;gap:10px}
+.score-banner .n{font-size:30px;font-weight:900;line-height:1}
+.score-banner .t{font-size:11px;opacity:.95;text-align:left}
+.meta{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px;margin:8px 0;font-size:11px;line-height:1.9}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.btn-row button{flex:1;padding:8px;border:none;border-radius:10px;color:#fff;font-size:11px}
+.b-green{background:var(--accent)}.b-red{background:var(--danger)}.b-dark{background:#37474F}
+.comps-drawer{position:absolute;inset-block:0;inset-inline-start:0;width:min(420px,100%);z-index:12;
+  background:var(--panel);border-inline-end:1px solid var(--line);display:flex;flex-direction:column;
+  box-shadow:var(--shadow);transform:translateX(110%);transition:transform .2s ease;pointer-events:none}
+.comps-drawer.open{transform:translateX(0);pointer-events:auto}
+.comps-head{display:flex;align-items:center;gap:8px;padding:12px;border-bottom:1px solid var(--line)}
+.comps-head h2{flex:1;margin:0}.comps-head button{width:32px;flex:none}
+.comps-meta{padding:8px 12px;font-size:11px;color:var(--muted);line-height:1.8;border-bottom:1px solid var(--line)}
+.comps-sort{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.comps-sort button{font-size:10px;padding:4px 6px;flex:none;width:auto}
+#compsList{flex:1;overflow-y:auto;padding:8px}
+.c-item{padding:8px;border:1px solid var(--line);border-radius:8px;margin-bottom:6px;background:var(--bg);cursor:pointer}
+.c-item:hover{border-color:var(--accent)}
+.c-item .t{font-weight:700;font-size:12px}
+.c-item .s{font-size:11px;color:var(--muted);margin-top:2px}
+.c-item .p{font-size:11px;margin-top:4px;color:var(--accent)}
+.chart-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:2000;
+  align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.chart-modal-content{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  width:min(1250px,95vw);max-height:92vh;overflow:auto;padding:18px;position:relative;box-shadow:var(--shadow)}
+.chart-modal-close{position:absolute;top:12px;left:12px;width:34px;height:34px;border-radius:50%;
+  background:var(--danger);color:#fff;border:none;font-size:16px;cursor:pointer}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.chart-box{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.chart-box canvas{width:100%;height:320px;display:block}
+#compareView{display:none;min-height:100vh;padding:24px;direction:rtl;background:var(--bg);color:var(--txt)}
+.compare-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.compare-title{margin:0;color:var(--accent)}
+.compare-summary{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:16px;line-height:2}
+.compare-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.compare-controls select{width:180px}
+.compare-table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.compare-table th{background:var(--accent);color:#fff;padding:12px 10px;text-align:right;font-size:12px}
+.compare-table td{padding:12px 10px;border-top:1px solid var(--line);vertical-align:top}
+.badge{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;color:#fff}
+a{color:var(--accent)}
+
+/* =========== Responsive: موبایل و تبلت =========== */
+@media (max-width: 820px){
+  #app{flex-direction:column}
+  #side{position:fixed;inset-block:0;inset-inline-start:0;z-index:500;
+    transform:translateX(110%);transition:transform .25s ease;
+    width:85%;max-width:360px;border-inline-start:none;border-inline-end:1px solid var(--line);
+    box-shadow:var(--shadow)}
+  #side.open{transform:translateX(0)}
+  #menuToggle{display:flex}
+  #side-overlay.open{display:block}
+  #app>main{flex:1;width:100%}
+  #brandPanel{position:fixed;inset-block:0;inset-inline-end:0;z-index:500;
+    width:85%;max-width:340px;transform:translateX(-110%);transition:transform .25s ease;box-shadow:var(--shadow)}
+  #brandPanel.open{transform:translateX(0)}
+  .chart-grid{grid-template-columns:1fr}
+  .chart-box canvas{height:240px}
+  .mm-popup{max-width:min(300px,85vw)}
+  .popup{min-width:200px}
+  .comps-drawer{width:100%}
+  .compare-controls select{width:140px}
+  .compare-table{font-size:11px}
+  .compare-table th,.compare-table td{padding:8px 6px}
+}
+@media (max-width: 480px){
+  .kpi-row{flex-wrap:wrap}
+  .kpi{flex:1 1 40%}
+  .btn-row{flex-direction:column}
+  .btn-row button{flex:none;width:100%}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="side">
+    <h1>🏪 نقشه‌ی مقایسه‌ی اجاره‌ی تجاری</h1>
+    <div class="sub">داده‌ی آگهی‌ها از خروجی <code>divar_scraper.py</code> (<code>data.json</code>) خوانده می‌شود. ودیعه و اجاره‌ی ماهانه جداگانه با آگهی‌های هم‌محله مقایسه می‌شوند؛ هیچ مبلغی با هم جمع نمی‌شود.</div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="v" id="kCount">—</div><div class="l">آگهی فیلترشده</div></div>
+      <div class="kpi"><div class="v" id="kDep">—</div><div class="l">میانه ودیعه/متر</div></div>
+      <div class="kpi"><div class="v" id="kRent">—</div><div class="l">میانه اجاره/متر</div></div>
+    </div>
+    <div class="card">
+      <h2>منبع داده</h2>
+      <div id="dataStatus" class="status">در حال بارگذاری…</div>
+      <div class="row" style="margin-top:8px">
+        <button onclick="loadAll()">بازخوانی (همه)</button>
+        <button onclick="document.getElementById('listingsFile').click()">فایل آگهی‌ها</button>
+      </div>
+      <input type="file" id="listingsFile" accept=".json,.csv" style="display:none">
+      <div class="hint">دکمه‌ی «بازخوانی» هر ۴ فایل (آگهی‌ها + هایپراستار + مایلی + تاریخچه) را با هم می‌گیرد. URLها را با پارامتر آدرس هم می‌توان داد: <code>?listings=…&hyperstar=…&myli=…&history=…</code></div>
+    </div>
+    <div class="card">
+      <h2>روند زمانی قیمت</h2>
+      <div id="historyStatus" class="status">داده‌ی روندی بارگذاری نشده.</div>
+      <button onclick="document.getElementById('historyFile').click()">بارگذاری history.json</button>
+      <input type="file" id="historyFile" accept=".json" style="display:none">
+    </div>
+    <div class="card">
+      <h2>فیلترها</h2>
+      <label>جست‌وجو در عنوان</label><input id="q" placeholder="مثلاً زعفرانیه">
+      <div class="row">
+        <div><label>استان</label><select id="fProv"><option value="">همه</option></select></div>
+        <div><label>شهر</label><select id="fCity"><option value="">همه</option></select></div>
+      </div>
+      <label>محله</label><select id="fNbh"><option value="">همه‌ی محله‌ها</option></select>
+      <div class="row">
+        <div><label>کاربری</label><select id="fCat"><option value="">همه</option>
+          <option value="commercial">تجاری</option><option value="residential">مسکونی</option></select></div>
+        <div><label>نوع معامله</label><select id="fDeal"><option value="">همه</option>
+          <option value="rent">رهن و اجاره</option><option value="sale">فروش</option></select></div>
+      </div>
+      <div class="row">
+        <div><label>متراژ از</label><input id="fMinA" type="number" min="0" placeholder="0"></div>
+        <div><label>تا</label><input id="fMaxA" type="number" min="0" placeholder="∞"></div>
+      </div>
+      <div class="chk"><input type="checkbox" id="fOutlier" checked><label for="fOutlier" style="margin:0">حذف داده‌های پرت (IQR)</label></div>
+      <div class="chk"><input type="checkbox" id="fEst"><label for="fEst" style="margin:0">حذف آگهی‌های با موقعیت تقریبی</label></div>
+      <div class="chk"><input type="checkbox" id="fColor" checked><label for="fColor" style="margin:0">رنگ‌بندی بر اساس قیمت/متر</label></div>
+      <label>نمای نقشه</label>
+      <div class="row">
+        <button onclick="setView('dots')" id="vDots">نقاط</button>
+        <button onclick="setView('heat')" id="vHeat">نقشه حرارتی</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>جست‌وجوی قیمت ملک</h2>
+      <div class="sub" style="margin:0 0 6px">قیمت یک ملک مشخص را با میانه‌ی بازار همان محله مقایسه کنید — مستقل از فیلترهای بالا.</div>
+      <div class="row">
+        <div><label>استان</label><select id="spProv"><option value="">— انتخاب کنید —</option></select></div>
+        <div><label>شهرستان</label><select id="spCity"><option value="">— ابتدا استان —</option></select></div>
+      </div>
+      <label>محله</label><select id="spNbh"><option value="">همه‌ی محله‌ها</option></select>
+      <div class="row">
+        <div><label>کاربری</label><select id="spCat"><option value="commercial">تجاری</option><option value="residential">مسکونی</option></select></div>
+        <div><label>متراژ (متر)</label><input id="spArea" type="number" min="0"></div>
+      </div>
+      <div class="row">
+        <div><label>اجاره (تومان)</label><input id="spRent" type="number" min="0"></div>
+        <div><label>ودیعه (تومان)</label><input id="spDep" type="number" min="0"></div>
+      </div>
+      <button style="margin-top:8px" onclick="runPropertySearch()">جست‌وجو</button>
+      <div id="spResult" class="status" style="margin-top:8px"></div>
+    </div>
+    <div class="card">
+      <h2>خلاصه‌ی بازار (فیلتر فعلی)</h2>
+      <div id="marketSummary" class="status">—</div>
+    </div>
+    <div class="card">
+      <h2>هایپراستار</h2>
+      <div class="row">
+        <button onclick="toggleBrand('hyperstar')" id="btn_hyperstar">نمایش/مخفی</button>
+        <button onclick="document.getElementById('brandFile_hyperstar').click()">بارگذاری فایل</button>
+        <button onclick="downloadTemplate()">قالب CSV</button>
+      </div>
+      <input type="file" id="brandFile_hyperstar" accept=".csv,.json" style="display:none">
+      <h2 style="margin-top:10px">مایلی</h2>
+      <div class="row">
+        <button onclick="toggleBrand('myli')" id="btn_myli">نمایش/مخفی</button>
+        <button onclick="document.getElementById('brandFile_myli').click()">بارگذاری فایل</button>
+        <button onclick="downloadTemplate()">قالب CSV</button>
+      </div>
+      <input type="file" id="brandFile_myli" accept=".csv,.json" style="display:none">
+    </div>
+    <div class="card">
+      <h2>راهنمای رنگ فروشگاه‌ها</h2>
+      <div class="chips">
+        <span class="chip"><i style="background:#2F9E77"></i>پایین‌تر از بازار</span>
+        <span class="chip"><i style="background:#8A93A0"></i>مطابق بازار</span>
+        <span class="chip"><i style="background:#D2645C"></i>بالاتر از بازار</span>
+        <span class="chip"><i style="background:#C9A15C"></i>ساختار متفاوت</span>
+        <span class="chip"><i style="background:#5B6472"></i>داده کم</span>
+      </div>
+      <div class="hint">🏬 نشان فروشگاهی = هایپراستار · 🌸 نشان گلی = مایلی · ● دایره‌ی ساده = آگهی دیوار</div>
+      <h2 style="margin-top:12px">رنگ آگهی‌ها (قیمت/متر)</h2>
+      <div class="price-legend">
+        <div class="bar" id="priceLegendBar"></div>
+        <div class="labels"><span id="priceLegendMin">کم</span><span id="priceLegendMid">میانه</span><span id="priceLegendMax">زیاد</span></div>
+      </div>
+    </div>
+  </aside>
+  <main>
+    <div id="map"></div>
+    <button id="themeToggle" class="float-btn" title="تغییر تم">☀️</button>
+    <button id="menuToggle" class="float-btn" title="منو">☰</button>
+    <button id="brandToggle" class="float-btn" title="فروشگاه‌ها" onclick="toggleBrandPanel()">📋</button>
+    <div id="side-overlay"></div>
+    <aside id="compsDrawer" class="comps-drawer" aria-hidden="true">
+      <div class="comps-head"><h2 id="compsTitle">آگهی‌های مقایسه‌شده</h2>
+        <button onclick="closeStoreComps()">×</button></div>
+      <div id="compsMeta" class="comps-meta"></div>
+      <div class="comps-sort">
+        <button onclick="sortComps('dist')">فاصله</button>
+        <button onclick="sortComps('rent')">اجاره/متر</button>
+        <button onclick="sortComps('dep')">ودیعه/متر</button>
+        <button onclick="sortComps('area')">متراژ</button>
+      </div>
+      <div id="compsList"></div>
+    </aside>
+  </main>
+  <aside id="brandPanel">
+    <div class="bp-head">
+      <h2>📋 فروشگاه‌ها</h2>
+      <div class="bp-tabs">
+        <button type="button" class="active" id="bpTabMyli" onclick="setBrandTab('myli')">🌸 مایلی</button>
+        <button type="button" id="bpTabHyperstar" onclick="setBrandTab('hyperstar')">🏬 هایپراستار</button>
+      </div>
+    </div>
+    <div class="bp-meta" id="brandMeta">بعد از بارگذاری فروشگاه‌ها، امتیازها اینجا دیده می‌شود.</div>
+    <div id="brandList"></div>
+  </aside>
+</div>
+<div id="compareView"></div>
+<div id="chartModal" class="chart-modal">
+  <div class="chart-modal-content">
+    <button class="chart-modal-close" onclick="closeChartModal()">×</button>
+    <h2 id="chartModalTitle" style="color:var(--accent);margin-top:0">نمودارها</h2>
+    <div class="chart-grid">
+      <div><h3 style="margin-bottom:8px">توزیع اجاره/متر آگهی‌های مقایسه</h3>
+        <div class="chart-box"><canvas id="adsCanvas"></canvas></div></div>
+      <div><h3 style="margin-bottom:8px">روند تاریخی اجاره/متر محله</h3>
+        <div class="chart-box"><canvas id="historyCanvas"></canvas></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ========== رندرر داخلی نقشه + pinch-to-zoom ========== */
+(function(global){
+var TILE=256,MAX_LAT=85.05112878;
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function project(lat,lng,z){var s=TILE*Math.pow(2,z);var la=clamp(lat,-MAX_LAT,MAX_LAT)*Math.PI/180;
+ return{x:(lng+180)/360*s,y:(1-Math.log(Math.tan(la)+1/Math.cos(la))/Math.PI)/2*s};}
+function unproject(x,y,z){var s=TILE*Math.pow(2,z);var n=Math.PI-2*Math.PI*y/s;
+ return{lat:180/Math.PI*Math.atan(.5*(Math.exp(n)-Math.exp(-n))),lng:x/s*360-180};}
+function Layer(){}
+Layer.prototype.addTo=function(m){m.addLayer(this);return this;};
+Layer.prototype._onAdd=function(m){this._map=m;};
+Layer.prototype._onRemove=function(){this._map=null;};
+Layer.prototype._sync=function(){};Layer.prototype._drawOn=function(){};Layer.prototype._hit=function(){return null;};
+function TileLayer(url,opts){this._url=url;this.options=opts||{};this._tiles={};}
+TileLayer.prototype=Object.create(Layer.prototype);
+TileLayer.prototype._onAdd=function(m){Layer.prototype._onAdd.call(this,m);
+ this._pane=document.createElement('div');this._pane.className='mm-tilepane';
+ m._tileRoot.appendChild(this._pane);m._setAttribution(this.options.attribution);this._sync();};
+TileLayer.prototype._onRemove=function(){if(this._pane)this._pane.remove();this._tiles={};Layer.prototype._onRemove.call(this);};
+TileLayer.prototype._tileUrl=function(x,y,z){var s=this.options.subdomains||'abc';
+ return this._url.replace('{s}',s[(x+y)%s.length]).replace('{z}',z).replace('{x}',x).replace('{y}',y);};
+TileLayer.prototype._sync=function(){var m=this._map;if(!m||!this._pane)return;
+ var z=Math.min(m._zoom,this.options.maxZoom||19),scale=Math.pow(2,m._zoom-z),size=TILE*scale,n=Math.pow(2,z),o=m._origin;
+ var x0=Math.floor(o.x/size),x1=Math.floor((o.x+m._size.w)/size),y0=Math.floor(o.y/size),y1=Math.floor((o.y+m._size.h)/size);
+ var keep={};
+ for(var x=x0;x<=x1;x++)for(var y=y0;y<=y1;y++){if(y<0||y>=n)continue;
+  var wx=((x%n)+n)%n,key=z+'|'+wx+'|'+y;keep[key]=1;
+  var img=this._tiles[key];
+  if(!img){img=document.createElement('img');img.className='mm-tile';img.decoding='async';
+   img.addEventListener('error',function(){this.style.visibility='hidden';});
+   img.src=this._tileUrl(wx,y,z);this._pane.appendChild(img);this._tiles[key]=img;}
+  img.style.width=img.style.height=size+'px';
+  img.style.transform='translate3d('+(x*size-o.x)+'px,'+(y*size-o.y)+'px,0)';}
+ for(var k in this._tiles){if(!keep[k]){this._tiles[k].remove();delete this._tiles[k];}}};
+TileLayer.prototype.bringToBack=function(){if(this._pane&&this._pane.parentNode)this._pane.parentNode.prepend(this._pane);return this;};
+function CircleMarker(ll,opts){this._ll={lat:ll[0],lng:ll[1]};this.options=opts||{};}
+CircleMarker.prototype=Object.create(Layer.prototype);
+CircleMarker.prototype.bindPopup=function(html){this._popup=html;return this;};
+CircleMarker.prototype.on=function(ev,fn){(this._ev=this._ev||{})[ev]=fn;return this;};
+CircleMarker.prototype._drawOn=function(ctx,map){var p=map.latLngToPixel(this._ll.lat,this._ll.lng);this._px=p;
+ var r=this.options.radius||6;if(p.x<-r||p.y<-r||p.x>map._size.w+r||p.y>map._size.h+r)return;
+ ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283185);ctx.globalAlpha=this.options.fillOpacity==null?.8:this.options.fillOpacity;
+ ctx.fillStyle=this.options.fillColor||this.options.color;ctx.fill();ctx.globalAlpha=1;
+ ctx.lineWidth=this.options.weight||1;ctx.strokeStyle=this.options.color;ctx.stroke();};
+CircleMarker.prototype._hit=function(x,y){var p=this._px;if(!p)return null;var r=(this.options.radius||6)+4;
+ return((x-p.x)*(x-p.x)+(y-p.y)*(y-p.y)<=r*r)?this:null;};
+function BrandMarker(ll,opts){CircleMarker.call(this,ll,opts);}
+BrandMarker.prototype=Object.create(CircleMarker.prototype);
+BrandMarker.prototype._drawOn=function(ctx,map){var p=map.latLngToPixel(this._ll.lat,this._ll.lng);this._px=p;
+ var r=this.options.radius||12;if(p.x<-r*2||p.y<-r*2||p.x>map._size.w+r*2||p.y>map._size.h+r*2)return;
+ var cx=p.x,cy=p.y-r*.15;
+ ctx.beginPath();ctx.arc(cx,cy,r,0,6.283185);ctx.fillStyle=this.options.fillColor||this.options.color;ctx.fill();
+ ctx.beginPath();ctx.moveTo(cx-r*.55,cy+r*.62);ctx.lineTo(cx,cy+r*1.55);ctx.lineTo(cx+r*.55,cy+r*.62);ctx.closePath();ctx.fill();
+ var ring=(getComputedStyle(document.documentElement).getPropertyValue('--ring')||'#fff').trim();
+ ctx.lineWidth=this.options.weight||2;ctx.strokeStyle=ring;
+ if(this.options.dashed)ctx.setLineDash([4,3]);
+ ctx.beginPath();ctx.arc(cx,cy,r,0,6.283185);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='#fff';ctx.strokeStyle='#fff';ctx.lineWidth=Math.max(1.4,r*.11);
+ if(this.options.icon==='flower'){var pr=r*.24,dist=r*.34;
+  for(var k=0;k<5;k++){var a=(Math.PI*2/5)*k-Math.PI/2;
+   ctx.beginPath();ctx.arc(cx+Math.cos(a)*dist,cy+Math.sin(a)*dist,pr,0,6.283185);ctx.fill();}
+  ctx.beginPath();ctx.arc(cx,cy,pr*.85,0,6.283185);ctx.fillStyle=this.options.color;ctx.fill();}
+ else{var w=r*.95,h=r*.6,roofH=r*.42,top=cy-r*.42;
+  ctx.beginPath();ctx.moveTo(cx-w/2,top+roofH);ctx.lineTo(cx,top);ctx.lineTo(cx+w/2,top+roofH);ctx.stroke();
+  ctx.strokeRect(cx-w/2,top+roofH,w,h);
+  ctx.beginPath();ctx.moveTo(cx-r*.12,top+roofH+h);ctx.lineTo(cx-r*.12,top+roofH+h*.45);
+  ctx.lineTo(cx+r*.12,top+roofH+h*.45);ctx.lineTo(cx+r*.12,top+roofH+h);ctx.stroke();}};
+BrandMarker.prototype._hit=function(x,y){var p=this._px;if(!p)return null;
+ var cy=p.y-(this.options.radius||12)*.15,r=(this.options.radius||12)+5;
+ return((x-p.x)*(x-p.x)+(y-cy)*(y-cy)<=r*r)?this:null;};
+function LayerGroup(){this._children=[];}
+LayerGroup.prototype=Object.create(Layer.prototype);
+LayerGroup.prototype.addLayer=function(l){this._children.push(l);if(this._map){l._onAdd(this._map);this._map._draw();}return this;};
+LayerGroup.prototype.clearLayers=function(){this._children.forEach(function(c){c._onRemove();});this._children=[];if(this._map)this._map._draw();return this;};
+LayerGroup.prototype._onAdd=function(m){Layer.prototype._onAdd.call(this,m);this._children.forEach(function(c){c._onAdd(m);});};
+LayerGroup.prototype._onRemove=function(){this._children.forEach(function(c){c._onRemove();});Layer.prototype._onRemove.call(this);};
+LayerGroup.prototype._drawOn=function(ctx,map){this._children.forEach(function(c){c._drawOn(ctx,map);});};
+LayerGroup.prototype._hit=function(x,y){for(var i=this._children.length-1;i>=0;i--){var h=this._children[i]._hit(x,y);if(h)return h;}return null;};
+function DotsLayer(){this._pts=[];}
+DotsLayer.prototype=Object.create(Layer.prototype);
+DotsLayer.prototype.setPoints=function(pts){this._pts=pts||[];if(this._map)this._map._draw();return this;};
+DotsLayer.prototype.clearLayers=function(){this._pts=[];if(this._map)this._map._draw();return this;};
+DotsLayer.prototype._drawOn=function(ctx,map){var w=map._size.w,h=map._size.h;
+ for(var i=0;i<this._pts.length;i++){var d=this._pts[i];var p=map.latLngToPixel(d.lat,d.lng);d._px=p;
+  var r=d.radius||5;if(p.x<-r||p.y<-r||p.x>w+r||p.y>h+r)continue;
+  ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283185);
+  ctx.globalAlpha=d.fillOpacity==null?.85:d.fillOpacity;ctx.fillStyle=d.fillColor||d.color||'#2fb6a3';ctx.fill();
+  ctx.globalAlpha=1;ctx.lineWidth=1;ctx.strokeStyle=d.color||'#07171a';ctx.stroke();}};
+DotsLayer.prototype._hit=function(x,y){for(var i=this._pts.length-1;i>=0;i--){var d=this._pts[i];var p=d._px;if(!p)continue;
+ var r=(d.radius||5)+4;if((x-p.x)*(x-p.x)+(y-p.y)*(y-p.y)<=r*r)return{_ll:{lat:d.lat,lng:d.lng},_popup:d.popup,_ev:d._ev};}return null;};
+function HeatLayer(){this._pts=[];}
+HeatLayer.prototype=Object.create(Layer.prototype);
+HeatLayer.prototype.setPoints=function(pts){this._pts=pts||[];if(this._map)this._map._draw();return this;};
+HeatLayer.prototype.clearLayers=function(){this._pts=[];if(this._map)this._map._draw();return this;};
+HeatLayer.prototype._drawOn=function(ctx,map){
+ for(var i=0;i<this._pts.length;i++){var d=this._pts[i];var p=map.latLngToPixel(d.lat,d.lng);
+  var r=18+d.t*22;if(p.x<-r||p.y<-r||p.x>map._size.w+r||p.y>map._size.h+r)continue;
+  var g=ctx.createRadialGradient(p.x,p.y,1,p.x,p.y,r);
+  var col=d.t>.66?'226,102,75':d.t>.33?'201,161,92':'47,182,163';
+  g.addColorStop(0,'rgba('+col+',.5)');g.addColorStop(1,'rgba('+col+',0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283185);ctx.fill();}};
+function MMap(el){this._el=typeof el==='string'?document.getElementById(el):el;
+ this._el.classList.add('mm-map');this._el.tabIndex=0;
+ this._tileRoot=document.createElement('div');this._tileRoot.className='mm-tileroot';
+ this._canvas=document.createElement('canvas');this._canvas.className='mm-canvas';
+ this._popupEl=document.createElement('div');this._popupEl.className='mm-popup';this._popupEl.hidden=true;
+ this._attrEl=document.createElement('div');this._attrEl.className='mm-attr';
+ this._el.appendChild(this._tileRoot);this._el.appendChild(this._canvas);
+ this._el.appendChild(this._popupEl);this._el.appendChild(this._attrEl);this._el.appendChild(this._zoomControl());
+ this._layers=[];this._handlers={};this._zoom=12;this._center={lat:35.735,lng:51.42};
+ this._minZoom=3;this._maxZoom=19;this._dragging=false;
+ var self=this;this._bind();this._resize();
+ if(global.ResizeObserver)new ResizeObserver(function(){self._resize();}).observe(this._el);}
+MMap.prototype.setView=function(ll,z){this._center={lat:ll[0],lng:ll[1]};if(z!=null)this._zoom=clamp(z,this._minZoom,this._maxZoom);this._update();return this;};
+MMap.prototype.setZoom=function(z){return this.setView([this._center.lat,this._center.lng],z);};
+MMap.prototype.flyTo=function(ll,z){return this.setView(ll,z);};
+MMap.prototype.getZoom=function(){return this._zoom;};
+MMap.prototype.getCenter=function(){return this._center;};
+MMap.prototype.addLayer=function(l){if(this._layers.indexOf(l)<0){this._layers.push(l);l._onAdd(this);}this._update();return this;};
+MMap.prototype.removeLayer=function(l){var i=this._layers.indexOf(l);if(i>=0){this._layers.splice(i,1);l._onRemove();}this._update();return this;};
+MMap.prototype.hasLayer=function(l){return !!l&&this._layers.indexOf(l)>=0;};
+MMap.prototype.on=function(ev,fn){(this._handlers[ev]=this._handlers[ev]||[]).push(fn);return this;};
+MMap.prototype.invalidateSize=function(){this._resize();return this;};
+MMap.prototype.closePopup=function(){this._popupEl.hidden=true;return this;};
+MMap.prototype.fitBounds=function(b){if(!b||!b.length)return this;var pad=28;
+ var s=Math.min(b[0][0],b[1][0]),n=Math.max(b[0][0],b[1][0]),w=Math.min(b[0][1],b[1][1]),e=Math.max(b[0][1],b[1][1]);
+ var z=this._maxZoom;for(;z>this._minZoom;z--){var a=project(n,w,z),c=project(s,e,z);
+  if(Math.abs(c.x-a.x)<=this._size.w-2*pad&&Math.abs(c.y-a.y)<=this._size.h-2*pad)break;}
+ return this.setView([(s+n)/2,(w+e)/2],z);};
+MMap.prototype.latLngToPixel=function(lat,lng){var p=project(lat,lng,this._zoom);return{x:p.x-this._origin.x,y:p.y-this._origin.y};};
+MMap.prototype._setAttribution=function(t){if(t)this._attrEl.textContent=t;};
+MMap.prototype._zoomControl=function(){var wrap=document.createElement('div');wrap.className='mm-zoom';var self=this;
+ [['+',1],['−',-1]].forEach(function(pair){var b=document.createElement('button');b.type='button';b.textContent=pair[0];
+  b.addEventListener('click',function(e){e.stopPropagation();self.setZoom(self._zoom+pair[1]);});wrap.appendChild(b);});
+ return wrap;};
+MMap.prototype._resize=function(){var r=this._el.getBoundingClientRect();
+ this._size={w:Math.max(1,Math.round(r.width)),h:Math.max(1,Math.round(r.height))};
+ var dpr=Math.min(global.devicePixelRatio||1,2);
+ this._canvas.width=this._size.w*dpr;this._canvas.height=this._size.h*dpr;
+ this._canvas.style.width=this._size.w+'px';this._canvas.style.height=this._size.h+'px';
+ this._ctx=this._canvas.getContext('2d');this._ctx.setTransform(dpr,0,0,dpr,0,0);this._update();};
+MMap.prototype._update=function(){var c=project(this._center.lat,this._center.lng,this._zoom);
+ this._origin={x:c.x-this._size.w/2,y:c.y-this._size.h/2};
+ this._layers.forEach(function(l){l._sync();});this._draw();};
+MMap.prototype._draw=function(){if(!this._ctx)return;this._ctx.clearRect(0,0,this._size.w,this._size.h);
+ var ctx=this._ctx,self=this;this._layers.forEach(function(l){l._drawOn(ctx,self);});};
+MMap.prototype._fire=function(ev,data){(this._handlers[ev]||[]).forEach(function(f){f(data);});};
+MMap.prototype._zoomAround=function(px,dz){var nz=clamp(Math.round(this._zoom+dz),this._minZoom,this._maxZoom);
+ if(nz===this._zoom)return;
+ var ll=unproject(this._origin.x+px.x,this._origin.y+px.y,this._zoom);
+ var p=project(ll.lat,ll.lng,nz);var o={x:p.x-px.x,y:p.y-px.y};
+ this._zoom=nz;this._center=unproject(o.x+this._size.w/2,o.y+this._size.h/2,nz);
+ this._update();this.closePopup();this._fire('zoomend');};
+MMap.prototype._openPopup=function(html,ll){if(typeof html==='function')html=html();if(!html)return;
+ var p=this.latLngToPixel(ll.lat,ll.lng);var self=this;
+ this._popupEl.innerHTML='<button type="button" class="mm-close">×</button><div>'+html+'</div>';
+ this._popupEl.querySelector('.mm-close').addEventListener('click',function(){self.closePopup();});
+ this._popupEl.hidden=false;
+ this._popupEl.style.left=p.x+'px';this._popupEl.style.top=p.y+'px';
+ this._popupEl.style.transform='translate(-50%,-100%)';
+ /* نگه داشتن پاپ‌آپ داخل کادر نقشه */
+ requestAnimationFrame(function(){
+  try{
+   var el=self._popupEl,sz=self._size||{w:800,h:600};
+   var r=el.getBoundingClientRect(),mr=self._el.getBoundingClientRect();
+   var dx=0,dy=0;
+   if(r.left<mr.left+8)dx=(mr.left+8)-r.left;
+   if(r.right>mr.right-8)dx-=(r.right-(mr.right-8));
+   if(r.top<mr.top+8)dy=(mr.top+8)-r.top;
+   if(r.bottom>mr.bottom-8)dy-=(r.bottom-(mr.bottom-8));
+   el.style.left=(p.x+dx)+'px';
+   el.style.top=(p.y+dy)+'px';
+  }catch(e){}
+ });
+};
+MMap.prototype._bind=function(){var el=this._el,self=this,drag=null;
+ /* ---- pointer (drag + click) ---- */
+ el.addEventListener('pointerdown',function(e){
+  if(e.target.closest('.mm-zoom,.mm-popup'))return;
+  if(e.pointerType==='touch')return; /* touch را جداگانه مدیریت می‌کنیم */
+  drag={x:e.clientX,y:e.clientY,ox:self._origin.x,oy:self._origin.y,moved:0};
+  self._dragging=true;el.setPointerCapture(e.pointerId);});
+ el.addEventListener('pointermove',function(e){
+  if(!drag||e.pointerType==='touch')return;
+  var dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved=Math.max(drag.moved,Math.abs(dx)+Math.abs(dy));
+  var o={x:drag.ox-dx,y:drag.oy-dy};
+  self._center=unproject(o.x+self._size.w/2,o.y+self._size.h/2,self._zoom);self._update();});
+ el.addEventListener('pointerup',function(e){
+  if(e.pointerType==='touch')return;
+  var wasDrag=drag&&drag.moved>4;drag=null;self._dragging=false;self._draw();
+  if(wasDrag){self._fire('moveend');return;}
+  if(e.target.closest('.mm-zoom,.mm-popup'))return;
+  var r=el.getBoundingClientRect();var x=e.clientX-r.left,y=e.clientY-r.top;
+  self._hitClick(x,y);});
+ /* ---- wheel zoom ---- */
+ el.addEventListener('wheel',function(e){e.preventDefault();
+  var r=el.getBoundingClientRect();
+  self._zoomAround({x:e.clientX-r.left,y:e.clientY-r.top},e.deltaY<0?1:-1);},{passive:false});
+ /* ---- dblclick zoom ---- */
+ el.addEventListener('dblclick',function(e){var r=el.getBoundingClientRect();
+  self._zoomAround({x:e.clientX-r.left,y:e.clientY-r.top},1);});
+ /* ---- TOUCH: drag + pinch-to-zoom ---- */
+ var touch={drag:null,pinch:null};
+ el.addEventListener('touchstart',function(e){
+  if(e.target.closest('.mm-zoom,.mm-popup'))return;
+  if(e.touches.length===1){
+   var t=e.touches[0];var r=el.getBoundingClientRect();
+   touch.drag={x:t.clientX,y:t.clientY,ox:self._origin.x,oy:self._origin.y,
+    mx:t.clientX-r.left,my:t.clientY-r.top,moved:0};
+   touch.pinch=null;
+  }else if(e.touches.length===2){
+   var a=e.touches[0],b=e.touches[1];
+   var r=el.getBoundingClientRect();
+   touch.drag=null;
+   touch.pinch={d0:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),
+    z0:self._zoom,
+    cx:(a.clientX+b.clientX)/2-r.left,
+    cy:(a.clientY+b.clientY)/2-r.top};
+   e.preventDefault();}
+ },{passive:false});
+ el.addEventListener('touchmove',function(e){
+  if(e.target.closest('.mm-zoom,.mm-popup'))return;
+  if(touch.pinch&&e.touches.length===2){
+   var a=e.touches[0],b=e.touches[1];
+   var d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);
+   var ratio=d/touch.pinch.d0;
+   var dz=Math.log2(ratio);
+   var nz=clamp(Math.round(touch.pinch.z0+dz),self._minZoom,self._maxZoom);
+   if(nz!==self._zoom){
+    var ll=unproject(self._origin.x+touch.pinch.cx,self._origin.y+touch.pinch.cy,self._zoom);
+    var p=project(ll.lat,ll.lng,nz);
+    var o={x:p.x-touch.pinch.cx,y:p.y-touch.pinch.cy};
+    self._zoom=nz;self._center=unproject(o.x+self._size.w/2,o.y+self._size.h/2,nz);
+    self._update();self.closePopup();self._fire('zoomend');}
+   e.preventDefault();return;
+  }
+  if(touch.drag&&e.touches.length===1){
+   var t=e.touches[0];
+   var dx=t.clientX-touch.drag.x,dy=t.clientY-touch.drag.y;
+   touch.drag.moved=Math.max(touch.drag.moved,Math.abs(dx)+Math.abs(dy));
+   var o={x:touch.drag.ox-dx,y:touch.drag.oy-dy};
+   self._center=unproject(o.x+self._size.w/2,o.y+self._size.h/2,self._zoom);self._update();
+   e.preventDefault();}
+ },{passive:false});
+ el.addEventListener('touchend',function(e){
+  if(touch.pinch){
+   if(e.touches.length<2)touch.pinch=null;
+   return;}
+  if(touch.drag&&e.touches.length===0){
+   var wasDrag=touch.drag.moved>8;
+   if(!wasDrag){self._hitClick(touch.drag.mx,touch.drag.my);}
+   else{self._fire('moveend');}
+   touch.drag=null;}
+  if(touch.drag&&e.touches.length===1){/* از pinch به تک‌انگشت */
+   var t=e.touches[0];var r=el.getBoundingClientRect();
+   touch.drag={x:t.clientX,y:t.clientY,ox:self._origin.x,oy:self._origin.y,
+    mx:t.clientX-r.left,my:t.clientY-r.top,moved:0};}
+ });
+};
+MMap.prototype._hitClick=function(x,y){
+ var hit=null;
+ for(var i=this._layers.length-1;i>=0;i--){var h=this._layers[i]._hit(x,y);
+  if(h){hit=h;break;}}
+ if(hit){if(hit._ev&&hit._ev.click)hit._ev.click({target:hit});
+  if(hit._popup)this._openPopup(hit._popup,hit._ll);return;}
+ this.closePopup();};
+global.L={map:function(el){return new MMap(el);},
+ tileLayer:function(u,o){return new TileLayer(u,o);},
+ layerGroup:function(){return new LayerGroup();},
+ circleMarker:function(ll,o){return new CircleMarker(ll,o);},
+ brandMarker:function(ll,o){return new BrandMarker(ll,o);},
+ dotsLayer:function(){return new DotsLayer();},
+ heatLayer:function(){return new HeatLayer();}};
+})(window);
+/* اطمینان از دسترسی سراسری به L (بعضی محیط‌ها window.L را به عنوان L نمی‌بینند) */
+var L=window.L;
+if(!L){console.error('Map engine failed to init');}
+
+/* ========== ابزارها ========== */
+var RAHN=0.025;
+var nf=new Intl.NumberFormat('fa-IR');
+function fmt(v,d){if(d==null)d=0;return(v==null||!isFinite(v))?'—':nf.format(Number(Number(v).toFixed(d)));}
+function toman(v){if(v==null||!isFinite(v))return '—';
+ if(Math.abs(v)>=1e9)return fmt(v/1e9,2)+' میلیارد';
+ if(Math.abs(v)>=1e6)return fmt(v/1e6,1)+' میلیون';
+ return fmt(v)+' تومان';}
+function fmtShort(v){if(v==null||!isFinite(v))return '—';
+ if(v>=1e9)return fmt(v/1e9,1)+' میلیارد';
+ if(v>=1e6)return fmt(v/1e6,0)+' میلیون';
+ if(v>=1e3)return fmt(v/1e3,0)+' هزار';
+ return fmt(v,0);}
+function num(v){if(v==null||v==='')return null;if(typeof v==='number')return isFinite(v)?v:null;
+ var s=String(v).replace(/[،,\s]/g,'').replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d);})
+  .replace(/[٠-٩]/g,function(d){return '٠١٢٤٥٦٨٩'.indexOf(d);});
+ var f=parseFloat(s);return isFinite(f)?f:null;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){
+ return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function normNb(s){return String(s||'').replace(/\u200c/g,'').replace(/\s+/g,'');}
+function haversine(a,b){var R=6371000,r=function(d){return d*Math.PI/180;};
+ var dLat=r(b.lat-a.lat),dLng=r(b.lng-a.lng);
+ var x=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLng/2)*Math.sin(dLng/2);
+ return 2*R*Math.asin(Math.sqrt(x));}
+function ageDays(ad){if(!ad.date_scraped)return Infinity;
+ var d=new Date(ad.date_scraped+'T00:00:00');
+ return isNaN(d.getTime())?Infinity:Math.round((Date.now()-d.getTime())/86400000);}
+function parseCSV(text){var rows=[],row=[],cur='',q=false;
+ var t=String(text||'').replace(/^\uFEFF/,'').split('\n').filter(function(l){return !l.trim().startsWith('#');}).join('\n');
+ for(var i=0;i<t.length;i++){var c=t[i];
+  if(q){if(c==='"'){if(t[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=c;}
+  else if(c==='"')q=true;
+  else if(c===','){row.push(cur);cur='';}
+  else if(c==='\n'){row.push(cur);rows.push(row);row=[];cur='';}
+  else if(c!=='\r')cur+=c;}
+ if(cur.length||row.length){row.push(cur);rows.push(row);}
+ if(!rows.length)return[];
+ var h=rows[0].map(function(x){return x.trim();});
+ return rows.slice(1).filter(function(r){return r.some(function(c){return String(c||'').trim()!=='';});})
+  .map(function(r){var o={};h.forEach(function(k,i){o[k]=(r[i]!==undefined?String(r[i]).trim():'');});return o;});}
+function parseAny(text){var t=String(text||'').trim();
+ if(t.charAt(0)==='['||t.charAt(0)==='{'){var j=JSON.parse(t);
+  if(Array.isArray(j))return j;return j.items||j.data||j.records||j.listings||j.stores||[];}
+ return parseCSV(t);}
+
+/* ========== منوی موبایل ========== */
+(function(){
+ var side=document.getElementById('side');
+ var tog=document.getElementById('menuToggle');
+ var ov=document.getElementById('side-overlay');
+ function open(){side.classList.add('open');ov.classList.add('open');}
+ function close(){side.classList.remove('open');ov.classList.remove('open');}
+ tog.addEventListener('click',function(){
+  if(side.classList.contains('open'))close();else open();});
+ ov.addEventListener('click',close);
+})();
+
+/* ========== تم ========== */
+var THEME_KEY='rem_theme';
+function currentTheme(){return document.documentElement.getAttribute('data-theme')||'dark';}
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+function applyTheme(t){
+ document.documentElement.setAttribute('data-theme',t);lsSet(THEME_KEY,t);
+ document.getElementById('themeToggle').textContent=(t==='dark')?'☀️':'🌙';
+ renderAds();renderStores();updateRampLegend();}
+document.getElementById('themeToggle').addEventListener('click',function(){
+ applyTheme(currentTheme()==='dark'?'light':'dark');});
+
+/* ========== داده — URLهای پیش‌فرض از همان مسیر listings مشتق می‌شوند ========== */
+var DATA_URLS={
+ listings:"https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/data.json",
+ hyperstar:"https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/hyperstar_stores.csv",
+ myli:"https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/myli_stores.json",
+ history:"https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/history.json"
+};
+/* fallback: نام‌های جایگزین روی همان باکت + gist */
+var DATA_FALLBACK={
+ listings:[
+  "https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/data.json"
+ ],
+ myli:[
+  "https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/myli_stores.json",
+  "https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/myli_stores.csv",
+  "https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/myli_stores.min.json",
+  "https://gist.githubusercontent.com/Templar1080/c671aa64ab227b338f81fd534ce86f28/raw/"
+ ],
+ history:[
+  "https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/history.json",
+  "https://gist.githubusercontent.com/Templar1080/5f8ffea878317f5d4990b3925de6cf01/raw/"
+ ],
+ hyperstar:[
+  "https://h-yperstar.s3.ir-thr-at1.arvanstorage.ir/hyperstar_stores.csv"
+ ]
+};
+(function(){
+ var qs=new URLSearchParams(location.search);
+ ['listings','hyperstar','myli','history'].forEach(function(k){var v=qs.get(k);if(v)DATA_URLS[k]=v.trim();});
+})();
+var EMBEDDED_MYLI=[];
+var RAW=[],HISTORY=[];
+var BRANDS={
+ hyperstar:{label:'هایپراستار',stores:[],layer:null,on:true},
+ myli:{label:'مایلی',stores:[],layer:null,on:true}};
+var PROVINCE_CITIES={
+ "تهران":["تهران","اسلامشهر","پرند","شهریار","ملارد","قدس","رباط‌کریم","پردیس","بومهن","پاکدشت","ورامین","دماوند","فیروزکوه","لواسان"],
+ "کرج":["کرج","فردیس","ماهدشت","نظرآباد","هشتگرد","کمال‌شهر","اشتهارد"],
+ "اصفهان":["اصفهان","شاهین‌شهر","خمینی‌شهر","نجف‌آباد","فلاورجان","مبارکه"],
+ "مشهد":["مشهد","طرقبه","شاندیز","چناران","گلبهار"],
+ "شیراز":["شیراز","صدرا","زرقان"],
+ "بابلسر":["بابلسر","بابل","فریدونکنار","کلارآباد"],
+ "قم":["قم"],"اهواز":["اهواز","بندر امام خمینی","ماهشهر"],
+ "کرمان":["کرمان","رفسنجان","سیرجان"],"ارومیه":["ارومیه"],"بندرعباس":["بندرعباس","میناب","قشم"]};
+
+/* اگر عدد خیلی کوچک باشد احتمالاً واحد «میلیون تومان» است → تبدیل به تومان */
+/* تبدیل پول آگهی: بدون ضرب کور.
+   چند مقیاس محتمل (۱، ×هزار، ×میلیون) را با بازهٔ معقول بازار ایران می‌سنجیم
+   و فقط مقیاسی را برمی‌داریم که قیمت/متر منطقی بدهد. */
+/* تبدیل مبلغ آگهی — بدون ضرب کور.
+   کاندیدها: ×۱ (تومان کامل)، ×۱۰۰۰، ×۱۰۰۰۰۰۰
+   انتخاب فقط با بازهٔ معقول قیمت/متر + واحد صریح + عنوان.
+   در تساوی یا ابهام: عدد خام برنده است (خطای سیستماتیک ≈۰). */
+/* واحدها مطابق divar_scraper.py:
+   - فروش price_total: میلیون تومان → ×1e6
+   - اجاره deposit / monthly_rent: تومان کامل → بدون ضرب
+   - اگر price_unit صریح باشد، همان اولویت دارد
+   - price_total اجاره در اسکرپر «هزار تومان معادل ماهانه» است؛ برای مقایسه از deposit+rent استفاده می‌کنیم */
+function moneyToToman(v,kind,area){
+ v=num(v);if(v==null||!(v>0))return null;
+ var unit=null,k='',title='';
+ if(kind&&typeof kind==='object'){
+  unit=kind.unit||null;k=String(kind.kind||'');title=String(kind.title||'');
+ }else if(typeof kind==='string'){k=kind;}
+ if(unit){
+  var u=String(unit).toLowerCase();
+  if(u.indexOf('million')>=0||u.indexOf('میلیون')>=0)return v*1e6;
+  if(u.indexOf('billion')>=0||u.indexOf('میلیارد')>=0)return v*1e9;
+  if(u.indexOf('thousand')>=0||u.indexOf('هزار')>=0)return v*1e3;
+  if(u.indexOf('rial')>=0||u.indexOf('ریال')>=0)return v/10;
+  if(u.indexOf('toman')>=0||u.indexOf('تومان')>=0)return v;
+ }
+ /* قرارداد اسکرپر */
+ if(k==='sale')return v*1e6;          /* price_total همیشه million_toman */
+ if(k==='deposit'||k==='rent')return v; /* تومان کامل */
+ if(k==='rent_equiv')return v*1e3;    /* price_total اجاره = thousand_toman_monthly */
+ return v;
+}
+function normalizeListing(r){
+ var cat=r.category!=null?r.category:(r.cat!=null?r.cat:r.usage);
+ var deal=r.deal_type!=null?r.deal_type:(r.deal!=null?r.deal:r.type);
+ var rent=r.monthly_rent!=null?r.monthly_rent:(r.rent!=null?r.rent:(r.rent_monthly!=null?r.rent_monthly:r.ejare));
+ var dep=r.deposit!=null?r.deposit:(r.vadie!=null?r.vadie:r.deposit_toman);
+ var area=r.area_sqm!=null?r.area_sqm:(r.area!=null?r.area:r.meterage);
+ var lat=num(r.lat!=null?r.lat:r.latitude),lng=num(r.lng!=null?r.lng:(r.lon!=null?r.lon:r.longitude));
+ var dealS=String(deal||'').toLowerCase().trim();
+ var isSale=dealS==='sale'||dealS==='sell'||dealS==='فروش'||dealS.indexOf('sale')>=0;
+ var isRent=dealS==='rent'||dealS==='rental'||dealS==='اجاره'||dealS.indexOf('rent')>=0||dealS.indexOf('اجاره')>=0;
+ var unit=r.price_unit||r.unit||r.currency_unit||null;
+ var priceRaw=num(r.price_total!=null?r.price_total:r.price);
+ var areaN=num(area);
+ /* ودیعه و اجاره ماهانه: تومان کامل (اسکرپر) — واحد sale را روی آن‌ها اعمال نکن */
+ var depN=moneyToToman(dep,{unit:null,kind:'deposit'},areaN);
+ var rentN=moneyToToman(rent,{unit:null,kind:'rent'},areaN);
+ /* price_total: فروش=میلیون‌تومان؛ اجاره=معادل هزارتومان (کم‌استفاده در مقایسه) */
+ var priceKind=isSale?'sale':(isRent?'rent_equiv':'sale');
+ var priceN=moneyToToman(priceRaw,{unit:unit,kind:priceKind},areaN);
+ return{
+  token:r.token||r.id||'',title:r.title||'',neighborhood:r.neighborhood||r.district||'',city:r.city||'',
+  category:String(cat||'').toLowerCase().trim(),
+  deal_type:dealS,
+  price_total:priceN,
+  deposit:depN,monthly_rent:rentN,
+  area_sqm:areaN,lat:lat,lng:lng,
+  floor:(r.floor!=null?r.floor:(r.story!=null?r.story:r.tabaghe)),
+  title:r.title||r.name||'',
+  lat_is_estimated:!!num(r.lat_is_estimated)||r.lat_is_estimated===true||r.lat_is_estimated==='1',
+  is_negotiable:!!num(r.is_negotiable)||r.is_negotiable===true,
+  url:r.url||'',date_scraped:r.date_scraped||r.scraped_at||r.date||'',
+  is_outlier:0};}
+function normalizeStore(s){
+ var lat=num(s.lat),lng=num(s.lng);
+ if((lat==null||lng==null)&&s.coordinates){
+  var p=String(s.coordinates).split(/[,،]/).map(function(x){return x.trim();});
+  if(p.length>=2){lat=(lat!=null)?lat:num(p[0]);lng=(lng!=null)?lng:num(p[1]);}}
+ var monthly=num(s.monthly_rent_toman!=null?s.monthly_rent_toman:s.monthly_rent);
+ var deposit=num(s.deposit_toman!=null?s.deposit_toman:s.deposit);
+ var sales=num(s.avg_monthly_sales_toman);
+ var ann=num(s.avg_annual_sales_toman);
+ /* اگر سالانه با ماهانه سازگار نبود، سالانه را کنار بگذار */
+ if(sales!=null&&sales>0&&ann!=null&&ann>0){
+  var ratio=ann/(sales*12);
+  if(ratio<0.3||ratio>1.5)ann=null;
+ }
+ if(sales==null&&ann!=null)sales=ann/12;
+ var pct=num(s.sales_rent_pct),minR=num(s.minimum_rent_toman);
+ var incRaw=s.annual_increase_pct,inc=null;
+ if(incRaw!=null&&incRaw!==''){
+  if(typeof incRaw==='number')inc=isFinite(incRaw)?incRaw:null;
+  else{
+   var mm=String(incRaw).match(/[\d.]+/g);
+   if(mm&&mm.length){
+    var vals=mm.map(num).filter(function(x){return x!=null;});
+    if(vals.length===1)inc=vals[0];
+    else if(vals.length>=2)inc=(vals[0]+vals[1])/2;
+   }
+  }
+ }
+ var st=String(s.deal_structure||'').trim().toLowerCase();
+ if(['fixed','percent_of_sales','hybrid'].indexOf(st)<0){
+  if(minR!=null&&pct!=null)st='hybrid';
+  else if(sales!=null&&pct!=null&&monthly==null)st='percent_of_sales';
+  else st='fixed';}
+ /* تاریخ تمدید ۱۹۳۰→۲۰۳۰ و مشابه */
+ var renewal=s.next_renewal||'';
+ if(renewal){
+  var ym=String(renewal).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if(ym){
+   var year=+ym[1];
+   if(year>=1900&&year<1980)renewal=(year+100)+'-'+ym[2]+'-'+ym[3];
+   if(year<1900||year>2100)renewal='';
+  }
+ }
+ return{store_name:s.store_name||s.name||'',city:s.city||'',province:s.province||'',
+  address:s.neighborhood_or_street||s.address||'',lat:lat,lng:lng,
+  area_sqm:num(s.area_sqm),deal_structure:st,monthly_rent_toman:monthly,
+  deposit_toman:deposit,minimum_rent_toman:minR,sales_rent_pct:pct,
+  avg_monthly_sales_toman:sales,avg_annual_sales_toman:ann,
+  annual_increase_pct:inc,lease_start:s.lease_start||null,
+  next_renewal:renewal,notes:s.notes||null};}
+
+function salesPctFraction(pct){
+ if(pct==null||!isFinite(pct))return null;
+ return pct>1?pct/100:pct;}
+
+/* هزینه فرصت ودیعه ماهانه */
+function depositMonthlyCost(dep){return(dep||0)*RAHN;}
+
+/* اجاره مؤثر ماهانه قابل‌مقایسه با آگهی‌ها: اجاره نقدی + ودیعه×RAHN */
+function storeEquivalent(st){
+ var dep=depositMonthlyCost(st.deposit_toman);
+ var f=salesPctFraction(st.sales_rent_pct);
+ var fromSales=(st.avg_monthly_sales_toman!=null&&f!=null)?st.avg_monthly_sales_toman*f:null;
+ var monthly=st.monthly_rent_toman;
+ /* اگر monthly با sales×pct خیلی فرق داشت، فیلد monthly را برای percent/hybrid بی‌اعتبار کن */
+ if(fromSales!=null&&monthly!=null&&monthly>0){
+  if(Math.abs(monthly-fromSales)/Math.max(fromSales,1)>0.4)monthly=null;
+ }
+ if(st.deal_structure==='fixed'){
+  if(monthly==null&&!(st.deposit_toman>0))return null;
+  return(monthly||0)+dep;
+ }
+ if(st.deal_structure==='percent_of_sales'){
+  var base=fromSales!=null?fromSales:monthly;
+  if(base==null)return null;
+  return base+dep;
+ }
+ if(st.deal_structure==='hybrid'){
+  var minR=st.minimum_rent_toman||0;
+  var base=null;
+  if(fromSales!=null)base=Math.max(fromSales,minR);
+  else if(minR>0)base=minR;
+  else if(monthly!=null)base=monthly;
+  else return null;
+  return base+dep;
+ }
+ return(monthly||0)+dep;}
+
+/* ===== مقایسه بازار: تورم، طبقه، تجاری/مسکونی، CI ===== */
+var ASK_HAIRCUT=0.95;
+var MIN_COMPS=8;
+var AREA_ELASTICITY=0.15; /* تعدیل قیمت/متر نسبت به اختلاف متراژ */
+var DEFAULT_MONTHLY_INFLATION=0.025; /* اگر history نبود: ~۲.۵٪ در ماه */
+
+function isRentAd(ad){
+ if(!ad)return false;
+ var d=String(ad.deal_type||'').toLowerCase().trim();
+ if(d==='sale'||d==='sell'||d==='فروش'||d.indexOf('sale')>=0)return false;
+ if(d==='rent'||d==='rental'||d==='اجاره'||d.indexOf('rent')>=0||d.indexOf('اجاره')>=0)return true;
+ return !!(ad.monthly_rent>0||ad.deposit>0);
+}
+function isResidentialAd(ad){
+ var c=String(ad.category||'').toLowerCase();
+ return c==='residential'||c==='مسکونی'||c.indexOf('resid')>=0||c.indexOf('مسکونی')>=0;
+}
+function isCommercialAd(ad){
+ if(isResidentialAd(ad))return false;
+ var c=String(ad.category||'').toLowerCase();
+ if(!c||c==='commercial'||c==='shop'||c==='store'||c==='office'||c==='retail'||
+    c.indexOf('commercial')>=0||c.indexOf('shop')>=0||c==='تجاری'||c==='مغازه'||c==='ملک تجاری')return true;
+ return !isResidentialAd(ad);
+}
+function isMallText(s){
+ s=String(s||'').toLowerCase();
+ return /پاساژ|mall|مال\b|مجتمع|center|سنتر|ایران\s*مال|هایپر|hyper|بازار/.test(s);
+}
+function floorToGroundFactor(ad){
+ /* ضریب قیمت نسبت به همکف: زیرزمین ارزان‌تر → برای معادل‌سازی تقسیم می‌کنیم */
+ var f=ad&&ad.floor;if(f==null||f==='')return 1;
+ var s=String(f).toLowerCase().trim();
+ if(/زیر|basement|under|منفی|-1|sub/.test(s))return 0.5;
+ if(/همکف|هم\s*کف|ground|gf|۰|0/.test(s))return 1;
+ if(/اول|first|\b1\b/.test(s))return 0.78;
+ if(/دوم|second|\b2\b/.test(s))return 0.65;
+ if(/سوم|third|\b3\b/.test(s))return 0.55;
+ var n=parseInt(s.replace(/[^\d-]/g,''),10);
+ if(!isFinite(n))return 1;
+ if(n<0)return 0.5;if(n===0)return 1;if(n===1)return 0.78;if(n===2)return 0.65;return 0.55;
+}
+function historyMedianOnDate(store,dateStr){
+ if(!HISTORY||!HISTORY.length)return null;
+ var nb=normNb(store.address||''),city=store.city||'';
+ function pick(rows){
+  if(!rows||!rows.length)return null;
+  rows=rows.slice().sort(function(a,b){return String(a.date).localeCompare(String(b.date));});
+  if(!dateStr)return +rows[rows.length-1].median_psqm;
+  var target=String(dateStr).slice(0,10),best=rows[0],bd=1e18,i;
+  for(i=0;i<rows.length;i++){
+   var dd=Math.abs(new Date(rows[i].date).getTime()-new Date(target).getTime());
+   if(isFinite(dd)&&dd<bd){bd=dd;best=rows[i];}
+  }
+  return +best.median_psqm;
+ }
+ function baseFilter(h,needNb){
+  if(h.deal_type&&String(h.deal_type).toLowerCase()!=='rent')return false;
+  if(h.category&&String(h.category).toLowerCase()==='residential')return false;
+  if(city&&h.city&&h.city!==city)return false;
+  if(h.median_psqm==null||!isFinite(+h.median_psqm))return false;
+  if(needNb&&nb&&h.neighborhood){
+   var hn=normNb(h.neighborhood);
+   return hn.indexOf(nb)>=0||nb.indexOf(hn)>=0;
+  }
+  return !needNb||!nb;
+ }
+ /* اول محله، بعد شهر */
+ var v=pick(HISTORY.filter(function(h){return baseFilter(h,true);}));
+ if(v!=null)return v;
+ return pick(HISTORY.filter(function(h){return baseFilter(h,false);}));
+}
+function inflationFactorToToday(ad,store){
+ function clampF(f){if(!(f>0)||!isFinite(f))return 1;return Math.max(0.7,Math.min(1.8,f));}
+ var today=historyMedianOnDate(store,null);
+ var then=ad.date_scraped?historyMedianOnDate(store,ad.date_scraped):null;
+ if(today!=null&&then!=null&&then>0)return clampF(today/then);
+ var d=ageDays(ad);
+ if(isFinite(d)&&d>7&&d<400)
+  return clampF(Math.pow(1+DEFAULT_MONTHLY_INFLATION,d/30));
+ return 1;
+}
+function adEquivalentPsqm(store,ad){
+ /* معادل ماهانه/متر در تومان امروز، نرمال‌شده به همکف و متراژ فروشگاه */
+ var eq=(ad.monthly_rent||0)+(ad.deposit||0)*RAHN;
+ if(!(eq>0)||!(ad.area_sqm>0))return null;
+ eq*=inflationFactorToToday(ad,store);
+ var ff=floorToGroundFactor(ad);
+ if(ff>0)eq=eq/ff; /* تبدیل به معادل همکف */
+ var psqm=eq/ad.area_sqm;
+ if(store.area_sqm>0&&ad.area_sqm>0){
+  psqm*=Math.pow(ad.area_sqm/store.area_sqm,AREA_ELASTICITY);
+ }
+ return psqm;
+}
+function commercialBias(ad){
+ if(isResidentialAd(ad))return 0.35;
+ if(isCommercialAd(ad))return 1;
+ return 0.75;
+}
+function adWeight(store,ad,opt){
+ opt=opt||{};
+ var maxKm=opt.maxKm!=null?opt.maxKm:8;
+ if(!isRentAd(ad))return 0;
+ if(opt.commercialOnly&&isResidentialAd(ad))return 0;
+ if(!(ad.area_sqm>0)||!isFinite(ad.lat)||!isFinite(ad.lng))return 0;
+ if(!(ad.monthly_rent>0)&&!(ad.deposit>0))return 0;
+ if(!store||!isFinite(store.lat)||!isFinite(store.lng))return 0;
+ var km=haversine(store,ad)/1000;if(!(km>=0)||km>maxKm)return 0;
+ var w=1/Math.pow(1+km,2);
+ w*=commercialBias(ad);
+ if(store.area_sqm>0){
+  var r=ad.area_sqm/store.area_sqm;
+  if(opt.looseArea){
+   if(r<0.2||r>5)return 0;
+   if(r>=0.7&&r<=1.4)w*=1;else if(r>=0.45&&r<=2.2)w*=.6;else w*=.25;
+  }else{
+   if(r>=0.75&&r<=1.35)w*=1;
+   else if(r>=0.55&&r<=1.8)w*=.7;
+   else if(r>=0.4&&r<=2.5)w*=.35;
+   else return 0;
+  }
+ }
+ var d=ageDays(ad);
+ if(d===Infinity)w*=0.4;
+ else w*=(d<=30?1:d<=60?.88:d<=90?.7:d<=180?.5:.25);
+ w*=ad.lat_is_estimated?.7:1.1;
+ if(ad.is_negotiable)w*=.65;
+ if(ad.is_outlier)w*=.45;
+ var nb=normNb(ad.neighborhood),snb=normNb(store.address);
+ if(nb&&snb&&(nb.indexOf(snb)>=0||snb.indexOf(nb)>=0))w*=1.35;
+ /* مال در برابر خیابان */
+ var storeMall=isMallText(store.address)||isMallText(store.store_name);
+ var adMall=isMallText(ad.title)||isMallText(ad.neighborhood);
+ if(storeMall&&adMall)w*=1.25;
+ else if(storeMall&&!adMall)w*=0.7;
+ else if(!storeMall&&adMall)w*=0.85;
+ return w;
+}
+function wmedian(pairs){
+ var a=pairs.filter(function(x){return isFinite(x.v)&&x.w>0;}).sort(function(x,y){return x.v-y.v;});
+ if(!a.length)return null;
+ var tw=0,i;for(i=0;i<a.length;i++)tw+=a[i].w;
+ var c=0;for(i=0;i<a.length;i++){c+=a[i].w;if(c>=tw/2)return a[i].v;}
+ return a[a.length-1].v;}
+function wquantile(pairs,q){
+ var a=pairs.filter(function(x){return isFinite(x.v)&&x.w>0;}).sort(function(x,y){return x.v-y.v;});
+ if(!a.length)return null;
+ var tw=0,i;for(i=0;i<a.length;i++)tw+=a[i].w;
+ var c=0,t=tw*q;for(i=0;i<a.length;i++){c+=a[i].w;if(c>=t)return a[i].v;}
+ return a[a.length-1].v;}
+function collectPairs(store,ads,opt){
+ var pairs=[],i,ad,w,psqm,maxKm,lat0,lng0,dLat,dLng,cand=[],step;
+ if(!ads||!ads.length||!store)return pairs;
+ maxKm=opt&&opt.maxKm!=null?opt.maxKm:8;
+ lat0=store.lat;lng0=store.lng;
+ if(!isFinite(lat0)||!isFinite(lng0))return pairs;
+ dLat=maxKm/111;dLng=maxKm/Math.max(20,(111*Math.cos(lat0*Math.PI/180)));
+ for(i=0;i<ads.length;i++){
+  ad=ads[i];
+  if(!isFinite(ad.lat)||!isFinite(ad.lng))continue;
+  if(ad.lat<lat0-dLat||ad.lat>lat0+dLat||ad.lng<lng0-dLng||ad.lng>lng0+dLng)continue;
+  cand.push(ad);
+ }
+ /* سقف کاندید برای جلوگیری از هنگ روی ده‌ها هزار آگهی */
+ if(cand.length>2500){
+  step=Math.ceil(cand.length/2500);
+  var slim=[];for(i=0;i<cand.length;i+=step)slim.push(cand[i]);
+  cand=slim;
+ }
+ for(i=0;i<cand.length;i++){
+  ad=cand[i];
+  w=adWeight(store,ad,opt);if(!(w>0))continue;
+  psqm=adEquivalentPsqm(store,ad);if(!(psqm>0))continue;
+  pairs.push({
+   dep:ad.deposit>0?ad.deposit/ad.area_sqm:null,
+   rent:ad.monthly_rent>0?ad.monthly_rent/ad.area_sqm:null,
+   eq:psqm,w:w,ad:ad,km:haversine(store,ad)/1000});
+ }
+ return pairs;
+}
+function capPairWeights(pairs,maxShare){
+ maxShare=maxShare!=null?maxShare:0.22;
+ if(!pairs||pairs.length<2)return pairs||[];
+ var sum=0,i;for(i=0;i<pairs.length;i++)sum+=pairs[i].w;
+ if(!(sum>0))return pairs;
+ var maxW=sum*maxShare,cut=0;
+ for(i=0;i<pairs.length;i++){
+  if(pairs[i].w>maxW){cut+=pairs[i].w-maxW;pairs[i].w=maxW;}
+ }
+ if(cut>0){
+  var rest=0;for(i=0;i<pairs.length;i++)if(pairs[i].w<maxW-1e-12)rest+=pairs[i].w;
+  if(rest>0){for(i=0;i<pairs.length;i++)if(pairs[i].w<maxW-1e-12)pairs[i].w+=cut*(pairs[i].w/rest);}
+ }
+ return pairs;
+}
+function summarizePairs(pairs){
+ pairs=capPairWeights((pairs||[]).map(function(p){return{dep:p.dep,rent:p.rent,eq:p.eq,w:p.w,ad:p.ad,km:p.km};}),0.22);
+ var eqPairs=pairs.map(function(p){return{v:p.eq,w:p.w};});
+ var med=wmedian(eqPairs),p25=wquantile(eqPairs,.25),p75=wquantile(eqPairs,.75);
+ var sumW=0,sumW2=0,i;
+ for(i=0;i<pairs.length;i++){sumW+=pairs[i].w;sumW2+=pairs[i].w*pairs[i].w;}
+ var effN=sumW2>0?(sumW*sumW)/sumW2:0;
+ var iqr=(p25!=null&&p75!=null)?(p75-p25):null;
+ var disp=(med>0&&iqr!=null)?iqr/med:null;
+ /* فقط haircut روی میانه — بدون کشیدن به Q1 */
+ var fair=med!=null?med*ASK_HAIRCUT:null;
+ return{n:pairs.length,effN:effN,pairs:pairs,eqMedian:med,eqFair:fair,eqP25:p25,eqP75:p75,dispersion:disp,
+  depMedian:wmedian(pairs.filter(function(p){return p.dep>0;}).map(function(p){return{v:p.dep,w:p.w};})),
+  rentMedian:wmedian(pairs.filter(function(p){return p.rent>0;}).map(function(p){return{v:p.rent,w:p.w};}))};
+}
+function buildMarketStats(store,ads){
+ var empty={n:0,effN:0,pairs:[],eqMedian:null,eqFair:null,eqP25:null,eqP75:null,dispersion:null,depMedian:null,rentMedian:null,mode:'none'};
+ if(!store||!isFinite(store.lat)||!isFinite(store.lng)||!ads||!ads.length)return empty;
+ var attempts=[
+  {maxKm:6,looseArea:false,commercialOnly:true},
+  {maxKm:10,looseArea:true,commercialOnly:true},
+  {maxKm:15,looseArea:true,commercialOnly:true},
+  {maxKm:10,looseArea:true,commercialOnly:false},
+  {maxKm:20,looseArea:true,commercialOnly:false}
+ ];
+ var best=empty;
+ for(var a=0;a<attempts.length;a++){
+  var stats=summarizePairs(collectPairs(store,ads,attempts[a]));
+  stats.mode=attempts[a].commercialOnly?'commercial':'mixed';
+  if(stats.n>best.n)best=stats;
+  if(stats.n>=MIN_COMPS&&attempts[a].commercialOnly)return stats;
+  if(stats.n>=MIN_COMPS&&!attempts[a].commercialOnly&&best.n<MIN_COMPS)return stats;
+ }
+ return best;
+}
+function clampS(v){return Math.max(0,Math.min(100,v));}
+function priceScoreFromGap(gap){
+ if(gap==null||!isFinite(gap))return 50;
+ if(gap<=-20)return 98;
+ if(gap<=-10)return 92+(-10-gap)*0.6;
+ if(gap<=0)return 82-gap;
+ if(gap<=10)return 82-gap*2.2;
+ if(gap<=25)return 60-(gap-10)*1.8;
+ if(gap<=50)return 33-(gap-25)*0.8;
+ return clampS(13-(gap-50)*0.15);}
+function neighborhoodTrend(store){
+ if(!HISTORY||!HISTORY.length)return null;
+ var nb=normNb(store.address),city=store.city||'';
+ function filt(strictNb){
+  return HISTORY.filter(function(h){
+   if(h.category&&String(h.category).toLowerCase()==='residential')return false;
+   if(h.deal_type&&String(h.deal_type).toLowerCase()!=='rent')return false;
+   if(city&&h.city&&h.city!==city)return false;
+   if(strictNb&&nb&&h.neighborhood){
+    var hn=normNb(h.neighborhood);
+    return hn.indexOf(nb)>=0||nb.indexOf(hn)>=0;
+   }
+   return !strictNb||!nb;
+  }).filter(function(h){return h.median_psqm!=null&&isFinite(+h.median_psqm);})
+   .sort(function(a,b){return String(a.date).localeCompare(String(b.date));});
+ }
+ var rows=filt(true);if(rows.length<3)rows=filt(false);if(rows.length<3)return null;
+ var n=rows.length,k=Math.max(1,Math.floor(n/3)),early=0,late=0,i;
+ for(i=0;i<k;i++)early+=+rows[i].median_psqm;
+ for(i=n-k;i<n;i++)late+=+rows[i].median_psqm;
+ early/=k;late/=k;if(!(early>0))return null;
+ return{changePct:((late-early)/early)*100,points:n,from:rows[0].date,to:rows[n-1].date};}
+function computeComposite(store,m){
+ if(!(store.area_sqm>0))return{ok:false,reason:'متراژ ثبت نشده',market:m};
+ if(!m||m.n<MIN_COMPS)return{ok:false,reason:'فقط '+(m?m.n:0)+' آگهی قابل مقایسه (حداقل '+MIN_COMPS+')',market:m};
+ var eq=storeEquivalent(store);
+ if(eq==null)return{ok:false,reason:'اجاره مؤثر قابل محاسبه نیست (فروش/اجاره ناقص)',market:m};
+ var my=eq/store.area_sqm;
+ var base=m.eqFair!=null?m.eqFair:m.eqMedian;
+ if(!(base>0))return{ok:false,reason:'میانه بازار قابل محاسبه نیست',market:m};
+ var gap=((my-base)/base)*100;
+ /* اگر داخل باند IQR بازار باشد → مطابق بازار */
+ var inBand=false;
+ if(m.eqP25!=null&&m.eqP75!=null&&my>=m.eqP25&&my<=m.eqP75)inBand=true;
+ var sPrice=inBand?Math.max(priceScoreFromGap(gap),78):priceScoreFromGap(gap);
+
+ var conf=50;
+ if(m.effN>=20)conf=92;else if(m.effN>=12)conf=82;else if(m.effN>=8)conf=72;else if(m.effN>=MIN_COMPS)conf=60;
+ if(m.effN<5)conf=Math.min(conf,48); /* n مؤثر کم حتی با تعداد خام کافی */
+ if(m.mode==='mixed')conf=Math.min(conf,68);
+ if(m.dispersion!=null){
+  if(m.dispersion>1.2)conf-=18;else if(m.dispersion>0.8)conf-=10;else if(m.dispersion<0.35)conf+=5;}
+ conf=clampS(conf);
+ var salesFlag=false;
+ if(store.avg_monthly_sales_toman>0&&store.area_sqm>0){
+  var spm=store.avg_monthly_sales_toman/store.area_sqm;
+  /* بازه باورپذیر تقریبی خرده‌فروشی (تومان/متر·ماه) */
+  if(spm<2e5||spm>8e7)salesFlag=true;
+ }
+
+ var sStruct=75;
+ if(store.deal_structure==='fixed'){
+  sStruct=gap<=-5?90:gap<=5?80:gap<=15?62:gap<=30?40:22;
+ }else if(store.deal_structure==='hybrid'){
+  if(store.minimum_rent_toman>0){
+   var floorGap=((store.minimum_rent_toman/store.area_sqm-base)/base)*100;
+   sStruct=floorGap<=-10?93:floorGap<=5?80:floorGap<=15?65:floorGap<=30?42:20;
+   if(store.sales_rent_pct!=null)sStruct=Math.min(100,sStruct+5);
+  }else sStruct=70;
+ }else if(store.deal_structure==='percent_of_sales'){
+  sStruct=gap<=0?88:gap<=15?70:gap<=30?48:28;
+ }
+
+ var sDep=null;
+ if(eq>0){
+  var months=(store.deposit_toman||0)/eq;
+  sDep=clampS(100-Math.abs(months-24)*2.2);
+  if(months>48)sDep=Math.min(sDep,45);
+  if(months===0&&store.deal_structure!=='fixed')sDep=78;
+ }
+ var sSales=null;
+ if(!salesFlag&&store.avg_monthly_sales_toman>0&&eq>0){
+  var pr=eq/store.avg_monthly_sales_toman*100;
+  sSales=clampS(100-Math.max(0,pr-6.5)*7);
+  if(pr>15)sSales=Math.min(sSales,25);
+ }else if(salesFlag){
+  conf=Math.min(conf,55);
+ }
+ var sEsc=null;
+ if(store.annual_increase_pct!=null){
+  var yrs=1;
+  if(store.next_renewal){
+   var t=new Date(store.next_renewal).getTime();
+   if(isFinite(t)){
+    yrs=(t-Date.now())/31557600000;
+    if(yrs<0.15||yrs>12)yrs=1;else yrs=Math.max(0.25,Math.min(5,yrs));
+   }
+  }
+  sEsc=clampS(100-store.annual_increase_pct*Math.min(yrs,3)*1.5);
+ }
+ var trend=neighborhoodTrend(store);
+ var sTrend=trend?clampS(70+trend.changePct*1.5):null;
+
+ var comps=[];
+ comps.push({label:'قیمت معادل نسبت به بازار منصفانه',weight:.36,score:sPrice,group:'price'});
+ comps.push({label:'اطمینان نمونه مقایسه‌ای',weight:.14,score:conf,group:'price'});
+ comps.push({label:'ساختار قرارداد',weight:.14,score:sStruct,group:'risk'});
+ if(sDep!=null)comps.push({label:'تعادل ودیعه/اجاره',weight:.10,score:sDep,group:'risk'});
+ if(sSales!=null)comps.push({label:'فشار اجاره روی فروش',weight:.12,score:sSales,group:'risk'});
+ if(sEsc!=null)comps.push({label:'ریسک افزایش سالانه',weight:.08,score:sEsc,group:'risk'});
+ if(sTrend!=null)comps.push({label:'روند قیمت محله',weight:.06,score:sTrend,group:'price'});
+
+ var tw=0,i,composite=0,pricePart=0,pw=0,riskPart=0,rw=0;
+ for(i=0;i<comps.length;i++)tw+=comps[i].weight;
+ for(i=0;i<comps.length;i++){
+  var w=comps[i].weight/tw;composite+=comps[i].score*w;
+  if(comps[i].group==='price'){pricePart+=comps[i].score*comps[i].weight;pw+=comps[i].weight;}
+  else{riskPart+=comps[i].score*comps[i].weight;rw+=comps[i].weight;}
+ }
+ composite=Math.round(composite);
+ var priceScore=pw?Math.round(pricePart/pw):null;
+ var riskScore=rw?Math.round(riskPart/rw):null;
+ var grade=composite>=80?{label:'عالی',color:'#2F9E77'}:
+  composite>=65?{label:'خوب',color:'#43A047'}:
+  composite>=50?{label:'متوسط',color:'#C9A15C'}:
+  composite>=35?{label:'ضعیف',color:'#D2645C'}:{label:'خیلی بد',color:'#8B0000'};
+ var tier;
+ if(store.deal_structure!=='fixed')tier='mixed';
+ else if(inBand||Math.abs(gap)<=8)tier='at';
+ else if(gap<=-5)tier='low';
+ else tier='high';
+ return{ok:true,composite:composite,grade:grade,tier:tier,components:comps,market:m,
+  storePsqm:my,gap:gap,priceScore:priceScore,riskScore:riskScore,confidence:conf,
+  trend:trend,fairMarket:base,eqTotal:eq,inBand:inBand,
+  ciLow:m.eqP25,ciHigh:m.eqP75,sampleMode:m.mode,salesFlag:salesFlag,effN:m.effN};
+}
+var TIER_COLORS={low:'#2F9E77',at:'#8A93A0',high:'#D2645C',mixed:'#C9A15C',insufficient:'#5B6472'};
+function getNearbyStores(store,limit){
+ var all=BRANDS.hyperstar.stores.concat(BRANDS.myli.stores);
+ var list=all.filter(function(s){return s!==store&&isFinite(s.lat)&&isFinite(s.lng);})
+  .map(function(s){var c={};for(var k in s)c[k]=s[k];c.distKm=haversine(store,s)/1000;return c;})
+  .filter(function(s){return s.distKm<=10;});
+ if(store.area_sqm>0)list=list.filter(function(s){return !(s.area_sqm>0)||
+  (s.area_sqm/store.area_sqm>=0.4&&s.area_sqm/store.area_sqm<=2.5);});
+ if(store.city)list=list.filter(function(s){return !s.city||s.city===store.city;});
+ list.sort(function(a,b){return a.distKm-b.distKm;});
+ return limit===0?list:list.slice(0,limit);}
+
+var map=null,adsLayer=null,heatLayer=null,VIEW='dots';
+try{
+ if(!L)throw new Error('موتور نقشه آماده نیست');
+ if(!document.getElementById('map'))throw new Error('عنصر #map پیدا نشد');
+ map=L.map('map');
+ adsLayer=L.dotsLayer().addTo(map);
+ heatLayer=L.heatLayer();
+ map.on('zoomend',function(){try{scheduleRenderAds();}catch(e){}});
+ map.on('moveend',function(){try{scheduleRenderAds();}catch(e){}});
+ BRANDS.hyperstar.layer=L.layerGroup().addTo(map);
+ BRANDS.myli.layer=L.layerGroup().addTo(map);
+}catch(e){
+ console.error(e);
+ setTimeout(function(){
+  try{setStatus('<b style="color:var(--danger)">خطای راه‌اندازی نقشه:</b> '+esc(String(e&&e.message||e)));}catch(x){}
+ },0);
+}
+var baseLayer=null;
+function probe(url){return new Promise(function(res){var img=new Image();
+ var t=setTimeout(function(){img.src='';res(false);},8000);
+ img.onload=function(){clearTimeout(t);res(true);};
+ img.onerror=function(){clearTimeout(t);res(false);};
+ img.src=url;});}
+function initBasemap(){
+ if(!map||!L)return;
+ /* بدون API Key — از CARTO/OSM.org مستقیم استفاده نمی‌شود */
+ var candidates=[
+  {url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+   attr:'© Esri © OpenStreetMap',sub:'',
+   test:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/12/1612/2632'},
+  {url:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+   attr:'© Esri',sub:'',
+   test:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/12/1612/2632'},
+  {url:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+   attr:'© Esri',sub:'',
+   test:'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/12/1612/2632'},
+  {url:'https://tile.openstreetmap.de/{z}/{x}/{y}.png',
+   attr:'© OpenStreetMap contributors (DE)',sub:'',
+   test:'https://tile.openstreetmap.de/12/2632/1612.png'},
+  {url:'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',
+   attr:'© OpenStreetMap France',sub:'abc',
+   test:'https://a.tile.openstreetmap.fr/osmfr/12/2632/1612.png'},
+  {url:'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+   attr:'© OpenStreetMap (HOT)',sub:'abc',
+   test:'https://a.tile.openstreetmap.fr/hot/12/2632/1612.png'}
+ ];
+ function applyTile(c){
+  try{
+   if(baseLayer&&map.removeLayer)try{map.removeLayer(baseLayer);}catch(e){}
+   var opts={maxZoom:19,attribution:c.attr};
+   if(c.sub)opts.subdomains=c.sub;
+   baseLayer=L.tileLayer(c.url,opts).addTo(map);
+   if(baseLayer.bringToBack)baseLayer.bringToBack();
+  }catch(e){console.warn('basemap',e);}
+ }
+ function tryAt(i){
+  if(i>=candidates.length){applyTile(candidates[0]);return;}
+  var c=candidates[i];
+  probe(c.test).then(function(ok){
+   if(ok)applyTile(c);else tryAt(i+1);
+  });
+ }
+ tryAt(0);
+}
+function setView(v){VIEW=v;
+ document.getElementById('vDots').style.borderColor=(v==='dots')?'var(--accent)':'var(--line)';
+ document.getElementById('vHeat').style.borderColor=(v==='heat')?'var(--accent)':'var(--line)';
+ renderAds();}
+
+function currentFilters(){return{
+ q:(document.getElementById('q').value||'').trim(),
+ prov:document.getElementById('fProv').value,
+ city:document.getElementById('fCity').value,
+ nbh:document.getElementById('fNbh').value,
+ cat:document.getElementById('fCat').value,
+ deal:document.getElementById('fDeal').value,
+ minA:num(document.getElementById('fMinA').value),
+ maxA:num(document.getElementById('fMaxA').value),
+ outlier:document.getElementById('fOutlier').checked,
+ est:document.getElementById('fEst').checked};}
+function computeOutliers(){
+ var groups={};
+ RAW.forEach(function(r){
+  if(!(r.area_sqm>0)||r.price_total==null)return;
+  var key=(r.city||'')+'|'+(r.neighborhood||'')+'|'+r.category+'|'+r.deal_type;
+  (groups[key]=groups[key]||[]).push(r);});
+ for(var k in groups){var rows=groups[k];if(rows.length<4)continue;
+  var ps=rows.map(function(r){return r.price_total/r.area_sqm;}).sort(function(a,b){return a-b;});
+  var q1=ps[Math.floor(ps.length/4)],q3=ps[Math.floor(3*ps.length/4)],iqr=q3-q1;
+  var lo=q1-1.5*iqr,hi=q3+1.5*iqr;
+  rows.forEach(function(r){var v=r.price_total/r.area_sqm;r.is_outlier=(v<lo||v>hi)?1:0;});}}
+function filteredListings(){var f=currentFilters();
+ var provCities=f.prov?(PROVINCE_CITIES[f.prov]||[]):null;
+ return RAW.filter(function(r){
+  if(!isFinite(r.lat)||!isFinite(r.lng))return false;
+  if(f.outlier&&r.is_outlier)return false;
+  if(f.est&&r.lat_is_estimated)return false;
+  if(provCities&&provCities.indexOf(r.city)<0)return false;
+  if(f.city&&r.city!==f.city)return false;
+  if(f.nbh&&r.neighborhood!==f.nbh)return false;
+  if(f.cat&&r.category!==f.cat)return false;
+  if(f.deal&&r.deal_type!==f.deal)return false;
+  if(f.minA!=null&&!(r.area_sqm>=f.minA))return false;
+  if(f.maxA!=null&&!(r.area_sqm<=f.maxA))return false;
+  if(f.q&&((r.title+' '+r.neighborhood+' '+r.city).indexOf(f.q)<0))return false;
+  return true;});}
+function listingPsqm(r){return r.deal_type==='sale'
+ ?((r.price_total&&r.area_sqm)?r.price_total/r.area_sqm:null)
+ :((r.monthly_rent&&r.area_sqm)?r.monthly_rent/r.area_sqm:null);}
+var priceScale={lo:0,hi:1};
+function priceToColor(t){t=Math.max(0,Math.min(1,t));
+ var stops=[[0,0x2f,0xb6,0xa3],[.5,0xc9,0xa1,0x5c],[1,0xe2,0x66,0x4b]];
+ var a=stops[0],b=stops[1];
+ for(var i=0;i<stops.length-1;i++)if(t>=stops[i][0]&&t<=stops[i+1][0]){a=stops[i];b=stops[i+1];break;}
+ var u=(t-a[0])/((b[0]-a[0])||1);
+ function c(i){return Math.round(a[i]+(b[i]-a[i])*u);}
+ return'rgb('+c(1)+','+c(2)+','+c(3)+')';}
+function updateRampLegend(){
+ var s=[0,.5,1].map(priceToColor);
+ document.getElementById('priceLegendBar').style.background=
+  'linear-gradient(to left, '+s[0]+', '+s[1]+', '+s[2]+')';}
+function updatePriceScale(data){
+ var v=data.map(listingPsqm).filter(function(x){return x!=null&&x>0;}).sort(function(a,b){return a-b;});
+ if(v.length>=4)priceScale={lo:v[Math.floor(v.length*.05)],hi:v[Math.floor(v.length*.95)]};
+ else if(v.length)priceScale={lo:v[0],hi:v[v.length-1]};
+ else priceScale={lo:0,hi:1};
+ document.getElementById('priceLegendMin').textContent=toman(priceScale.lo);
+ document.getElementById('priceLegendMid').textContent=toman((priceScale.lo+priceScale.hi)/2);
+ document.getElementById('priceLegendMax').textContent=toman(priceScale.hi);}
+function colorForListing(r){
+ /* رنگ ثابت بر اساس نوع معامله: اجاره = سبز، فروش = طلایی */
+ var dt=String(r.deal_type||'').toLowerCase();
+ if(dt==='sale'||dt==='sell'||dt.indexOf('sale')>=0||dt==='فروش')return '#C9A15C';
+ return '#2F9E77';}
+function listingPopup(r){
+ var dt=r.deal_type==='sale'?'فروش':'رهن و اجاره';
+ var price=r.deal_type==='sale'
+  ?'قیمت کل: '+toman(r.price_total)+'<br>قیمت/متر: '+toman(r.price_total&&r.area_sqm?r.price_total/r.area_sqm:null)
+  :'ودیعه: '+toman(r.deposit)+'<br>اجاره: '+toman(r.monthly_rent)+'<br>ودیعه/متر: '+toman(r.deposit&&r.area_sqm?r.deposit/r.area_sqm:null)+' · اجاره/متر: '+toman(r.monthly_rent&&r.area_sqm?r.monthly_rent/r.area_sqm:null);
+ return'<div class="popup"><b>'+esc(r.title||'آگهی')+'</b><br>'+esc(r.city||'')+
+  (r.neighborhood?' · '+esc(r.neighborhood):'')+' · '+dt+'<br>متراژ: '+fmt(r.area_sqm)+' متر<br>'+price+
+  (r.url?'<br><a href="'+esc(r.url)+'" target="_blank">مشاهده در دیوار</a>':'')+'</div>';}
+/* اولویت با آگهی‌های داخل نمای فعلی نقشه؛ بقیه فقط اگر جا بود */
+function pickAdsForView(data,limit){
+ if(!data||!data.length)return [];
+ if(data.length<=limit)return data;
+ var c=map.getCenter(),z=map.getZoom(),sz=map._size||{w:800,h:600};
+ var latSpan=(360/Math.pow(2,Math.max(z,1)))*(sz.h/256);
+ var lngSpan=(360/Math.pow(2,Math.max(z,1)))*(sz.w/256);
+ var pad=0.25;
+ var s=c.lat-latSpan*(0.5+pad),n=c.lat+latSpan*(0.5+pad);
+ var w=c.lng-lngSpan*(0.5+pad),e=c.lng+lngSpan*(0.5+pad);
+ var inV=[],out=[],i,r;
+ for(i=0;i<data.length;i++){
+  r=data[i];
+  if(r.lat>=s&&r.lat<=n&&r.lng>=w&&r.lng<=e)inV.push(r);else out.push(r);
+ }
+ if(inV.length>=limit)return inV.slice(0,limit);
+ return inV.concat(out.slice(0,limit-inV.length));
+}
+var _adsMoveTimer=null;
+function scheduleRenderAds(){
+ if(_adsMoveTimer)clearTimeout(_adsMoveTimer);
+ _adsMoveTimer=setTimeout(function(){renderAds();},120);
+}
+function renderAds(){
+ if(!map||!adsLayer)return;
+ var data=filteredListings();
+ updatePriceScale(data);
+ if(VIEW==='heat'){
+  adsLayer.clearLayers();
+  if(!map.hasLayer(heatLayer))map.addLayer(heatLayer);
+  var rent=data.filter(function(r){return r.deal_type==='rent'&&r.monthly_rent&&r.area_sqm;});
+  var vs=rent.map(listingPsqm).filter(function(v){return v!=null;}).sort(function(a,b){return a-b;});
+  var lo=vs.length?vs[0]:0,hi=vs.length?vs[vs.length-1]:1;
+  var heatPts=pickAdsForView(rent,1800);
+  heatLayer.setPoints(heatPts.map(function(r){return{lat:r.lat,lng:r.lng,
+   t:(hi>lo)?(listingPsqm(r)-lo)/(hi-lo):.5};}));
+ }else{
+  heatLayer.clearLayers();
+  if(map.hasLayer(heatLayer))map.removeLayer(heatLayer);
+  var dots=pickAdsForView(data,4500);
+  adsLayer.setPoints(dots.map(function(r){return{
+   lat:r.lat,lng:r.lng,
+   radius:Math.max(4,Math.min(11,Math.sqrt(r.area_sqm||30)/2.2)),
+   color:'var(--ring)',fillColor:colorForListing(r),fillOpacity:.8,
+   popup:function(){return listingPopup(r);}};}));}
+ renderStats(data);}
+function medianArr(a){if(!a.length)return null;return a[Math.floor(a.length/2)];}
+function renderStats(data){
+ var rent=data.filter(function(r){return r.deal_type==='rent';});
+ var dep=rent.filter(function(r){return r.deposit&&r.area_sqm;})
+  .map(function(r){return r.deposit/r.area_sqm;}).sort(function(a,b){return a-b;});
+ var mon=rent.filter(function(r){return r.monthly_rent&&r.area_sqm;})
+  .map(function(r){return r.monthly_rent/r.area_sqm;}).sort(function(a,b){return a-b;});
+ var sale=data.filter(function(r){return r.deal_type==='sale'&&r.price_total&&r.area_sqm;})
+  .map(function(r){return r.price_total/r.area_sqm;}).sort(function(a,b){return a-b;});
+ document.getElementById('kCount').textContent=fmt(data.length);
+ document.getElementById('kDep').textContent=dep.length?toman(medianArr(dep)):'—';
+ document.getElementById('kRent').textContent=mon.length?toman(medianArr(mon)):'—';
+ document.getElementById('marketSummary').innerHTML=
+  '<div class="kv"><span>آگهی رهن‌واجاره / فروش</span><b>'+fmt(rent.length)+' / '+fmt(data.length-rent.length)+'</b></div>'+
+  '<div class="kv"><span>میانه ودیعه/متر</span><b>'+toman(medianArr(dep))+'</b></div>'+
+  '<div class="kv"><span>میانه اجاره/متر</span><b>'+toman(medianArr(mon))+'</b></div>'+
+  '<div class="kv"><span>میانه قیمت فروش/متر</span><b>'+toman(medianArr(sale))+'</b></div>';}
+function explainScoreReasons(store,score,m){
+ var reasons=[];
+ if(!score)return reasons;
+ if(!score.ok){
+  reasons.push(score.reason||'داده کافی برای امتیازدهی نیست.');
+  return reasons;
+ }
+ var gap=score.gap,comp=score.composite;
+ if(gap!=null&&isFinite(gap)){
+  if(gap>25)reasons.push('اجاره مؤثر حدود '+fmt(gap,0)+'٪ بالاتر از بازار منصفانه است — عامل اصلی فشار روی امتیاز.');
+  else if(gap>10)reasons.push('اجاره مؤثر حدود '+fmt(gap,0)+'٪ بالاتر از بازار منصفانه است.');
+  else if(gap>5)reasons.push('قیمت کمی بالاتر از بازار منصفانه است ('+fmt(gap,1)+'٪).');
+  else if(gap<-15)reasons.push('نسبت به بازار منصفانه حدود '+fmt(-gap,0)+'٪ ارزان‌تر است.');
+  else if(score.inBand)reasons.push('قیمت داخل بازه معمول بازار (چارک ۲۵–۷۵) قرار دارد.');
+ }
+ if(score.salesFlag)reasons.push('فروش خوداظهاری خارج از بازه باورپذیر است؛ بخش وابسته به فروش با احتیاط دیده شده.');
+ if(score.effN!=null&&score.effN<5)reasons.push('تعداد مؤثر آگهی‌ها کم است (n≈'+fmt(score.effN,1)+')؛ اطمینان نمونه پایین است.');
+ else if(score.confidence!=null&&score.confidence<55)reasons.push('اطمینان نمونه نسبتاً پایین است (پراکندگی زیاد یا داده محدود).');
+ if(m&&m.mode==='mixed')reasons.push('نمونه بازار ترکیبی است (تجاری کافی نبوده)؛ معیار کمی ضعیف‌تر از نمونه صرفاً تجاری است.');
+ if(score.components&&score.components.length){
+  var weak=score.components.slice().filter(function(c){return c.score!=null&&c.score<55;})
+   .sort(function(a,b){return a.score-b.score;});
+  weak.slice(0,3).forEach(function(c){
+   var tip='';
+   if(c.label.indexOf('قیمت')>=0)tip=' = گران‌تر بودن نسبت به بازار';
+   else if(c.label.indexOf('اطمینان')>=0)tip=' = ضعف کیفیت/تعداد نمونه';
+   else if(c.label.indexOf('ودیعه')>=0)tip=' = نسبت ودیعه به اجاره نامتعادل';
+   else if(c.label.indexOf('فروش')>=0)tip=' = فشار بالای اجاره روی فروش';
+   else if(c.label.indexOf('افزایش')>=0)tip=' = ریسک رشد اجاره در تمدید';
+   else if(c.label.indexOf('ساختار')>=0)tip=' = ساختار قرارداد نسبت به بازار ضعیف‌تر ارزیابی شده';
+   else if(c.label.indexOf('روند')>=0)tip=' = روند محله به نفع اجاره‌دهنده نیست';
+   reasons.push(c.label+' نمره '+fmt(c.score)+tip+'.');
+  });
+ }
+ if(store.deal_structure==='hybrid'&&store.minimum_rent_toman>0&&score.fairMarket>0){
+  var fg=((store.minimum_rent_toman/store.area_sqm-score.fairMarket)/score.fairMarket)*100;
+  if(fg>15)reasons.push('کف اجاره hybrid حدود '+fmt(fg,0)+'٪ بالاتر از بازار منصفانه است.');
+ }
+ if(comp!=null&&comp>=65&&!reasons.length)reasons.push('نمره کلی قابل‌قبول است؛ ضعف جدی ساختاری دیده نشد.');
+ if(comp!=null&&comp<50&&!reasons.some(function(r){return r.indexOf('بالاتر از بازار')>=0||r.indexOf('نمره')>=0;}))
+  reasons.push('چند عامل همزمان نمره را پایین آورده‌اند؛ جزئیات اجزا را در فهرست زیر ببینید.');
+ /* حداکثر ۴ دلیل */
+ var out=[],seen={};
+ reasons.forEach(function(r){
+  if(out.length>=4)return;
+  var k=r.slice(0,40);if(seen[k])return;seen[k]=1;out.push(r);
+ });
+ return out;
+}
+function storePopupHtml(store,key,idx){
+ var m=buildMarketStats(store,RAW);
+ var score=computeComposite(store,m);
+ store._score=score;store._market=m;
+ var nearby=getNearbyStores(store,0).length;
+ var html='<div class="popup"><b>'+esc(store.store_name||BRANDS[key].label)+'</b><br>'+
+  esc(store.city||'')+(store.address?' · '+esc(store.address):'')+'<br>متراژ: '+
+  (store.area_sqm?fmt(store.area_sqm)+' متر':'—')+' · قرارداد: '+esc(store.deal_structure||'—');
+ /* جزئیات قرارداد از فایل فروشگاه (اکسل/JSON) */
+ html+='<div class="meta" style="margin-top:8px"><b>جزئیات قرارداد</b>';
+ function kv(label,val){if(val==null||val===''||val===undefined)return;html+='<div class="kv"><span>'+esc(label)+'</span><b>'+val+'</b></div>';}
+ kv('اجاره ماهانه',store.monthly_rent_toman!=null?toman(store.monthly_rent_toman):null);
+ kv('ودیعه',store.deposit_toman!=null?toman(store.deposit_toman):null);
+ kv('کف اجاره (حداقل)',store.minimum_rent_toman!=null?toman(store.minimum_rent_toman):null);
+ kv('درصد از فروش',store.sales_rent_pct!=null?(fmt(store.sales_rent_pct<=1?store.sales_rent_pct*100:store.sales_rent_pct,2)+'٪'):null);
+ kv('فروش ماهانه (میانگین)',store.avg_monthly_sales_toman!=null?toman(store.avg_monthly_sales_toman):null);
+ kv('فروش سالانه (میانگین)',store.avg_annual_sales_toman!=null?toman(store.avg_annual_sales_toman):null);
+ kv('افزایش سالانه',store.annual_increase_pct!=null?(fmt(store.annual_increase_pct,1)+'٪'):null);
+ kv('شروع قرارداد',store.lease_start||null);
+ kv('تمدید بعدی',store.next_renewal||null);
+ if(store.notes)kv('یادداشت',esc(store.notes));
+ html+='</div>';
+ if(score.ok){
+  html+='<div class="score-banner" style="background:'+score.grade.color+'">'+
+   '<div class="n">'+score.composite+'</div>'+
+   '<div class="t">امتیاز مرکب: '+score.grade.label+'<br>اختلاف با بازار: '+fmt(score.gap,1)+'٪</div></div>';
+  var why=explainScoreReasons(store,score,m);
+  if(why&&why.length){
+   html+='<div class="meta" style="border-right:3px solid '+(score.composite<50?'var(--danger)':(score.composite<65?'#C9A15C':'var(--accent)'))+';padding-right:8px">'+
+    '<b>چرا این نمره؟</b><ul style="margin:6px 0 0;padding-right:18px">';
+   why.forEach(function(r){html+='<li style="margin:4px 0">'+esc(r)+'</li>';});
+   html+='</ul></div>';
+  }
+  html+='<div class="meta">مقایسه با <b>'+nearby+'</b> فروشگاه نزدیک و <b>'+m.n+'</b> آگهی (n≈'+fmt(m.effN,1)+')'+
+   (score.sampleMode?' · نمونه: '+esc(score.sampleMode==='commercial'?'تجاری':'ترکیبی'):'')+(score.effN!=null?' · n مؤثر≈'+fmt(score.effN,1):'')+(score.salesFlag?' · <b style="color:var(--danger)">فروش خوداظهاری مشکوک</b>':'')+'<br>'+
+   'هزینه معادل: '+toman(score.storePsqm)+'/متر · بازار منصفانه (امروز): '+toman(score.fairMarket)+'/متر<br>'+
+   'میانه: '+toman(m.eqMedian)+'/متر'+(m.eqP25!=null?' · بازه اطمینان: '+toman(m.eqP25)+'–'+toman(m.eqP75):'')+
+   (score.inBand?' · <b>داخل بازه بازار</b>':'')+
+   (score.priceScore!=null?'<br>نمره قیمت: <b>'+score.priceScore+'</b> · نمره ریسک: <b>'+score.riskScore+'</b> · اطمینان: <b>'+score.confidence+'</b>':'')+
+   '<br><span style="opacity:.85">قیمت آگهی‌ها با تورم/تاریخ و تعدیل طبقه/متراژ نرمال شده‌اند</span>'+
+   '</div>';
+  score.components.forEach(function(c){html+='<div class="kv"><span>'+esc(c.label)+'</span><b>'+fmt(c.score)+'</b></div>';});
+ }else{
+  var why0=explainScoreReasons(store,score,m);
+  html+='<div class="meta"><b>داده کافی نیست.</b><br>'+esc(score.reason||'');
+  if(why0&&why0.length){html+='<ul style="margin:6px 0 0;padding-right:18px">';why0.forEach(function(r){html+='<li>'+esc(r)+'</li>';});html+='</ul>';}
+  html+='</div>';}
+ html+='<div class="btn-row">'+
+  '<button class="b-red" onclick="openChartModal(\''+key+'\','+idx+')">نمودارها</button>'+
+  '<button class="b-dark" onclick="openCompareTab(\''+key+'\','+idx+')">فروشگاه‌های مقایسه</button>'+
+  '<button class="b-green" onclick="openStoreComps(\''+key+'\','+idx+')">آگهی‌های مقایسه</button></div></div>';
+ return html;}
+function renderStores(){
+ if(!map)return;
+ var jobs=[];
+ ['hyperstar','myli'].forEach(function(key){
+  var B=BRANDS[key];
+  if(!B.layer){B.layer=L.layerGroup().addTo(map);}
+  B.layer.clearLayers();
+  if(!B.on)return;
+  B.stores.forEach(function(store,idx){
+   if(!isFinite(store.lat)||!isFinite(store.lng))return;
+   jobs.push({key:key,store:store,idx:idx});
+  });
+ });
+ var i=0;
+ function paintOne(job){
+  var store=job.store,key=job.key,idx=job.idx,B=BRANDS[key];
+  var m=null,score={ok:false,tier:'insufficient'};
+  try{m=buildMarketStats(store,RAW);score=computeComposite(store,m);}catch(e){console.warn('score',e);}
+  store._score=score;store._market=m;store._brand=key;store._idx=idx;
+  var color=TIER_COLORS.insufficient;
+  if(score&&score.ok){
+   /* رنگ پین = کیفیت نمره (grade)، نه فقط tier */
+   if(score.grade&&score.grade.color)color=score.grade.color;
+   else if(score.composite>=80)color='#2F9E77';
+   else if(score.composite>=65)color='#43A047';
+   else if(score.composite>=50)color='#C9A15C';
+   else if(score.composite>=35)color='#D2645C';
+   else color='#8B0000';
+  }
+  try{
+   L.brandMarker([store.lat,store.lng],{radius:13,weight:2,
+    fillColor:color,fillOpacity:.95,dashed:store.deal_structure!=='fixed',
+    icon:key==='hyperstar'?'store':'flower'})
+    .bindPopup(function(){return storePopupHtml(store,key,idx);}).addTo(B.layer);
+  }catch(e){console.warn('marker',e);}
+ }
+ function step(){
+  var start=+new Date();
+  while(i<jobs.length&&(+new Date()-start)<30){paintOne(jobs[i++]);}
+  try{map._draw();}catch(e){}
+  if(i<jobs.length){
+   if(window.requestAnimationFrame)requestAnimationFrame(step);
+   else setTimeout(step,16);
+  }else{
+   try{renderBrandPanel();}catch(e){}
+  }
+ }
+ if(jobs.length)step();
+ else try{renderBrandPanel();}catch(e){}
+}
+function toggleBrand(key){
+ var B=BRANDS[key];B.on=!B.on;
+ document.getElementById('btn_'+key).textContent=B.label+': '+(B.on?'روشن':'خاموش');
+ renderStores();}
+
+var BRAND_TAB='myli';
+function setBrandTab(tab){
+ BRAND_TAB=tab;
+ var a=document.getElementById('bpTabMyli'),b=document.getElementById('bpTabHyperstar');
+ if(a)a.classList.toggle('active',tab==='myli');
+ if(b)b.classList.toggle('active',tab==='hyperstar');
+ renderBrandPanel();
+}
+function toggleBrandPanel(){
+ var p=document.getElementById('brandPanel');
+ if(!p)return;
+ if(window.matchMedia('(max-width: 820px)').matches){
+  p.classList.toggle('open');
+  var ov=document.getElementById('side-overlay');
+  if(ov)ov.classList.toggle('open',p.classList.contains('open'));
+ }else{
+  p.style.display=(p.style.display==='none')?'flex':'';
+  if(p.style.display==='')p.style.display='flex';
+  if(getComputedStyle(p).width==='0px'){p.style.width='320px';p.style.minWidth='320px';}
+  setTimeout(function(){try{map.invalidateSize();}catch(e){}},200);
+ }
+}
+function focusBrandStore(key,idx){
+ var store=BRANDS[key]&&BRANDS[key].stores[idx];
+ if(!store){console.warn('focusBrandStore: no store',key,idx);return;}
+ if(!isFinite(store.lat)||!isFinite(store.lng)){console.warn('focusBrandStore: bad coords',store);return;}
+ try{
+  if(typeof map.flyTo==='function')map.flyTo([store.lat,store.lng],Math.max(map.getZoom()||12,14));
+  else if(typeof map.setView==='function')map.setView([store.lat,store.lng],Math.max(map.getZoom()||12,14));
+ }catch(e){console.warn('flyTo',e);}
+ function open(){
+  try{
+   var html=storePopupHtml(store,key,idx);
+   if(html)map._openPopup(html,{lat:store.lat,lng:store.lng});
+  }catch(e){console.warn('popup',e);}
+ }
+ setTimeout(open,250);
+ setTimeout(open,600);
+ if(window.matchMedia('(max-width: 820px)').matches){
+  var p=document.getElementById('brandPanel');
+  if(p)p.classList.remove('open');
+  var ov=document.getElementById('side-overlay');
+  if(ov)ov.classList.remove('open');
+ }
+}
+function renderBrandPanel(){
+ var list=document.getElementById('brandList');
+ var meta=document.getElementById('brandMeta');
+ if(!list)return;
+ var key=BRAND_TAB||'myli';
+ var B=BRANDS[key];
+ if(!B){list.innerHTML='';return;}
+ var items=B.stores.slice();
+ items.forEach(function(s,i){
+  if(s._idx==null)s._idx=B.stores.indexOf(s);
+  /* همیشه با RAW فعلی دوباره حساب کن */
+  try{
+   s._market=buildMarketStats(s,RAW);
+   s._score=computeComposite(s,s._market);
+  }catch(e){console.warn('score',e);s._score={ok:false,reason:String(e&&e.message||e)};}
+ });
+ items.sort(function(a,b){
+  var sa=(a._score&&a._score.ok)?a._score.composite:-1;
+  var sb=(b._score&&b._score.ok)?b._score.composite:-1;
+  return sb-sa;
+ });
+ var ok=0;
+ for(var i=0;i<items.length;i++)if(items[i]._score&&items[i]._score.ok)ok++;
+ if(meta)meta.innerHTML=B.label+': <b>'+fmt(items.length)+'</b> شعبه · <b>'+fmt(ok)+'</b> با امتیاز'+
+  (RAW.length?' · بر اساس '+fmt(RAW.length)+' آگهی':'');
+ if(!items.length){
+  list.innerHTML='<div class="status" style="padding:10px">فروشگاهی برای این برند بارگذاری نشده.</div>';
+  return;
+ }
+ list.innerHTML=items.map(function(s){
+  var idx=(s._idx!=null)?s._idx:B.stores.indexOf(s);
+  var sc=s._score;
+  var color=(sc&&sc.ok&&sc.grade)?sc.grade.color:(TIER_COLORS?TIER_COLORS.insufficient:'#5B6472');
+  var scoreTxt=(sc&&sc.ok)?String(sc.composite):'—';
+  var gradeTxt=(sc&&sc.ok&&sc.grade)?sc.grade.label:(sc&&sc.reason?sc.reason:'داده کم');
+  var gapTxt=(sc&&sc.ok)?(fmt(sc.gap,1)+'٪'):'—';
+  var tier=(sc&&sc.ok)?(sc.tier==='low'?'پایین‌تر از بازار':sc.tier==='at'?'مطابق بازار':sc.tier==='high'?'بالاتر از بازار':'ساختار متفاوت'):'—';
+  return '<div class="bp-item" onclick="focusBrandStore(\''+key+'\','+idx+')">'+
+   '<div class="bp-top"><div class="bp-score" style="background:'+color+'">'+scoreTxt+'</div>'+
+   '<div><div class="bp-name">'+esc(s.store_name||'—')+'</div>'+
+   '<div class="bp-sub">'+esc(s.city||'')+(s.address?' · '+esc(s.address):'')+'</div></div></div>'+
+   '<div class="bp-row"><span>وضعیت: <b>'+esc(gradeTxt)+'</b></span>'+
+   '<span>اختلاف: <b>'+gapTxt+'</b></span>'+
+   '<span>'+esc(tier)+'</span>'+
+   '<span>متراژ: <b>'+(s.area_sqm?fmt(s.area_sqm):'—')+'</b></span>'+
+   '<span>قرارداد: <b>'+esc(s.deal_structure||'—')+'</b></span></div></div>';
+ }).join('');
+}
+function downloadTemplate(){
+ var header='store_name,province,county,city,neighborhood_or_street,coordinates,area_sqm,deal_structure,monthly_rent_toman,deposit_toman,minimum_rent_toman,sales_rent_pct,avg_monthly_sales_toman,annual_increase_pct,next_renewal';
+ var sample='شعبه نمونه,تهران,تهران,تهران,ولنجک,"35.80,51.40",120,fixed,50000000,2000000000,,,,\n';
+ var blob=new Blob(['\uFEFF'+header+'\n'+sample],{type:'text/csv;charset=utf-8'});
+ var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='stores_template.csv';a.click();}
+
+var _comps={items:[],store:null};
+function openStoreComps(key,idx){
+ var store=BRANDS[key].stores[idx];if(!store)return;
+ var m=store._market||buildMarketStats(store,RAW);
+ _comps={items:m.pairs.slice().sort(function(a,b){return a.ad.deposit/b.ad.deposit;}),store:store};
+ document.getElementById('compsTitle').textContent=(store.store_name||'')+' — آگهی‌های مقایسه';
+ document.getElementById('compsMeta').innerHTML=m.n+' آگهی تجاری رهن‌واجاره در شعاع ۵ کیلومتر (وزن‌دهی‌شده بر فاصله/متراژ/تازگی)';
+ drawComps();
+ document.getElementById('compsDrawer').classList.add('open');}
+function closeStoreComps(){document.getElementById('compsDrawer').classList.remove('open');}
+function sortComps(mode){
+ var it=_comps.items;
+ if(mode==='dist')it.sort(function(a,b){return haversine(_comps.store,a.ad)-haversine(_comps.store,b.ad);});
+ if(mode==='rent')it.sort(function(a,b){return a.rent-b.rent;});
+ if(mode==='dep')it.sort(function(a,b){return a.dep-b.dep;});
+ if(mode==='area')it.sort(function(a,b){return b.ad.area_sqm-a.ad.area_sqm;});
+ drawComps();}
+function drawComps(){
+ var list=document.getElementById('compsList');
+ list.innerHTML=_comps.items.slice(0,250).map(function(x){var r=x.ad;
+  return'<div class="c-item"><div class="t">'+esc(r.title||'آگهی')+'</div>'+
+   '<div class="s">'+esc(r.city||'')+(r.neighborhood?' · '+esc(r.neighborhood):'')+' · '+fmt(r.area_sqm)+' متر</div>'+
+   '<div class="p">ودیعه '+toman(r.deposit)+' · اجاره '+toman(r.monthly_rent)+'<br>ودیعه/متر '+toman(r.deposit/r.area_sqm)+' · اجاره/متر '+toman(r.monthly_rent/r.area_sqm)+'</div></div>';}).join('');}
+
+var _openChartStore=null;
+function cssVar(n){return(getComputedStyle(document.documentElement).getPropertyValue(n)||'').trim();}
+function setupCanvas(c){var dpr=Math.min(devicePixelRatio||1,2);
+ var w=c.clientWidth,h=c.clientHeight;c.width=w*dpr;c.height=h*dpr;
+ var ctx=c.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ return{ctx:ctx,w:w,h:h};}
+function extents(vals){var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);
+ if(!isFinite(mn)){mn=0;mx=1;}if(mn===mx){mn-=1;mx+=1;}
+ var p=(mx-mn)*.08;return[mn-p,mx+p];}
+/* history.median_psqm برای اجاره معمولاً «هزار تومان/متر» است؛ برای فروش «میلیون تومان/متر» */
+function historyPsqmToToman(v,deal){
+ if(v==null||!isFinite(v))return null;
+ if(v>=100000)return v;
+ var d=String(deal||'rent').toLowerCase();
+ if(d==='sale')return v*1e6;
+ return v*1e3;
+}
+function drawPriceHist(canvas,rentValues,storeRentPerM){
+ var s=setupCanvas(canvas),ctx=s.ctx,w=s.w,h=s.h;
+ var muted=cssVar('--muted'),grid=cssVar('--line'),accent=cssVar('--accent'),danger=cssVar('--danger');
+ var vals=rentValues.filter(function(v){return v!=null&&isFinite(v)&&v>0;}).sort(function(a,b){return a-b;});
+ if(!vals.length){ctx.fillStyle=muted;ctx.font='12px Vazirmatn,Tahoma';ctx.textAlign='center';
+  ctx.fillText('آگهی قابل مقایسه برای نمودار نیست',w/2,h/2);return;}
+ var nBins=Math.min(8,Math.max(4,Math.ceil(Math.sqrt(vals.length))));
+ var lo=vals[Math.floor(vals.length*0.05)],hi=vals[Math.min(vals.length-1,Math.floor(vals.length*0.95))];
+ if(!(hi>lo)){lo=vals[0];hi=vals[vals.length-1]||lo+1;}
+ var step=(hi-lo)/nBins,bins=[],i,j;
+ for(i=0;i<nBins;i++)bins.push({lo:lo+i*step,hi:lo+(i+1)*step,c:0,sum:0});
+ vals.forEach(function(v){
+  var idx=Math.min(nBins-1,Math.max(0,Math.floor((v-lo)/step)));
+  if(v<lo)idx=0;if(v>=hi)idx=nBins-1;
+  bins[idx].c++;bins[idx].sum+=v;
+ });
+ var maxC=1;bins.forEach(function(b){if(b.c>maxC)maxC=b.c;});
+ var Lp=48,R=14,T=16,B=42,gap=4;
+ var barW=(w-Lp-R)/nBins;
+ ctx.strokeStyle=grid;ctx.fillStyle=muted;ctx.font='10px Vazirmatn,Tahoma';
+ for(i=0;i<=4;i++){
+  var gy=T+i*(h-T-B)/4;ctx.beginPath();ctx.moveTo(Lp,gy);ctx.lineTo(w-R,gy);ctx.stroke();
+  ctx.textAlign='right';ctx.fillText(String(Math.round(maxC*(1-i/4))),Lp-6,gy+3);
+ }
+ bins.forEach(function(b,i){
+  var bh=(b.c/maxC)*(h-T-B),x=Lp+i*barW+gap/2,y=h-B-bh,bw=Math.max(2,barW-gap);
+  ctx.fillStyle=accent;ctx.globalAlpha=.85;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;
+  if(b.c>0){ctx.fillStyle=muted;ctx.textAlign='center';ctx.font='9px Vazirmatn,Tahoma';
+   ctx.fillText(fmt(b.c),x+bw/2,y-3);
+   var mid=b.sum/b.c;
+   ctx.fillText(toman(mid).replace(' تومان',''),x+bw/2,h-B+12);
+  }
+ });
+ ctx.fillStyle=muted;ctx.font='10px Vazirmatn,Tahoma';ctx.textAlign='center';
+ ctx.fillText('بازهٔ اجاره / متر (تومان) — ارتفاع = تعداد آگهی',(Lp+w-R)/2,h-6);
+ if(storeRentPerM!=null&&isFinite(storeRentPerM)&&storeRentPerM>0){
+  var sx=Lp+Math.min(nBins-0.01,Math.max(0,(storeRentPerM-lo)/step))*barW+barW/2;
+  ctx.strokeStyle=danger;ctx.lineWidth=2;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(sx,T);ctx.lineTo(sx,h-B);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=danger;ctx.font='10px Vazirmatn,Tahoma';ctx.textAlign='center';
+  ctx.fillText('فروشگاه '+toman(storeRentPerM),sx,T+10);
+ }
+}
+function drawLineChart(canvas,series,xlabels){
+ var s=setupCanvas(canvas),ctx=s.ctx,w=s.w,h=s.h;
+ var muted=cssVar('--muted'),grid=cssVar('--line');
+ var Lp=52,R=12,T=22,B=32,n=xlabels.length;
+ if(n<2){ctx.fillStyle=muted;ctx.font='12px Vazirmatn,Tahoma';ctx.textAlign='center';
+  ctx.fillText('داده تاریخی کافی نیست',w/2,h/2);return;}
+ function X(i){return Lp+i*(w-Lp-R)/(n-1);}
+ var all=[];series.forEach(function(sr){sr.data.forEach(function(v){if(v!=null&&isFinite(v))all.push(v);});});
+ if(!all.length){ctx.fillStyle=muted;ctx.font='12px Vazirmatn,Tahoma';ctx.textAlign='center';
+  ctx.fillText('داده تاریخی کافی نیست',w/2,h/2);return;}
+ var e=extents(all);
+ function Y(v){return h-B-(v-e[0])/((e[1]-e[0])||1)*(h-T-B);}
+ ctx.strokeStyle=grid;ctx.fillStyle=muted;ctx.font='10px Vazirmatn,Tahoma';
+ for(var gi=0;gi<=4;gi++){
+  var gy=T+gi*(h-T-B)/4,val=e[1]-gi*(e[1]-e[0])/4;
+  ctx.beginPath();ctx.moveTo(Lp,gy);ctx.lineTo(w-R,gy);ctx.stroke();
+  ctx.textAlign='right';ctx.fillText(toman(val).replace(' تومان',''),Lp-4,gy+3);
+ }
+ ctx.textAlign='center';
+ var step=Math.max(1,Math.floor(n/5));
+ for(var i=0;i<n;i+=step)ctx.fillText(xlabels[i],X(i),h-B+14);
+ series.forEach(function(sr,si){
+  ctx.strokeStyle=sr.color;ctx.lineWidth=2;ctx.beginPath();var started=false;
+  sr.data.forEach(function(v,i){if(v==null)return;
+   if(!started){ctx.moveTo(X(i),Y(v));started=true;}else ctx.lineTo(X(i),Y(v));});
+  ctx.stroke();
+  var last=null;for(var k=sr.data.length-1;k>=0;k--)if(sr.data[k]!=null){last=sr.data[k];break;}
+  ctx.fillStyle=sr.color;ctx.font='10px Vazirmatn,Tahoma';
+  ctx.textAlign=si===0?'right':'left';
+  ctx.fillText(sr.label+(last!=null?' '+toman(last):''),si===0?w-R:Lp,T+si*12);
+ });
+}
+function openChartModal(key,idx){
+ var store=BRANDS[key].stores[idx];if(!store)return;
+ _openChartStore=store;
+ document.getElementById('chartModalTitle').textContent='نمودارها: '+(store.store_name||'');
+ document.getElementById('chartModal').style.display='flex';
+ redrawOpenCharts();}
+function redrawOpenCharts(){
+ var store=_openChartStore;if(!store)return;
+ var m=store._market||buildMarketStats(store,RAW);
+ var rents=(m.pairs||[]).map(function(p){return p.rent;}).filter(function(v){return v!=null&&v>0;});
+ var eq=null;try{eq=storeEquivalent(store);}catch(e){}
+ var storeRent=(eq!=null&&store.area_sqm>0)?(eq/store.area_sqm):(store.monthly_rent_toman&&store.area_sqm?store.monthly_rent_toman/store.area_sqm:null);
+ drawPriceHist(document.getElementById('adsCanvas'),rents,storeRent);
+ var nb=normNb(store.address);
+ var rows=HISTORY.filter(function(hh){
+   if(String(hh.category||'').toLowerCase()==='residential')return false;
+   if(hh.deal_type&&String(hh.deal_type).toLowerCase()!=='rent')return false;
+   if(store.city&&hh.city&&hh.city!==store.city)return false;
+   if(nb&&hh.neighborhood){
+    var hn=normNb(hh.neighborhood);
+    return hn.indexOf(nb)>=0||nb.indexOf(hn)>=0;
+   }
+   return !nb;
+  }).sort(function(a,b){return String(a.date).localeCompare(String(b.date));});
+ if(rows.length<2){
+  rows=HISTORY.filter(function(hh){
+   if(hh.deal_type&&String(hh.deal_type).toLowerCase()!=='rent')return false;
+   if(String(hh.category||'').toLowerCase()==='residential')return false;
+   return !store.city||!hh.city||hh.city===store.city;
+  }).sort(function(a,b){return String(a.date).localeCompare(String(b.date));});
+ }
+ var series=[];
+ if(rows.some(function(r){return r.median_monthly_rent!=null;}))
+  series.push({label:'اجاره/متر',color:cssVar('--danger'),
+   data:rows.map(function(r){return r.median_monthly_rent!=null?r.median_monthly_rent:null;})});
+ else if(rows.length)
+  series.push({label:'میانه اجاره/متر',color:cssVar('--accent'),
+   data:rows.map(function(r){return historyPsqmToToman(r.median_psqm,r.deal_type||'rent');})});
+ drawLineChart(document.getElementById('historyCanvas'),series,rows.map(function(r){return r.date;}));
+}
+function closeChartModal(){document.getElementById('chartModal').style.display='none';}
+
+function openCompareTab(key,idx){
+ if(location.protocol==='http:'||location.protocol==='https:'){
+  var url=new URL(location.href);
+  url.searchParams.set('view','compare');url.searchParams.set('brand',key);url.searchParams.set('idx',String(idx));
+  var w=window.open(url.toString(),'_blank');
+  if(w)return;}
+ renderCompareView(key,idx);}
+function renderCompareView(key,idx){
+ var store=BRANDS[key]&&BRANDS[key].stores[idx];
+ if(!store)return;
+ document.getElementById('app').style.display='none';
+ var view=document.getElementById('compareView');view.style.display='block';
+ var limit=10;
+ function draw(){
+  var all=getNearbyStores(store,0),shown=getNearbyStores(store,limit);
+  var m=store._market||buildMarketStats(store,RAW);
+  var sc=store._score||computeComposite(store,m);
+  var rows=shown.map(function(s,i){
+   var sm=s._score||computeComposite(s,s._market||buildMarketStats(s,RAW));
+   return'<tr><td>'+(i+1)+'</td><td>'+esc(s.store_name)+'</td>'+
+    '<td>'+(s._brand==='hyperstar'?'هایپراستار':'مایلی')+'</td>'+
+    '<td>'+esc(s.city||'')+(s.address?' / '+esc(s.address):'')+'</td>'+
+    '<td>'+s.distKm.toFixed(2)+' کیلومتر</td><td>'+(s.area_sqm?fmt(s.area_sqm):'—')+'</td>'+
+    '<td>'+(sm.ok?'<span class="badge" style="background:'+sm.grade.color+'">'+sm.composite+' — '+sm.grade.label+'</span>':'—')+'</td></tr>';}).join('');
+  view.innerHTML='<div style="max-width:1250px;margin:0 auto">'+
+   '<div class="compare-header"><h1 class="compare-title">مقایسه فروشگاه: '+esc(store.store_name)+'</h1>'+
+   '<button style="width:auto" onclick="backToMap()">← بازگشت به نقشه</button></div>'+
+   '<div class="compare-summary">این فروشگاه با <b>'+all.length+'</b> فروشگاه نزدیک و <b>'+m.n+'</b> آگهی قابل مقایسه سنجیده شده است.'+
+   (sc.ok?'<br>امتیاز مرکب: <b style="color:'+sc.grade.color+'">'+sc.composite+' — '+sc.grade.label+'</b>':'')+'</div>'+
+   '<div class="compare-controls"><label>تعداد فروشگاه‌ها:</label>'+
+   '<select id="cmpLimit">'+
+   '<option value="5"'+(limit===5?' selected':'')+'>5</option>'+
+   '<option value="10"'+(limit===10?' selected':'')+'>10</option>'+
+   '<option value="25"'+(limit===25?' selected':'')+'>25</option>'+
+   '<option value="50"'+(limit===50?' selected':'')+'>50</option>'+
+   '<option value="0"'+(limit===0?' selected':'')+'>همه</option></select></div>'+
+   '<table class="compare-table"><thead><tr><th>#</th><th>نام</th><th>برند</th><th>شهر / آدرس</th><th>فاصله</th><th>متراژ</th><th>امتیاز مرکب</th></tr></thead>'+
+   '<tbody>'+(rows||'<tr><td colspan="7">فروشگاهی پیدا نشد.</td></tr>')+'</tbody></table></div>';
+  document.getElementById('cmpLimit').addEventListener('change',function(e){limit=parseInt(e.target.value,10);draw();});}
+ draw();}
+function backToMap(){
+ document.getElementById('compareView').style.display='none';
+ document.getElementById('app').style.display='flex';
+ map.invalidateSize();}
+
+function runPropertySearch(){
+ var prov=document.getElementById('spProv').value;
+ var city=document.getElementById('spCity').value;
+ var nbh=document.getElementById('spNbh').value;
+ var cat=document.getElementById('spCat').value;
+ var area=num(document.getElementById('spArea').value);
+ var rent=num(document.getElementById('spRent').value);
+ var dep=num(document.getElementById('spDep').value);
+ var cities=prov?(PROVINCE_CITIES[prov]||[]):null;
+ var pool=RAW.filter(function(r){
+  return(!cities||cities.indexOf(r.city)>=0)&&(!city||r.city===city)&&
+   (!nbh||r.neighborhood===nbh)&&(!cat||r.category===cat);});
+ var rentPool=pool.filter(function(r){return r.deal_type==='rent'&&r.deposit&&r.monthly_rent&&r.area_sqm;});
+ var dm=rentPool.map(function(r){return r.deposit/r.area_sqm;}).sort(function(a,b){return a-b;});
+ var rm=rentPool.map(function(r){return r.monthly_rent/r.area_sqm;}).sort(function(a,b){return a-b;});
+ var dMed=dm.length?dm[Math.floor(dm.length/2)]:null;
+ var rMed=rm.length?rm[Math.floor(rm.length/2)]:null;
+ var html='<div class="kv"><span>آگهی هم‌گروه</span><b>'+fmt(rentPool.length)+'</b></div>'+
+  '<div class="kv"><span>میانه ودیعه/متر</span><b>'+toman(dMed)+'</b></div>'+
+  '<div class="kv"><span>میانه اجاره/متر</span><b>'+toman(rMed)+'</b></div>';
+ if(area>0&&(rent>0||dep>0)&&dMed&&rMed){
+  var gD=dep>0?((dep/area-dMed)/dMed)*100:null;
+  var gR=rent>0?((rent/area-rMed)/rMed)*100:null;
+  html+='<div class="kv"><span>اختلاف ودیعه شما</span><b>'+(gD!=null?fmt(gD,1)+'٪':'—')+'</b></div>'+
+   '<div class="kv"><span>اختلاف اجاره شما</span><b>'+(gR!=null?fmt(gR,1)+'٪':'—')+'</b></div>';}
+ document.getElementById('spResult').innerHTML=html;}
+
+function buildOptions(){
+ var provs=Object.keys(PROVINCE_CITIES).sort();
+ ['fProv','spProv'].forEach(function(id){var el=document.getElementById(id);
+  var first=el.options[0].textContent;
+  el.innerHTML='<option value="">'+first+'</option>'+provs.map(function(p){return'<option>'+esc(p)+'</option>';}).join('');});
+ buildCities();}
+function buildCities(){
+ var prov=document.getElementById('fProv').value;
+ var cities;
+ if(prov)cities=(PROVINCE_CITIES[prov]||[]).filter(function(c){return RAW.some(function(r){return r.city===c;});});
+ else cities=Array.from(new Set(RAW.map(function(r){return r.city;}).filter(Boolean))).sort();
+ document.getElementById('fCity').innerHTML='<option value="">همه</option>'+cities.map(function(c){return'<option>'+esc(c)+'</option>';}).join('');
+ buildNbhs();}
+function buildNbhs(){
+ var city=document.getElementById('fCity').value;
+ var nbs=Array.from(new Set(RAW.filter(function(r){return !city||r.city===city;})
+  .map(function(r){return r.neighborhood;}).filter(Boolean))).sort();
+ document.getElementById('fNbh').innerHTML='<option value="">همه‌ی محله‌ها</option>'+nbs.map(function(n){return'<option>'+esc(n)+'</option>';}).join('');
+ var spProv=document.getElementById('spProv').value,spCity=document.getElementById('spCity').value;
+ var spNbhs=Array.from(new Set(RAW.filter(function(r){
+  return(!spProv||(PROVINCE_CITIES[spProv]||[]).indexOf(r.city)>=0)&&(!spCity||r.city===spCity);})
+  .map(function(r){return r.neighborhood;}).filter(Boolean))).sort();
+ document.getElementById('spNbh').innerHTML='<option value="">همه‌ی محله‌ها</option>'+spNbhs.map(function(n){return'<option>'+esc(n)+'</option>';}).join('');}
+function buildSpCities(){
+ var prov=document.getElementById('spProv').value;
+ var el=document.getElementById('spCity');
+ el.innerHTML='<option value="">— شهرستان —</option>'+
+  (prov?(PROVINCE_CITIES[prov]||[]):[]).map(function(c){return'<option>'+esc(c)+'</option>';}).join('');}
+
+function setStatus(html){document.getElementById('dataStatus').innerHTML=html;}
+function applyListings(rec){
+ RAW=rec.map(normalizeListing).filter(function(r){return isFinite(r.lat)&&isFinite(r.lng);});
+ setStatus('<b>'+fmt(RAW.length)+'</b> آگهی بارگذاری شد — در حال آماده‌سازی…');
+ ['hyperstar','myli'].forEach(function(k){
+  (BRANDS[k].stores||[]).forEach(function(s){s._score=null;s._market=null;});
+ });
+ try{computeOutliers();}catch(e){console.warn(e);}
+ try{buildOptions();}catch(e){console.warn(e);}
+ try{renderAds();}catch(e){console.warn(e);}
+ try{fitToData();}catch(e){}
+ setTimeout(function(){
+  try{renderStores();renderBrandPanel();}catch(e){console.warn(e);}
+  setStatus('<b>'+fmt(RAW.length)+'</b> آگهی آماده است.');
+  try{maybeCompareFromUrl();}catch(e){}
+ },50);
+}
+function applyBrand(key,rec){
+ var mapped=(rec||[]).map(normalizeStore);
+ var ok=mapped.filter(function(s){return isFinite(s.lat)&&isFinite(s.lng);});
+ console.log('[applyBrand]',key,'in',mapped.length,'ok',ok.length);
+ BRANDS[key].stores=ok;
+ BRANDS[key].stores.forEach(function(s){s._brand=key;});
+ BRANDS[key].on=true;
+ var btn=document.getElementById('btn_'+key);
+ if(btn)btn.textContent=BRANDS[key].label+': روشن';
+ renderStores();
+ maybeCompareFromUrl();}
+function applyHistory(rec){if(Array.isArray(rec)&&rec.length){HISTORY=rec;
+ document.getElementById('historyStatus').innerHTML='<b>'+fmt(rec.length)+'</b> نقطه‌ی روند بارگذاری شد.';}}
+function fetchText(url,timeoutMs){
+ timeoutMs=timeoutMs||90000;
+ var ctrl=typeof AbortController!=='undefined'?new AbortController():null;
+ var timer=ctrl?setTimeout(function(){try{ctrl.abort();}catch(e){}},timeoutMs):null;
+ return fetch(url,{cache:'no-store',mode:'cors',credentials:'omit',signal:ctrl?ctrl.signal:undefined}).then(function(res){
+  if(timer)clearTimeout(timer);
+  if(!res.ok){
+   if(res.status===403||res.status===401)
+    throw new Error('Access Denied (HTTP '+res.status+') — فایل در ابرآروان Public Read نیست یا CORS بسته است');
+   throw new Error('HTTP '+res.status);
+  }
+  return res.text();
+ }).catch(function(e){
+  if(timer)clearTimeout(timer);
+  if(e&&e.name==='AbortError')throw new Error('timeout');
+  throw e;
+ });}
+function loadAll(){
+ setStatus('در حال بارگذاری…');
+ var errors={};
+ function done(){
+  var nStore=BRANDS.hyperstar.stores.length+BRANDS.myli.stores.length;
+  var msg='<b>'+fmt(RAW.length)+'</b> آگهی · <b>'+fmt(nStore)+'</b> فروشگاه';
+  if(errors.listings)msg+=' · آگهی: '+esc(errors.listings);
+  if(errors.myli)msg+=' · مایلی: '+esc(errors.myli);
+  if(errors.hyperstar)msg+=' · هایپراستار: '+esc(errors.hyperstar);
+  if(errors.history)msg+=' · تاریخچه: '+esc(errors.history);
+  else if(HISTORY.length)msg+=' · تاریخچه: '+fmt(HISTORY.length);
+  if(errors.listings||errors.myli||errors.hyperstar||errors.history){
+   if(/Access Denied|403|401/i.test(JSON.stringify(errors)))
+    msg+='<br><span style="color:var(--danger)">برای رفع Access Denied در پنل ابرآروان روی هر فایل ACL = Public Read بگذارید و CORS با Origin * ذخیره شود.</span>';
+  }
+  setStatus(msg);
+  try{fitToData();}catch(e){}
+  /* امتیازدهی را تکه‌تکه انجام بده تا صفحه قفل نشود */
+  try{
+   ['hyperstar','myli'].forEach(function(k){
+    (BRANDS[k].stores||[]).forEach(function(s){s._score=null;s._market=null;});
+   });
+   setTimeout(function(){
+    try{renderStores();renderBrandPanel();}catch(e){console.warn('rescore',e);}
+   },30);
+  }catch(e){console.warn(e);}
+ }
+ if(typeof EMBEDDED_MYLI!=='undefined'&&EMBEDDED_MYLI.length){
+  try{applyBrand('myli',EMBEDDED_MYLI);}catch(e){}
+  setStatus('<b>'+fmt(BRANDS.myli.stores.length)+'</b> فروشگاه مایلی · دریافت از ابرآروان…');
+  try{fitToData();}catch(e){}
+ }
+ function fetchFirst(urls){
+  var i=0;
+  function next(){
+   if(i>=urls.length)return Promise.reject(new Error('همه منابع ناموفق'));
+   var u=urls[i++];
+   return fetchText(u).catch(function(){return next();});
+  }
+  return next();
+ }
+ function job(name, p){
+  return Promise.resolve(p).then(function(){}).catch(function(e){errors[name]=(e&&e.message)||String(e);});
+ }
+ function urlsFor(name){
+  var list=[];
+  if(DATA_URLS[name])list.push(DATA_URLS[name]);
+  var fb=DATA_FALLBACK[name];
+  if(typeof fb==='string')list.push(fb);
+  else if(Array.isArray(fb))list=list.concat(fb);
+  /* unique */
+  var seen={},out=[];
+  list.forEach(function(u){if(u&&!seen[u]){seen[u]=1;out.push(u);}});
+  return out;
+ }
+ var jobs=[];
+ jobs.push(job('listings', fetchFirst(urlsFor('listings')).then(function(t){applyListings(parseAny(t));})));
+ jobs.push(job('myli', fetchFirst(urlsFor('myli')).then(function(t){
+  var rec=parseAny(t); if(rec&&rec.length)applyBrand('myli',rec);
+ })));
+ jobs.push(job('hyperstar', fetchFirst(urlsFor('hyperstar')).then(function(t){applyBrand('hyperstar',parseAny(t));})));
+ jobs.push(job('history', fetchFirst(urlsFor('history')).then(function(t){applyHistory(parseAny(t));})));
+ var finished=false;
+ function finish(){
+  if(finished)return;finished=true;
+  try{
+   if(!BRANDS.myli.stores.length&&typeof EMBEDDED_MYLI!=='undefined'&&EMBEDDED_MYLI&&EMBEDDED_MYLI.length)
+    applyBrand('myli',EMBEDDED_MYLI);
+  }catch(e){}
+  done();
+ }
+ Promise.all(jobs).then(finish).catch(finish);
+ /* اگر چیزی گیر کرد، بعد از ۱۳۰ثانیه وضعیت را ببند */
+ setTimeout(finish,130000);
+}
+function fitToData(){
+ var mnLa=1e9,mxLa=-1e9,mnLn=1e9,mxLn=-1e9,n=0;
+ function consider(la,ln){if(!isFinite(la)||!isFinite(ln))return;n++;
+  mnLa=Math.min(mnLa,la);mxLa=Math.max(mxLa,la);mnLn=Math.min(mnLn,ln);mxLn=Math.max(mxLn,ln);}
+ RAW.forEach(function(r){consider(r.lat,r.lng);});
+ BRANDS.hyperstar.stores.concat(BRANDS.myli.stores).forEach(function(s){consider(s.lat,s.lng);});
+ if(n)map.fitBounds([[mnLa,mnLn],[mxLa,mxLn]]);}
+function maybeCompareFromUrl(){
+ var p=new URLSearchParams(location.search);
+ if(p.get('view')!=='compare')return;
+ renderCompareView(p.get('brand'),parseInt(p.get('idx')||'0',10));}
+
+['q','fMinA','fMaxA'].forEach(function(id){document.getElementById(id).addEventListener('input',renderAds);});
+['fCat','fDeal'].forEach(function(id){document.getElementById(id).addEventListener('change',renderAds);});
+['fOutlier','fEst','fColor'].forEach(function(id){document.getElementById(id).addEventListener('change',renderAds);});
+document.getElementById('fProv').addEventListener('change',function(){buildCities();renderAds();});
+document.getElementById('fCity').addEventListener('change',function(){buildNbhs();renderAds();});
+document.getElementById('fNbh').addEventListener('change',renderAds);
+document.getElementById('spProv').addEventListener('change',function(){buildSpCities();buildNbhs();});
+document.getElementById('spCity').addEventListener('change',buildNbhs);
+document.getElementById('listingsFile').addEventListener('change',function(e){
+ var f=e.target.files[0];if(!f)return;var rd=new FileReader();
+ rd.onload=function(){try{applyListings(parseAny(rd.result));}catch(err){setStatus('خطا: '+esc(err.message));}};
+ rd.readAsText(f,'utf-8');});
+document.getElementById('historyFile').addEventListener('change',function(e){
+ var f=e.target.files[0];if(!f)return;var rd=new FileReader();
+ rd.onload=function(){try{applyHistory(parseAny(rd.result));}catch(err){}};
+ rd.readAsText(f,'utf-8');});
+['hyperstar','myli'].forEach(function(key){
+ document.getElementById('brandFile_'+key).addEventListener('change',function(e){
+  var f=e.target.files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){try{applyBrand(key,parseAny(rd.result));}catch(err){}};
+  rd.readAsText(f,'utf-8');});});
+
+(function(){
+ var saved=lsGet(THEME_KEY)||'dark';
+ document.documentElement.setAttribute('data-theme',saved);
+ document.getElementById('themeToggle').textContent=(saved==='dark')?'☀️':'🌙';
+ try{setView('dots');}catch(e){console.warn(e);}
+ try{updateRampLegend();}catch(e){console.warn(e);}
+ try{initBasemap();}catch(e){console.warn(e);}
+ try{loadAll();}catch(e){
+  console.error(e);
+  try{setStatus('<b style="color:var(--danger)">خطا در بارگذاری داده:</b> '+esc(String(e&&e.message||e)));}catch(x){}
+ }
+ /* بستن خودکار سایدبار روی موبایل بعد از تغییر فیلتر برای UX بهتر */
+ var side=document.getElementById('side');
+ if(window.matchMedia('(max-width: 820px)').matches){
+  ['q','fProv','fCity','fNbh','fCat','fDeal','fMinA','fMaxA','fOutlier','fEst','fColor'].forEach(function(id){
+   var el=document.getElementById(id);
+   el.addEventListener(el.tagName==='SELECT'?'change':(el.type==='checkbox'?'change':'input'),function(){
+    setTimeout(function(){side.classList.remove('open');document.getElementById('side-overlay').classList.remove('open');},400);
+   });
+  });
+ }
+})();
+</script>
+</body>
+</html>

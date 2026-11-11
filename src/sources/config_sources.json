@@ -1,0 +1,35 @@
+[
+ {
+  "name": "divar",
+  "base_url": "https://divar.ir",
+  "api_url": "https://api.divar.ir/v8/postlist/w/search",
+  "listing_path": "",
+  "letters": "all",
+  "delay_s": 3.0,
+  "enabled": true,
+  "notes": "اسکرپر کامل و تست‌شده در data/divar_scraper.py؛ این آداپتور فقط خروجی آن را به اسکیمای مشترک تبدیل می‌کند.",
+  "headers": {}
+ },
+ {
+  "name": "sheypoor",
+  "base_url": "https://www.sheypoor.com",
+  "api_url": "https://www.sheypoor.com/api/v10.0.0/listings",
+  "listing_path": "/v/{token}",
+  "letters": "all",
+  "delay_s": 3.0,
+  "enabled": true,
+  "notes": "آگهی‌های املاک: /املاک/تجاری-صنعتی ; بهتر است با کوکی مرورگر اجرا شود.",
+  "headers": {}
+ },
+ {
+  "name": "kilid",
+  "base_url": "https://kilid.com",
+  "api_url": "https://api.kilid.com/v1/search",
+  "listing_path": "/buy-residential/{token}",
+  "letters": "all",
+  "delay_s": 3.0,
+  "enabled": true,
+  "notes": "کلید روی «فروش/اجاره» متمرکز است؛ برای مقایسه‌ی ودیعه/اجاره مفید است.",
+  "headers": {}
+ }
+]

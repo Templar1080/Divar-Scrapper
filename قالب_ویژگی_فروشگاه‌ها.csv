@@ -1,0 +1,41 @@
+store_id,store,city,floor,position,corner,frontage,visibility,راهنما_floor,راهنما_position,راهنما_corner,راهنما_frontage,راهنما_visibility
+S01,مایلی سوهانک,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S02,مایلی روتانو,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S03,مایلی سپهرمال,کرج,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S04,مایلی ونک,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S05,مایلی سیوان سنتر,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S06,مایلی گلشهر,کرج,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S07,مایلی پارسیان,کرج,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S08,مایلی دومان,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S09,مایلی رواق,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S10,مایلی حکیم نظامی,اصفهان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S11,مایلی اصفهان,اصفهان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S12,مایلی اطلس مال,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S13,مایلی کرمان,کرمان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S14,مایلی گلدسته,اصفهان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S15,مایلی شاهین شهر,اصفهان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S16,مایلی تیدا,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S17,مایلی آرامیس,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S18,مایلی لواسان,لواسان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S19,مایلی آرمیتاژ,مشهد,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S20,مایلی کامیشا,مشهد,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S21,مایلی اهواز پرشین گلف,اهواز,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S22,مایلی اهواز پارک سنتر,اهواز,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S23,مایلی بندرعباس,بندرعباس,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S24,مایلی فدک,اصفهان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S25,مایلی اکومال,کرج,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S26,مایلی مارلیک,کرج,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S27,مایلی لایکو,کلارآباد,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S28,مایلی میزبان,بابلسر,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S29,مایلی بازار شهر,قم,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S30,مایلی سیرجان,سیرجان,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S31,مایلی شیراز,شیراز,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S32,مایلی ارم,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S33,مایلی هدیش,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S34,مایلی همیلا,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S35,مایلی ایران مال,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S36,مایلی جماران,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S37,مایلی اپال,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S38,مایلی صبا,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S39,مایلی تیراژه,تهران,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime
+S40,مایلی ارومیه,ارومیه,ground,mall,0,normal,normal,ground|f1|f2|f3|f4p|basement,street|passage|mall|alley,0|1 (نبش یا دوبر),narrow|normal|wide|xwide,hidden|normal|prime

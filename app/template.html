@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دیوار اینتلیجنس — ارزش‌گذاری اجاره و انتخاب لوکیشن</title>
+<style>
+:root{
+  --bg:#0a0e13; --bg2:#0e141c; --panel:#121a24; --panel2:#16202c; --line:#1e2a38;
+  --text:#e8eef5; --muted:#8b9aac; --dim:#5d6b7d;
+  --good:#2ed3a0; --mid:#4d9fff; --warn:#f2a93b; --bad:#f2565f; --purple:#a78bfa;
+  --shadow:0 10px 30px rgba(0,0,0,.45); --r:14px;
+}
+[data-theme="light"]{
+  --bg:#f4f6f9; --bg2:#eef1f5; --panel:#ffffff; --panel2:#f7f9fb; --line:#e2e8ef;
+  --text:#16202b; --muted:#5c6b7d; --dim:#8b9aac;
+  --good:#0e9f74; --mid:#2b7fd4; --warn:#c47b06; --bad:#d43a44; --purple:#7c5cf0;
+  --shadow:0 8px 24px rgba(16,32,50,.10);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:radial-gradient(1200px 700px at 80% -10%, rgba(77,159,255,.07), transparent 60%),
+             radial-gradient(900px 600px at 5% 0%, rgba(46,211,160,.06), transparent 55%), var(--bg);
+  color:var(--text);
+  font-family:"Vazirmatn","IRANSans","Segoe UI",Tahoma,system-ui,sans-serif;
+  font-size:14px; line-height:1.65; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0;font-weight:700;letter-spacing:-.2px}
+a{color:var(--mid);text-decoration:none}
+a:hover{text-decoration:underline}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:9px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- header ---------- */
+header.top{
+  position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:18px;
+  padding:12px 22px;background:color-mix(in srgb,var(--bg) 82%, transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:250px}
+.logo{
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;
+  background:linear-gradient(135deg,var(--good),var(--mid));color:#04121a;font-weight:900;
+  box-shadow:0 6px 18px rgba(46,211,160,.25);
+}
+.brand h1{font-size:16px}
+.brand p{margin:0;font-size:11.5px;color:var(--muted)}
+.kpis{display:flex;gap:9px;flex:1;overflow-x:auto;scrollbar-width:none}
+.kpis::-webkit-scrollbar{display:none}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:7px 13px;min-width:104px}
+.kpi b{display:block;font-size:16px;line-height:1.3}
+.kpi span{font-size:10.5px;color:var(--muted)}
+.actions{display:flex;gap:8px}
+button{font-family:inherit;cursor:pointer}
+.btn{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:10px;
+  padding:8px 13px;font-size:12.5px;font-weight:600;transition:.16s}
+.btn:hover{border-color:var(--dim);background:var(--panel2)}
+.btn.primary{background:linear-gradient(135deg,var(--good),#1fb6c9);color:#04121a;border:0}
+.btn.ghost{background:transparent}
+
+/* ---------- tabs ---------- */
+nav.tabs{display:flex;gap:6px;padding:11px 22px 0;flex-wrap:wrap}
+nav.tabs button{
+  background:transparent;border:1px solid transparent;border-radius:10px 10px 0 0;
+  color:var(--muted);padding:9px 16px;font-size:13px;font-weight:600;position:relative;
+}
+nav.tabs button.on{color:var(--text);background:var(--panel);border-color:var(--line);border-bottom-color:var(--panel)}
+nav.tabs button.on:after{content:"";position:absolute;inset:auto 14px -1px;height:2px;background:var(--good);border-radius:2px}
+
+main{padding:16px 22px 60px;max-width:1720px;margin:0 auto}
+section[hidden]{display:none}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card .hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.card .hd h3{font-size:13.5px}
+.card .bd{padding:14px 16px}
+.grid{display:grid;gap:14px}
+.muted{color:var(--muted)}
+.dim{color:var(--dim)}
+.small{font-size:11.5px}
+.tag{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;border:1px solid transparent}
+.t-good{background:rgba(46,211,160,.13);color:var(--good);border-color:rgba(46,211,160,.3)}
+.t-mid{background:rgba(77,159,255,.13);color:var(--mid);border-color:rgba(77,159,255,.3)}
+.t-warn{background:rgba(242,169,59,.14);color:var(--warn);border-color:rgba(242,169,59,.32)}
+.t-bad{background:rgba(242,86,95,.13);color:var(--bad);border-color:rgba(242,86,95,.3)}
+.t-gray{background:var(--panel2);color:var(--muted);border-color:var(--line)}
+
+/* ---------- segmented ---------- */
+.seg{display:flex;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);font-size:11.5px;padding:5px 6px;border-radius:7px}
+.seg button.on{background:var(--panel);color:var(--text);font-weight:700;box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px}
+.qgrid label{font-size:10.5px;color:var(--muted);display:block;margin:0 0 2px}
+.qgrid select{width:100%;font-size:11.5px;padding:5px 6px}
+.qout{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.qbox{flex:1;min-width:130px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px}
+.qbox b{display:block;font-size:14px;font-variant-numeric:tabular-nums}
+
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:11.5px;position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}
+th:hover{color:var(--text)}
+tbody tr:hover{background:var(--panel2)}
+td.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.scroll{overflow:auto;max-height:520px;border-radius:10px}
+
+/* ---------- score ring ---------- */
+.ring{display:block}
+.ring text{font-family:inherit;font-weight:800}
+
+/* bars */
+.bar{height:7px;border-radius:6px;background:var(--panel2);overflow:hidden;position:relative}
+.bar > i{display:block;height:100%;border-radius:6px;transition:width .5s}
+
+/* store list */
+.slist{max-height:calc(100vh - 220px);overflow:auto}
+.sitem{padding:10px 13px;border-bottom:1px solid var(--line);cursor:pointer;display:flex;gap:10px;align-items:center}
+.sitem:hover{background:var(--panel2)}
+.sitem.on{background:linear-gradient(90deg,rgba(46,211,160,.14),transparent);border-inline-start:3px solid var(--good)}
+.sitem .nm{font-size:12.5px;font-weight:700}
+.sitem .sub{font-size:10.5px;color:var(--muted)}
+.grade{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-weight:900;font-size:13px;flex:none}
+
+/* map */
+#mapWrap{position:relative;height:calc(100vh - 210px);min-height:460px;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:#05080c}
+#gl{width:100%;height:100%;display:block}
+.mapui{position:absolute;display:flex;flex-direction:column;gap:8px;padding:11px;pointer-events:none;z-index:6}
+.mapui > *{pointer-events:auto}
+.mapui.top{top:0;right:0}
+.mapui.bottom{bottom:0;left:0}
+.ctl{background:color-mix(in srgb,var(--panel) 88%, transparent);border:1px solid var(--line);border-radius:11px;padding:10px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+.ctl label{display:block;font-size:10.5px;color:var(--muted);margin-bottom:4px}
+select,input[type="text"],input[type="number"]{
+  width:100%;background:var(--bg2);color:var(--text);border:1px solid var(--line);border-radius:8px;
+  padding:7px 9px;font-family:inherit;font-size:12.5px;
+}
+input[type="range"]{width:100%;accent-color:var(--good)}
+.legend{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--muted)}
+.legend .ramp{width:120px;height:8px;border-radius:5px;background:linear-gradient(90deg,#2ed3a0,#4d9fff,#f2a93b,#f2565f)}
+
+.tip{position:fixed;z-index:99;pointer-events:none;opacity:0;transition:opacity .12s;
+  background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 11px;
+  font-size:11.5px;box-shadow:var(--shadow);max-width:290px}
+.tip.on{opacity:1}
+
+.flagline{display:flex;gap:7px;align-items:flex-start;font-size:11.5px;color:var(--muted);padding:5px 0;border-bottom:1px dashed var(--line)}
+.flagline:last-child{border:0}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--warn);margin-top:7px;flex:none}
+
+.stat{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.stat b{display:block;font-size:17px;line-height:1.35}
+.stat span{font-size:11px;color:var(--muted)}
+
+.pill{display:inline-block;padding:3px 10px;border-radius:20px;background:var(--panel2);border:1px solid var(--line);font-size:11px;color:var(--muted);margin:0 0 6px 6px}
+.hr{height:1px;background:var(--line);margin:12px 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+code{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:11.5px;direction:ltr;display:inline-block}
+.split{display:grid;grid-template-columns:320px 1fr;gap:14px;align-items:start}
+@media(max-width:1050px){.split{grid-template-columns:1fr}.brand{min-width:auto}.kpis{display:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <div class="logo">◈</div>
+    <div><h1>دیوار اینتلیجنس</h1><p>ارزش‌گذاری اجاره و انتخاب لوکیشن — نسخه ۲</p></div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <div class="actions">
+    <button class="btn ghost" id="themeBtn" title="تغییر تم">◐ تم</button>
+    <button class="btn" id="csvBtn">خروجی CSV</button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="overview" class="on">نمای کلی</button>
+  <button data-tab="store">تحلیل فروشگاه</button>
+  <button data-tab="map">نقشه</button>
+  <button data-tab="trend">روند و تورم</button>
+  <button data-tab="expand">توسعه و شهرهای جدید</button>
+  <button data-tab="method">داده و متد</button>
+</nav>
+
+<main>
+  <!-- ============ overview ============ -->
+  <section id="tab-overview">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-bottom:14px" id="ovStats"></div>
+    <div class="grid" style="grid-template-columns:1.55fr 1fr">
+      <div class="card">
+        <div class="hd"><h3>رتبه‌بندی فروشگاه‌ها بر پایه امتیاز کل</h3>
+          <div class="small muted">امتیاز = ترکیب ارزش اجاره، نسبت اجاره به فروش، ساختار ودیعه، ریسک قرارداد و کیفیت بازار لوکیشن</div></div>
+        <div class="bd" style="padding-bottom:4px"><div id="ovBarChart"></div></div>
+      </div>
+      <div class="card">
+        <div class="hd"><h3>سه فرصت بزرگ صرفه‌جویی</h3></div>
+        <div class="bd" id="ovOpps"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="hd">
+        <h3>جدول کامل فروشگاه‌ها</h3>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="text" id="ovSearch" placeholder="جست‌وجوی نام/شهر…" style="width:170px">
+          <select id="ovCity" style="width:130px"></select>
+          <select id="ovGrade" style="width:110px"><option value="">همه گریدها</option><option>A</option><option>B</option><option>C</option><option>D</option></select>
+        </div>
+      </div>
+      <div class="bd" style="padding:0"><div class="scroll"><table id="ovTable"></table></div></div>
+    </div>
+  </section>
+
+  <!-- ============ store detail ============ -->
+  <section id="tab-store" hidden>
+    <div class="split">
+      <div class="card">
+        <div class="hd"><h3>فروشگاه‌ها</h3><span class="small muted" id="slistCount"></span></div>
+        <div class="slist" id="slist"></div>
+      </div>
+      <div id="sdetail"></div>
+    </div>
+  </section>
+
+  <!-- ============ 3D map ============ -->
+  <section id="tab-map" hidden>
+    <div id="mapWrap">
+      <canvas id="gl"></canvas>
+      <div class="mapui top">
+        <div class="ctl" style="min-width:210px">
+          <label>شهر</label>
+          <select id="mCity"></select>
+          <div style="height:8px"></div>
+          <label>نوع نقشه</label>
+          <div class="seg" id="mView">
+            <button data-v="3d" class="on">سه‌بعدی</button>
+            <button data-v="2d">کلاسیک ۲بعدی</button>
+          </div>
+          <div style="height:8px"></div>
+          <label>نمایش</label>
+          <select id="mMode">
+            <option value="all">همه آگهی‌های مغازه + فروشگاه‌ها</option>
+            <option value="stores">فقط فروشگاه‌های من</option>
+            <option value="top">۲۰۰ آگهی گران‌ترین</option>
+          </select>
+          <div style="height:8px"></div>
+          <label id="mHeightLbl">ارتفاع ستون‌ها: قیمت هر متر مربع</label>
+          <input type="range" id="mHeight" min="30" max="260" value="130">
+        </div>
+      </div>
+      <div class="mapui bottom">
+        <div class="ctl">
+          <div class="legend"><span>ارزان</span><span class="ramp"></span><span>گران</span></div>
+          <div class="legend" style="margin-top:6px;color:var(--dim)" id="mapHint">کشیدن = چرخش · اسکرول = زوم · کلیک روی نشانگر = تحلیل فروشگاه</div>
+          <div class="legend" style="margin-top:6px"><span id="mapInfo" style="color:var(--muted)"></span>
+            <span class="tag t-gray" style="margin-inline-start:6px">رندر: <b id="mapMode">…</b></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ trend ============ -->
+  <section id="tab-trend" hidden>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:14px" id="tStats"></div>
+    <div class="grid" style="grid-template-columns:1.35fr 1fr">
+      <div class="card">
+        <div class="hd"><h3>برآیند متر به اجاره و ودیعه — به تفکیک محله</h3>
+          <div style="display:flex;gap:8px">
+            <select id="tCity" style="width:130px"></select>
+            <input type="text" id="tSearch" placeholder="جست‌وجوی محله…" style="width:150px">
+          </div></div>
+        <div class="bd" style="padding:0"><div class="scroll" style="max-height:460px"><table id="tTable"></table></div></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="hd"><h3>تورم رسمی</h3><span class="small muted">مرکز آمار ایران</span></div>
+          <div class="bd" style="padding:0"><div class="scroll" style="max-height:230px"><table id="tInfl"></table></div></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="hd"><h3>برآورد گذشته و آینده</h3></div>
+          <div class="bd">
+            <div class="small muted" id="tAssum" style="line-height:1.9;margin-bottom:8px"></div>
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+              <label class="small muted" style="white-space:nowrap">افق</label>
+              <select id="tHorizon" style="width:110px"><option value="6">۶ ماه</option><option value="12" selected>۱۲ ماه</option><option value="24">۲۴ ماه</option></select>
+            </div>
+            <div id="tProj"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="hd"><h3>وضعیت پوشش داده‌ی زمانی</h3></div>
+      <div class="bd" id="tCover"></div>
+    </div>
+  </section>
+
+  <!-- ============ expansion ============ -->
+  <section id="tab-expand" hidden>
+    <div class="grid" style="grid-template-columns:340px 1fr">
+      <div class="card">
+        <div class="hd"><h3>فرض‌های سایت جدید</h3></div>
+        <div class="bd">
+          <label class="small muted">شهر</label>
+          <select id="xCity"></select>
+          <div style="height:10px"></div>
+          <label class="small muted">محله (اختیاری)</label>
+          <select id="xNb"><option value="">— کل شهر —</option></select>
+          <div style="height:10px"></div>
+          <label class="small muted">متراژ مورد نظر (متر مربع)</label>
+          <input type="number" id="xArea" value="150" min="20" max="2000">
+          <div style="height:10px"></div>
+          <label class="small muted">فروش ماهانه‌ی پیش‌بینی‌شده (تومان)</label>
+          <input type="number" id="xSales" value="3000000000" step="100000000">
+          <div style="height:10px"></div>
+          <label class="small muted">سقف قابل‌تحمل «اجاره ÷ فروش»: <b id="xRtsLbl">۶٪</b></label>
+          <input type="range" id="xRts" min="2" max="12" value="6" step="0.5">
+          <div style="height:12px"></div>
+          <button class="btn primary" id="xGo" style="width:100%">محاسبه</button>
+          <div class="small dim" style="margin-top:10px">مدل، اجاره‌ی بازار را از آگهی‌های مغازه‌ی همان شهر/محله با تعدیل متراژ برآورد می‌کند و با فروش پیش‌بینی‌شده مقایسه می‌کند.</div>
+        </div>
+      </div>
+      <div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))" id="xStats"></div>
+        <div class="card" style="margin-top:14px">
+          <div class="hd"><h3>محله‌های این شهر</h3><span class="small muted">اجاره‌ی برآوردی برای متراژ انتخابی</span></div>
+          <div class="bd" style="padding:0"><div class="scroll" style="max-height:320px"><table id="xNbTable"></table></div></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="hd"><h3>آگهی‌های منتخب زیر سقف اجاره</h3><span class="small muted" id="xCandNote"></span></div>
+          <div class="bd" style="padding:0"><div class="scroll" style="max-height:420px"><table id="xCand"></table></div></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="hd"><h3>مقایسه‌ی شهرها برای همین سایت</h3><span class="small muted">با همان متراژ و فروش پیش‌بینی‌شده</span></div>
+          <div class="bd" style="padding:0"><div class="scroll" style="max-height:420px"><table id="xCityTable"></table></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ method ============ -->
+  <section id="tab-method" hidden>
+    <div class="grid" style="grid-template-columns:1.1fr 1fr">
+      <div class="card">
+        <div class="hd"><h3>متدولوژی ارزش‌گذاری</h3></div>
+        <div class="bd" id="mMethod"></div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="hd"><h3>اعتبارسنجی مدل (هولد-اوت)</h3></div>
+          <div class="bd" id="mVal"></div>
+        </div>
+        <div class="card" style="margin-top:14px">
+          <div class="hd"><h3>پوشش داده به تفکیک شهر</h3></div>
+          <div class="bd" style="padding:0"><div class="scroll" style="max-height:330px"><table id="mCover"></table></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:14px">
+      <div class="card">
+        <div class="hd"><h3>ممیزی واحد ارقام (ریال/تومان)</h3><span class="small muted" id="uVerdict"></span></div>
+        <div class="bd" id="mUnits"></div>
+      </div>
+      <div class="card">
+        <div class="hd"><h3>ضرایب کیفیت بنگاه</h3><span class="small muted">تجربی یا عرف بازار</span></div>
+        <div class="bd" style="padding:0"><div class="scroll" style="max-height:340px"><table id="mQual"></table></div></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="hd"><h3>هشدارهای کیفیت داده و محدودیت‌ها به تفکیک فروشگاه</h3></div>
+      <div class="bd" style="padding:0"><div class="scroll"><table id="mFlags"></table></div></div>
+    </div>
+  </section>
+</main>
+
+<div class="tip" id="tip"></div>
+
+<script>/*__THREE__*/</script>
+<script>window.DATA = /*__DATA__*/;</script>
+<script>
+"use strict";
+const D = window.DATA, META = D.meta, STORES = D.stores, CITIES = D.cities, LIST = D.listings;
+const GAMMA = META.gamma;
+
+/* ---------------- helpers ---------------- */
+const fa = n => (n===null||n===undefined||isNaN(n)) ? "—" : Number(n).toLocaleString("fa-IR",{maximumFractionDigits:0});
+const fa1 = n => (n===null||n===undefined||isNaN(n)) ? "—" : Number(n).toLocaleString("fa-IR",{maximumFractionDigits:1});
+function money(v){
+  if(v===null||v===undefined||isNaN(v)) return "—";
+  const a=Math.abs(v);
+  if(a>=1e9) return fa1(v/1e9)+" میلیارد";
+  if(a>=1e6) return fa1(v/1e6)+" میلیون";
+  if(a>=1e3) return fa(v/1e3)+" هزار";
+  return fa(v);
+}
+const pct = v => (v===null||v===undefined||isNaN(v)) ? "—" : fa1(v*100)+"٪";
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const ok=n=>n!==null&&n!==undefined&&!Number.isNaN(n);
+const el=(t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!==undefined)e.innerHTML=h; return e;};
+const byId=id=>document.getElementById(id);
+function storeById(id){ return STORES.find(s=>s.id===id); }
+const GRADE_COL={A:"var(--good)",B:"var(--mid)",C:"var(--warn)",D:"var(--bad)"};
+function verdictClass(l){
+  if(!l) return "t-gray";
+  if(l.includes("بسیار گران")) return "t-bad";
+  if(l.includes("گران")) return "t-warn";
+  if(l.includes("بالای")) return "t-warn";
+  if(l.includes("هم‌تراز")) return "t-mid";
+  if(l.includes("زیر")) return "t-good";
+  return "t-gray";
+}
+function scoreColor(s){ return s>=75?"var(--good)": s>=60?"var(--mid)": s>=45?"var(--warn)":"var(--bad)"; }
+
+/* ---------- ring ---------- */
+function ring(score, size, sub){
+  size=size||104;
+  const r=(size-12)/2, c=2*Math.PI*r, off=c*(1-clamp(score,0,100)/100);
+  const col=scoreColor(score);
+  return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--panel2)" stroke-width="9"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="9"
+      stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
+      transform="rotate(-90 ${size/2} ${size/2})"/>
+    <text x="${size/2}" y="${size/2+2}" text-anchor="middle" fill="var(--text)" font-size="${size*0.30}">${fa(score)}</text>
+    <text x="${size/2}" y="${size/2+size*0.23}" text-anchor="middle" fill="var(--muted)" font-size="${size*0.115}">${sub||"از ۱۰۰"}</text>
+  </svg>`;
+}
+
+/* ---------- market band ---------- */
+function bandBar(st){
+  const m=st.market; if(!m.ok) return `<div class="muted small">داده کافی نیست</div>`;
+  const actual=st.deal.eff, hi=Math.max(m.p90||0, actual)*1.08, lo=0;
+  const x=v=>clamp((v-lo)/(hi-lo)*100,0,100);
+  const grad = `linear-gradient(90deg,var(--line) 0%, var(--line) ${x(m.p25)}%, rgba(77,159,255,.35) ${x(m.p25)}%, rgba(77,159,255,.35) ${x(m.p75)}%, var(--line) ${x(m.p75)}%, var(--line) 100%)`;
+  return `
+  <div style="position:relative;height:52px;margin:6px 0 2px">
+    <div style="position:absolute;inset:20px 0 auto 0;height:10px;border-radius:6px;background:${grad}"></div>
+    <div style="position:absolute;top:12px;right:${x(m.fair)}%;width:2px;height:26px;background:var(--mid)"></div>
+    <div style="position:absolute;top:8px;right:${x(actual)}%;width:12px;height:34px;border-radius:4px;background:${scoreColor(100-clamp((m.pct||0)*100,0,100))};box-shadow:0 0 0 3px color-mix(in srgb, var(--panel) 70%, transparent)"></div>
+    <div style="position:absolute;top:40px;right:${x(m.p25)}%;font-size:10px;color:var(--dim);transform:translateX(50%)">چارک۲۵</div>
+    <div style="position:absolute;top:40px;right:${x(m.fair)}%;font-size:10px;color:var(--mid);transform:translateX(50%)">میانه بازار</div>
+    <div style="position:absolute;top:40px;right:${x(m.p75)}%;font-size:10px;color:var(--dim);transform:translateX(50%)">چارک۷۵</div>
+    <div style="position:absolute;top:40px;right:${x(actual)}%;font-size:10px;color:var(--text);font-weight:700;transform:translateX(50%)">اجاره شما</div>
+  </div>
+  <div class="small muted">بازه‌ی آبی = محدوده‌ی طبیعی بازار محلی · مقادیر بر حسب میلیون تومان در ماه برای ${fa1(st.area)} متر مربع</div>`;
+}
+
+/* ---------- scatter ---------- */
+function scatter(st){
+  const W=560,H=270,pad={t:14,r:16,b:30,l:46};
+  const pts=st.scatter||[];
+  if(!pts.length) return `<div class="muted small">نقطه‌ای برای نمایش نیست</div>`;
+  const xs=pts.map(p=>Math.log10(p[0])), ys=pts.map(p=>Math.log10(Math.max(p[1],1)));
+  const my=Math.log10(Math.max(st.psqm,1)), mx=Math.log10(st.area);
+  const x0=Math.min(...xs,mx)-0.05, x1=Math.max(...xs,mx)+0.05;
+  const y0=Math.min(...ys,my)-0.1, y1=Math.max(...ys,my)+0.1;
+  const X=v=>pad.l+(Math.log10(v)-x0)/(x1-x0)*(W-pad.l-pad.r);
+  const Y=v=>H-pad.b-(Math.log10(Math.max(v,1))-y0)/(y1-y0)*(H-pad.t-pad.b);
+  let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;direction:ltr">`;
+  // fair curve
+  const m=st.market;
+  if(m.ok){
+    let d="";
+    for(let i=0;i<=40;i++){
+      const a=Math.pow(10, x0+(x1-x0)*i/40);
+      const fp=(m.fair/st.area)*Math.pow(a/st.area, GAMMA-1);
+      d += (i?" L":"M")+X(a).toFixed(1)+","+Y(fp).toFixed(1);
+    }
+    s+=`<path d="${d}" fill="none" stroke="var(--mid)" stroke-width="1.6" stroke-dasharray="5 4" opacity=".85"/>`;
+  }
+  // grid
+  for(let i=0;i<=4;i++){
+    const y=pad.t+i*(H-pad.t-pad.b)/4;
+    s+=`<line x1="${pad.l}" y1="${y}" x2="${W-pad.r}" y2="${y}" stroke="var(--line)" stroke-width=".7"/>`;
+  }
+  pts.forEach(p=>{
+    const near=p[2]<=2.6;
+    s+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="${near?4.2:3.1}"
+      fill="var(--mid)" opacity="${near?.55:.28}"/>`;
+  });
+  s+=`<circle cx="${X(st.area).toFixed(1)}" cy="${Y(st.psqm).toFixed(1)}" r="7" fill="${scoreColor(100-clamp((m.pct||0)*100,0,100))}" stroke="var(--panel)" stroke-width="2"/>`;
+  s+=`<text x="${W-pad.r}" y="${H-8}" text-anchor="end" fill="var(--muted)" font-size="10" direction="rtl">متراژ (لگاریتمی)</text>`;
+  s+=`<text x="${pad.l-6}" y="${pad.t+8}" text-anchor="end" fill="var(--muted)" font-size="10" direction="rtl">تومان/م²</text>`;
+  s+=`</svg>`;
+  return s;
+}
+
+/* ---------- sub score rows ---------- */
+const SUB_LABELS={price:"ارزش اجاره نسبت به بازار",sales:"نسبت اجاره به فروش",dep:"ساختار ودیعه",contract:"ریسک قرارداد",location:"کیفیت بازار لوکیشن"};
+const SUB_KEYS=["price","sales","dep","contract","location"];
+function subRows(st){
+  return SUB_KEYS.map(k=>{
+    const v=st.scores[k], w=st.weights[k];
+    return `<div style="margin-bottom:9px">
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px">
+        <span>${SUB_LABELS[k]} <span class="dim">· وزن ${fa(w*100)}٪</span></span>
+        <b style="color:${scoreColor(v)}">${fa(v)}</b></div>
+      <div class="bar"><i style="width:${clamp(v,0,100)}%;background:${scoreColor(v)}"></i></div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- KPI ---------- */
+function renderKpis(){
+  const scored=STORES.filter(s=>s.market.ok);
+  const med=[...STORES].map(s=>s.scores.total).sort((a,b)=>a-b)[Math.floor(STORES.length/2)];
+  const expensive=STORES.filter(s=>s.market.pct!==null&&s.market.pct>0.9).length;
+  const items=[
+    ["فروشگاه",fa(META.n_stores)],
+    ["میانه امتیاز",fa1(med)],
+    ["گران‌تر از ۹۰٪ بازار",fa(expensive)],
+    ["دقت مدل",META.val.mdape?("±"+fa(META.val.mdape*100)+"٪"):"—"],
+    ["آگهی پردازش‌شده",fa(META.n_listings)],
+    ["مغازه‌ی مرجع",fa(META.n_retail)]
+  ];
+  byId("kpis").innerHTML=items.map(([l,v])=>`<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join("");
+}
+
+/* ---------- overview ---------- */
+function renderOverview(){
+  const s=[...STORES].sort((a,b)=>b.scores.total-a.scores.total);
+  const med=STORES.map(x=>x.scores.total).sort((a,b)=>a-b)[Math.floor(STORES.length/2)];
+  const gaps=STORES.filter(x=>ok(x.market.gap_med)).map(x=>x.market.gap_med).sort((a,b)=>a-b);
+  const medGap=gaps.length?gaps[Math.floor(gaps.length/2)]:null;
+  const saved=STORES.filter(x=>x.market.ok&&ok(x.market.gap_med)&&x.market.gap_med>0).reduce((a,x)=>a+(x.deal.eff-x.market.fair),0);
+  byId("ovStats").innerHTML=[
+    ["میانه امتیاز پرتفوی",fa1(med),"var(--text)"],
+    ["میانه‌ی انحراف از بازار",pct(medGap),"var(--warn)"],
+    ["اختلاف ماهانه با میانه‌ی بازار (مجموع)",money(saved),"var(--good)"],
+    ["نسبت اجاره به فروش (میانه)",pct(META.internal_median_rts),"var(--mid)"],
+    ["فروشگاه با داده‌ی کافی",fa(STORES.filter(x=>x.market.ok).length)+" از "+fa(STORES.length),"var(--text)"]
+  ].map(([l,v,c])=>`<div class="stat"><b style="color:${c}">${v}</b><span>${l}</span></div>`).join("");
+
+  // bar chart
+  const W=760,H=Math.max(220,s.length*15+20), pad={l:118,r:34,t:8,b:8};
+  let bars="";
+  s.forEach((st,i)=>{
+    const y=pad.t+i*((H-pad.t-pad.b)/s.length);
+    const w=(st.scores.total/100)*(W-pad.l-pad.r);
+    bars+=`<g class="ovrow" data-id="${st.id}" style="cursor:pointer">
+      <text x="${W-pad.r+4}" y="${y+9}" text-anchor="end" fill="var(--muted)" font-size="10.5">${st.name.replace("مایلی ","")}</text>
+      <rect x="${pad.l}" y="${y+1}" width="${w}" height="11" rx="5" fill="${GRADE_COL[st.scores.grade]}" opacity=".85"/>
+      <text x="${pad.l-6}" y="${y+10}" text-anchor="end" fill="var(--text)" font-size="10.5" font-weight="700">${fa(st.scores.total)}</text>
+      <rect x="${pad.l}" y="${y}" width="${W-pad.l-pad.r}" height="13" fill="transparent"/>
+    </g>`;
+  });
+  byId("ovBarChart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto;direction:ltr">${bars}</svg>`;
+  byId("ovBarChart").querySelectorAll(".ovrow").forEach(g=>g.onclick=()=>{openStore(g.dataset.id);});
+
+  // opportunities
+  const opps=STORES.filter(x=>x.market.ok&&x.market.gap_med>0.15)
+    .map(x=>({st:x, save:(x.deal.eff-x.market.fair)*12}))
+    .sort((a,b)=>b.save-a.save).slice(0,5);
+  byId("ovOpps").innerHTML=opps.length?opps.map(o=>`
+    <div style="padding:9px 0;border-bottom:1px solid var(--line)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <div><div style="font-weight:700;font-size:12.5px">${o.st.name}</div>
+        <div class="small muted">${o.st.city} · ${o.st.nb} · ${fa1(o.st.area)} م²</div></div>
+        <div style="text-align:left"><div style="font-weight:800;color:var(--good)">${money(o.save)}</div>
+        <div class="small dim">صرفه‌جویی سالانه</div></div>
+      </div>
+      <div class="small" style="margin-top:5px;color:var(--warn)">اجاره‌ی فعلی ${pct(o.st.market.gap_med)} بالاتر از میانه‌ی بازار محلی · صدک ${fa(o.st.market.pct*100)}</div>
+    </div>`).join(""):`<div class="muted small">فروشگاهی بالاتر از بازار پیدا نشد.</div>`;
+
+  // table
+  const cities=[...new Set(STORES.map(x=>x.city))].sort();
+  byId("ovCity").innerHTML=`<option value="">همه شهرها</option>`+cities.map(c=>`<option>${c}</option>`).join("");
+  const draw=()=>{
+    const q=(byId("ovSearch").value||"").trim(), c=byId("ovCity").value, g=byId("ovGrade").value;
+    const rows=s.filter(x=>(!q||x.name.includes(q)||x.city.includes(q))&&(!c||x.city===c)&&(!g||x.scores.grade===g));
+    byId("ovTable").innerHTML=`
+      <thead><tr>
+        <th>فروشگاه</th><th>شهر</th><th>متراژ</th><th>اجاره‌ی مؤثر</th><th>نسبت اجاره/فروش</th>
+        <th>جایگاه در بازار</th><th>اختلاف با میانه</th><th>امتیاز</th><th>وضعیت</th><th></th>
+      </tr></thead><tbody>${rows.map(x=>`
+        <tr data-id="${x.id}" style="cursor:pointer">
+          <td><b>${x.name}</b></td><td>${x.city}</td><td class="num">${fa1(x.area)}</td>
+          <td class="num">${money(x.deal.eff)}</td><td class="num">${x.rts!==null?pct(x.rts):"—"}</td>
+          <td class="num">${x.market.pct!==null?`<span class="tag ${x.market.pct>.9?"t-bad":x.market.pct>.7?"t-warn":"t-good"}">صدک ${fa(x.market.pct*100)}</span>`:"—"}</td>
+          <td class="num" style="color:${(x.market.gap_med||0)>0.1?"var(--bad)":(x.market.gap_med||0)<-0.1?"var(--good)":"var(--muted)"}">${x.market.gap_med!==null?(x.market.gap_med>0?"+":"")+pct(x.market.gap_med):"—"}</td>
+          <td><span class="tag" style="background:color-mix(in srgb,${GRADE_COL[x.scores.grade]} 16%, transparent);color:${GRADE_COL[x.scores.grade]}">${fa(x.scores.total)} · ${x.scores.grade}</span></td>
+          <td><span class="tag ${verdictClass(x.verdict.label)}">${x.verdict.label}</span></td>
+          <td class="dim">›</td>
+        </tr>`).join("")}</tbody>`;
+    byId("ovTable").querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>openStore(tr.dataset.id));
+  };
+  ["ovSearch","ovCity","ovGrade"].forEach(id=>byId(id).addEventListener("input",draw));
+  draw();
+}
+
+/* ---------- store list + detail ---------- */
+let currentStore=null;
+function renderList(){
+  const s=[...STORES].sort((a,b)=>b.scores.total-a.scores.total);
+  byId("slistCount").textContent=fa(s.length)+" فروشگاه";
+  byId("slist").innerHTML=s.map(st=>`
+    <div class="sitem${currentStore===st.id?" on":""}" data-id="${st.id}">
+      <div class="grade" style="background:color-mix(in srgb,${GRADE_COL[st.scores.grade]} 18%, transparent);color:${GRADE_COL[st.scores.grade]}">${st.scores.grade}</div>
+      <div style="flex:1;min-width:0">
+        <div class="nm">${st.name.replace("مایلی ","")}</div>
+        <div class="sub">${st.city} · ${fa1(st.area)} م² · ${money(st.deal.eff)}</div>
+      </div>
+      <div style="font-weight:800;font-size:13px;color:${scoreColor(st.scores.total)}">${fa(st.scores.total)}</div>
+    </div>`).join("");
+  byId("slist").querySelectorAll(".sitem").forEach(d=>d.onclick=()=>{currentStore=d.dataset.id;renderList();renderDetail();});
+}
+
+/* ================= لایه کیفیت بنگاه ================= */
+const QM = (D.quality||{}), QF = QM.factors || {};
+const QLBL = {
+  floor:{ground:"همکف",f1:"طبقه اول",f2:"طبقه دوم",f3:"طبقه سوم",f4p:"چهارم و بالاتر",basement:"زیرزمین",unknown:"نامشخص"},
+  position:{street:"بر خیابان",passage:"داخل پاساژ",mall:"داخل مال/مجتمع",alley:"کوچه / دید کم",unknown:"نامشخص"},
+  frontage:{narrow:"باریک (زیر ۳ متر)",normal:"معمولی (۳ تا ۶ متر)",wide:"پهن (۶ تا ۱۲ متر)",xwide:"خیلی پهن (بالای ۱۲ متر)"},
+  visibility:{hidden:"دید کم",normal:"معمولی",prime:"ممتاز / پرتردد"}
+};
+function qualOf(a){
+  let q=1;
+  q *= (QF.floor && QF.floor[a.floor]!==undefined) ? QF.floor[a.floor] : 1;
+  q *= (QF.position && QF.position[a.position]!==undefined) ? QF.position[a.position] : 1;
+  if(a.corner) q *= (QF.corner!==undefined?QF.corner:1.12);
+  q *= (QF.frontage && QF.frontage[a.frontage]!==undefined) ? QF.frontage[a.frontage] : 1;
+  q *= (QF.visibility && QF.visibility[a.visibility]!==undefined) ? QF.visibility[a.visibility] : 1;
+  return q;
+}
+function attrOf(st){
+  let a = Object.assign({}, st.attrs||{floor:"ground",position:"street",corner:false,frontage:"normal",visibility:"normal"});
+  try{ const saved = JSON.parse(localStorage.getItem("attr_"+st.id)||"null"); if(saved) a = Object.assign(a, saved); }catch(e){}
+  a.corner = !!a.corner;
+  return a;
+}
+function interpX(x, pts){
+  if(!isFinite(x)) return null;
+  if(x<=pts[0][0]) return pts[0][1];
+  if(x>=pts[pts.length-1][0]) return pts[pts.length-1][1];
+  for(let i=1;i<pts.length;i++){
+    if(x<=pts[i][0]){ const [x0,y0]=pts[i-1], [x1,y1]=pts[i]; return y0+(y1-y0)*(x-x0)/((x1-x0)||1e-9); }
+  }
+  return pts[pts.length-1][1];
+}
+const SP_PTS=[[-0.40,100],[-0.20,93],[-0.08,84],[0,76],[0.08,70],[0.18,60],[0.30,47],[0.50,30],[0.80,16],[1.50,4]];
+const SB_PTS=[[-0.50,100],[-0.25,92],[0,78],[0.10,66],[0.25,52],[0.45,36],[0.75,22],[1.20,10]];
+function pctlQ(qk, val){
+  if(!qk || !qk.length || !isFinite(val)) return null;
+  const n=qk.length, q0=0.02, q1=0.98;
+  if(val<=qk[0]) return q0;
+  if(val>=qk[n-1]) return q1;
+  for(let i=1;i<n;i++){
+    if(val<=qk[i]){
+      const t=(val-qk[i-1])/((qk[i]-qk[i-1])||1e-9);
+      return q0+(q1-q0)*((i-1+t)/(n-1));
+    }
+  }
+  return q1;
+}
+function renderAttrBox(st){
+  const a = attrOf(st);
+  const fill=(id,sec,cur,isBool)=>{
+    const opts = isBool ? [["0","خیر"],["1","بله"]] : Object.keys(QLBL[sec]).map(k=>[k,QLBL[sec][k]]);
+    byId(id).innerHTML = opts.map(([v,l])=>`<option value="${v}" ${String(cur)===String(v)?"selected":""}>${l}</option>`).join("");
+  };
+  fill("aFloor","floor",a.floor,false); fill("aPos","position",a.position,false);
+  fill("aCorner",null,a.corner?1:0,true); fill("aFront","frontage",a.frontage,false);
+  fill("aVis","visibility",a.visibility,false);
+  const upd=()=>{
+    const na={floor:byId("aFloor").value, position:byId("aPos").value,
+              corner:byId("aCorner").value==="1", frontage:byId("aFront").value,
+              visibility:byId("aVis").value};
+    try{ localStorage.setItem("attr_"+st.id, JSON.stringify(na)); }catch(e){}
+    paintAttr(st, na);
+  };
+  ["aFloor","aPos","aCorner","aFront","aVis"].forEach(id=>byId(id).onchange=upd);
+  paintAttr(st, a);
+}
+function paintAttr(st, a){
+  const q = qualOf(a);
+  const q0 = st.qual || 1;
+  const areaG = Math.pow(st.area, GAMMA);
+  const fairRef = st.fair_ref || st.market.fair || 0;
+  const expected = fairRef * q;
+  const eff = st.deal.eff;
+  const gap = expected>0 ? eff/expected - 1 : null;
+  const qk = st.qk || [];
+  const unit = (eff/areaG)/q;
+  const pct = pctlQ(qk, unit);
+  let bandGap = null;
+  if(qk.length){
+    const p75 = qk[Math.round(0.75*(qk.length-1))] * areaG * q;
+    bandGap = p75>0 ? eff/p75 - 1 : null;
+  }
+  const spNow = (gap===null) ? st.scores.price
+    : 0.55*interpX(gap, SP_PTS) + 0.45*(bandGap===null?76:interpX(bandGap, SB_PTS));
+  // امتیاز پایه در حالت پیش‌فرض (تا در حالت اولیه دقیقاً همان امتیاز مدل دیده شود)
+  const fair0 = fairRef*q0, gap0 = fair0>0 ? eff/fair0 - 1 : null;
+  const p75_0 = qk.length ? qk[Math.round(0.75*(qk.length-1))]*areaG*q0 : null;
+  const band0 = p75_0 ? eff/p75_0 - 1 : null;
+  const spBase = (gap0===null) ? st.scores.price
+    : 0.55*interpX(gap0, SP_PTS) + 0.45*(band0===null?76:interpX(band0, SB_PTS));
+  const wPrice = (st.weights && st.weights.price) || 0.35;
+  const totalAdj = st.scores.total + wPrice*(spNow - spBase);
+  const diff = q - q0;
+  byId("aOut").innerHTML = `
+    <div class="qbox"><span class="small muted">ضریب کیفیت</span><b>${(q*100).toFixed(0)}٪</b>
+      <span class="small ${diff>0.001?"":diff<-0.001?"":""}" style="color:${diff>0.001?"var(--good)":diff<-0.001?"var(--bad)":"var(--muted)"}">
+      ${diff===0?"بدون تغییر نسبت به پیش‌فرض":(diff>0?"+":"")+(diff*100).toFixed(0)+"٪ نسبت به پیش‌فرض"}</span></div>
+    <div class="qbox"><span class="small muted">اجاره‌ی متعارف با این شرایط</span><b>${money(expected)}</b>
+      <span class="small muted">قبل: ${money(fairRef*q0)}</span></div>
+    <div class="qbox"><span class="small muted">اختلاف با بازار</span><b style="color:${gap>0?"var(--bad)":"var(--good)"}">${gap===null?"—":(gap>0?"+":"")+(gap*100).toFixed(0)+"٪"}</b>
+      <span class="small muted">صدک تقریبی ${pct===null?"—":(pct*100).toFixed(0)}</span></div>
+    <div class="qbox"><span class="small muted">امتیاز تعدیل‌شده</span><b>${totalAdj.toFixed(1)}</b>
+      <span class="small muted">قبل: ${st.scores.total.toFixed(1)}</span></div>`;
+  byId("aNote").innerHTML = `ضریب «همکفِ بر خیابان» = ۱۰۰٪. تغییر هر گزینه، اجاره‌ی متعارف و امتیاز را همان‌جا بازمحاسبه می‌کند و در همین مرورگر ذخیره می‌شود.
+    برای دائمی‌شدن، از دکمه‌ی «خروجی ویژگی‌ها» CSV بگیر و با نام <code>ویژگی_فروشگاه‌ها.csv</code> در پوشه‌ی out بگذار و run.py را دوباره اجرا کن.
+    ${QM.meta && QM.meta.key_money_note?`<br>${QM.meta.key_money_note}`:""}`;
+}
+
+function renderDetail(){
+  const st=storeById(currentStore)||[...STORES].sort((a,b)=>b.scores.total-a.scores.total)[0];
+  currentStore=st.id;
+  const m=st.market, sc=st.scores;
+  const gap=st.deal.eff-(m.fair||0);
+  const html=`
+  <div class="card">
+    <div class="bd" style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+      <div>${ring(sc.total,116,sc.grade)}</div>
+      <div style="flex:1;min-width:240px">
+        <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+          <h2 style="font-size:19px">${st.name}</h2>
+          <span class="tag ${verdictClass(st.verdict.label)}">${st.verdict.label}</span>
+          ${st.mall?'<span class="tag t-gray">داخل مجتمع/مال</span>':""}
+          <span class="tag t-gray">${st.deal.structure==="fixed"?"اجاره‌ی ثابت":st.deal.structure==="hybrid"?"ترکیبی":"درصدی از فروش"}</span>
+        </div>
+        <div class="muted small" style="margin:5px 0 9px">${st.city} · ${st.nb} · ${fa1(st.area)} متر مربع · اعتماد تحلیل ${fa(sc.conf)}٪ (±${fa1(sc.unc)} امتیاز)</div>
+        <div style="font-size:12.5px;color:var(--text)">${st.verdict.text}</div>
+        ${(st.actions||[]).length?`<div style="margin-top:8px">${st.actions.map(a=>`<div class="flagline" style="border:0;padding:2px 0"><span class="dot" style="background:var(--good)"></span><span>${a}</span></div>`).join("")}</div>`:""}
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="dMap">نمایش در نقشه</button>
+          <button class="btn" id="dExp">تحلیل توسعه در این شهر</button>
+        </div>
+      </div>
+      <div style="min-width:230px">
+        <div class="stat" style="margin-bottom:8px"><b>${money(st.deal.eff)}</b><span>هزینه‌ی مؤثر ماهانه (اجاره + هزینه‌ی ودیعه)</span></div>
+        <div class="stat"><b style="color:${sc.sales>60?"var(--good)":"var(--warn)"}">${st.rts!==null?pct(st.rts):"—"}</b><span>نسبت اجاره به فروش (میانه پرتفوی: ${pct(META.internal_median_rts)})</span></div>
+      </div>
+    </div>
+    <div class="bd" style="border-top:1px solid var(--line)">
+      <h3 style="font-size:13px;margin-bottom:8px">جایگاه اجاره‌ی شما در بازار محلی</h3>
+      ${bandBar(st)}
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin-top:12px">
+        <div class="stat"><b>${m.pct!==null?"صدک "+fa(m.pct*100):"—"}</b><span>در میان ${fa(m.n)} آگهی مشابه اطراف</span></div>
+        <div class="stat"><b>${money(m.fair)}</b><span>برآورد میانه‌ی بازار برای این متراژ</span></div>
+        <div class="stat"><b style="color:${gap>0?"var(--bad)":"var(--good)"}">${(gap>0?"+":"")+money(gap)}</b><span>اختلاف با میانه‌ی بازار (ماهانه)</span></div>
+        <div class="stat"><b>${money(m.ci_lo)} – ${money(m.ci_hi)}</b><span>بازه‌ی اطمینان ۹۵٪ برآورد</span></div>
+      </div>
+      ${st.sens?(()=>{
+        const lo=st.sens["0.04"], hi=st.sens["0.02"];
+        if(!lo||!hi||!ok(lo.gap)||!ok(hi.gap)) return "";
+        return `<div class="small muted" style="margin-top:10px">حساسیت به نرخ تبدیل ودیعه: با نرخ ۲٪ تا ۴٪، اختلاف اجاره‌ی شما با میانه‌ی بازار بین <b style="color:var(--text)">${pct(Math.min(lo.gap,hi.gap))}</b> و <b style="color:var(--text)">${pct(Math.max(lo.gap,hi.gap))}</b> نوسان می‌کند.</div>`;
+      })():""}
+      ${st.rts_fair!==null?`<div class="small muted" style="margin-top:10px">اگر همین فضا را با اجاره‌ی میانه‌ی بازار می‌گرفتید، نسبت اجاره به فروش ${pct(st.rts_fair)} می‌شد (به‌جای ${pct(st.rts)}).</div>`:""}
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:14px">
+    <div class="card"><div class="hd"><h3>تفکیک امتیاز</h3></div><div class="bd">${subRows(st)}</div></div>
+    <div class="card"><div class="hd"><h3>اقتصاد قرارداد</h3></div><div class="bd">
+      <dl class="kv">
+        <dt>اجاره‌ی نقدی پایه</dt><dd>${money(st.deal.cash)}</dd>
+        <dt>${st.deal.structure==="fixed"?"نوع محاسبه":"پایه‌ی محاسبه"} </dt><dd>${st.deal.structure==="fixed"?"اجاره‌ی ثابت":st.deal.pct!==null?fa1(st.deal.pct*100)+"٪ فروش":"—"}</dd>
+        <dt>ودیعه</dt><dd>${st.deal.dep?money(st.deal.dep):"—"}</dd>
+        <dt>هزینه‌ی ماهانه‌ی ودیعه <span class="dim">(۳٪)</span></dt><dd>${money(st.deal.dep_cost)}</dd>
+        <dt>هزینه‌ی مؤثر ماهانه</dt><dd style="color:var(--text)">${money(st.deal.eff)}</dd>
+        <dt>ودیعه معادل</dt><dd>${ok(st.contract.dep_months)?fa1(st.contract.dep_months)+" ماه اجاره":""}</dd>
+        <dt>فروش ماهانه</dt><dd>${money(st.deal.sales)}</dd>
+        <dt>سقف اجاره با نسبت ۶٪</dt><dd>${money(st.rts_max)}</dd>
+        <dt>شروع قرارداد</dt><dd>${st.contract.start||"—"}</dd>
+        <dt>تمدید</dt><dd>${st.contract.renewal||"—"} ${ok(st.contract.months_left)?`<span class="dim">(${fa1(st.contract.months_left)} ماه)</span>`:""}</dd>
+        <dt>افزایش سالانه</dt><dd>${ok(st.contract.inc)?fa1(st.contract.inc)+"٪":"—"}</dd>
+      </dl>
+    </div></div>
+  </div>
+
+  <div class="card" style="margin-top:14px" id="attrCard">
+    <div class="hd"><h3>شرایط خودِ مغازه — ضریب کیفیت</h3>
+      <span class="small muted">هم‌کف بودن، بر خیابان بودن، نبش و ویترین ارزش را جابه‌جا می‌کنند</span></div>
+    <div class="bd">
+      <div class="qgrid">
+        <div><label>طبقه</label><select id="aFloor"></select></div>
+        <div><label>موقعیت</label><select id="aPos"></select></div>
+        <div><label>نبش / دو بر</label><select id="aCorner"></select></div>
+        <div><label>عرض ویترین</label><select id="aFront"></select></div>
+        <div><label>دید و تردد</label><select id="aVis"></select></div>
+      </div>
+      <div class="qout" id="aOut"></div>
+      <div class="small muted" style="margin-top:9px" id="aNote"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="hd"><h3>نقشه‌ی پراکندگی بازار اطراف</h3><span class="small muted">نقطه‌ی رنگی = فروشگاه شما · خط‌چین = برآورد میانه‌ی بازار</span></div>
+    <div class="bd">${scatter(st)}</div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="hd"><h3>مشابه‌های نزدیک (${fa((st.comps||[]).length)} مورد)</h3><span class="small muted">وزن‌دهی بر اساس فاصله، تشابه متراژ و نوع</span></div>
+    <div class="bd" style="padding:0"><div class="scroll" style="max-height:400px"><table>
+      <thead><tr><th>عنوان آگهی</th><th>متراژ</th><th>اجاره</th><th>ودیعه</th><th>هزینه‌ی مؤثر</th><th>تومان/م²</th><th>فاصله</th><th>طبقه</th><th></th></tr></thead>
+      <tbody>${(st.comps||[]).map(c=>`<tr>
+        <td style="max-width:290px;overflow:hidden;text-overflow:ellipsis">${c.t||"—"}</td>
+        <td class="num">${fa1(c.a)}</td><td class="num">${money(c.rt)}</td><td class="num">${money(c.dp)}</td>
+        <td class="num">${money(c.ef)}</td><td class="num">${fa(c.p)}</td><td class="num">${fa1(c.d)} km</td>
+        <td class="num small muted">${c.fl||"—"}</td>
+        <td><a href="${c.u}" target="_blank" rel="noopener">دیوار ↗</a></td>
+      </tr>`).join("")}</tbody></table></div></div>
+  </div>
+
+  ${st.flags.length?`<div class="card" style="margin-top:14px"><div class="hd"><h3>هشدارها</h3></div><div class="bd">
+    ${st.flags.map(f=>`<div class="flagline"><span class="dot"></span><span>${f}</span></div>`).join("")}</div></div>`:""}
+  `;
+  byId("sdetail").innerHTML=html;
+  byId("dMap").onclick=()=>{ setTab("map"); byId("mCity").value=st.city; setTimeout(()=>{ mapResize(); focusStore(st); },80); };
+  byId("dExp").onclick=()=>{setTab("expand"); byId("xCity").value=st.city; syncNb(); runExpand();};
+  try{ renderAttrBox(st); }catch(e){ console.warn("attr box", e); }
+}
+
+/* ================= 3D / 2D map ================= */
+/* دو موتور رندر: WebGL (three.js) و Canvas2D (بدون WebGL).
+   دلیل: در iframeهای sandbox و برخی مرورگرها WebGL در دسترس نیست؛
+   نقشه باید در هر حالتی داده نشان بدهد و تعامل داشته باشد.          */
+const MAP = {mode:null, viewMode:"3d", three:null, ctx2d:null, canvas:null, scene:null, view:{th:0.9, el:0.55, sc:1, cx:0, cy:0}, hover:null, hoverRow:null, fitted:false, glDead:false, data:null, items:[], instances:[]};
+
+function computeScene(){
+  const city=byId("mCity").value||"تهران";
+  const mode=byId("mMode").value||"all";
+  const hMul=(+byId("mHeight").value||130)/100;
+  let rows=LIST.filter(r=>r[1]===city);
+  if(!rows.length){
+    const best=Object.entries(CITIES).sort((a,b)=>b[1].n-a[1].n)[0];
+    if(best){ byId("mCity").value=best[0]; rows=LIST.filter(r=>r[1]===best[0]); }
+  }
+  if(!rows.length) return null;
+  const psAll=rows.map(r=>r[9]).sort((a,b)=>a-b);
+  if(mode==="top") rows=[...rows].sort((a,b)=>b[9]-a[9]).slice(0,200);
+  const clat=rows.reduce((a,r)=>a+r[3],0)/rows.length;
+  const clng=rows.reduce((a,r)=>a+r[4],0)/rows.length;
+  const latSpan=Math.max(...rows.map(r=>Math.abs(r[3]-clat)),0.012);
+  const K=9/(latSpan*111);                       // مقیاس: شهر در ~±۹ واحد جا شود
+  const P=(lat,lng)=>[(lng-clng)*111*Math.cos(clat*Math.PI/180)*K,(lat-clat)*111*K];
+  const ps=psAll;
+  const q=p=>ps.length?ps[clamp(Math.floor(p*(ps.length-1)),0,ps.length-1)]:1;
+  const q10=Math.max(q(.1),1), q99=Math.max(q(.99),q10*1.01);
+  const H=v=>clamp(Math.pow(v/q99,.55),.06,1)*5.0*hMul;
+  const lerpC=(a,b,t)=>{
+    const pa=[parseInt(a.slice(1,3),16),parseInt(a.slice(3,5),16),parseInt(a.slice(5,7),16)];
+    const pb=[parseInt(b.slice(1,3),16),parseInt(b.slice(3,5),16),parseInt(b.slice(5,7),16)];
+    return "#"+pa.map((v,i)=>clamp(Math.round(v+(pb[i]-v)*t),0,255).toString(16).padStart(2,"0")).join("");
+  };
+  const ramp=["#2ed3a0","#4d9fff","#f2a93b","#f2565f"];
+  const colFor=v=>{
+    const t=clamp((Math.log(Math.max(v,1))-Math.log(q10))/(Math.log(q99)-Math.log(q10)),0,1);
+    const i=Math.min(Math.floor(t*(ramp.length-1)),ramp.length-2);
+    return lerpC(ramp[i],ramp[i+1],(t-i/(ramp.length-1))*(ramp.length-1));
+  };
+  const pts=(mode==="stores"?[]:rows).map(r=>{
+    const [x,z]=P(r[3],r[4]);
+    return {x,z,h:H(r[9]),w:clamp(.10+Math.sqrt(r[5])*.012,.10,.42),c:colFor(r[9]),row:r};
+  });
+  const sts=STORES.filter(s=>s.city===city).map(s=>{
+    const [x,z]=P(s.lat,s.lng);
+    return {x,z,h:6.0*hMul+1.0,s,row:null};
+  });
+  const maxH=Math.max(1,...sts.map(p=>p.h));
+  const extent=Math.max(5,...pts.map(p=>Math.hypot(p.x,p.z)),...sts.map(p=>Math.hypot(p.x,p.z)), maxH);
+  return {pts,sts,extent,city,mode,kmPerUnit:1/K};
+}
+
+/* ---------- engine: WebGL ---------- */
+function initWebGL(canvas){
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+  const scene=new THREE.Scene(); scene.background=new THREE.Color(0x05080c);
+  scene.fog=new THREE.Fog(0x05080c,20,80);
+  const cam=new THREE.PerspectiveCamera(46,1,.1,500); cam.position.set(9,11,13);
+  scene.add(new THREE.HemisphereLight(0xbcd6ff,0x0a0f16,1.2));
+  const dir=new THREE.DirectionalLight(0xffffff,1.05); dir.position.set(6,14,8); scene.add(dir);
+  const grid=new THREE.GridHelper(120,60,0x16324a,0x0e2233);
+  grid.material.transparent=true; grid.material.opacity=.6; scene.add(grid);
+  const plane=new THREE.Mesh(new THREE.PlaneGeometry(160,160),new THREE.MeshBasicMaterial({color:0x070d13}));
+  plane.rotation.x=-Math.PI/2; plane.position.y=-.02; scene.add(plane);
+  const group=new THREE.Group(); scene.add(group);
+  const labels=new THREE.Group(); scene.add(labels);
+  const target=new THREE.Vector3(0,.8,0);
+  const sph={r:24,th:Math.PI/4.4,ph:Math.PI/3.5};
+  const apply=()=>{
+    const {r,th,ph}=sph;
+    cam.position.set(target.x+r*Math.sin(ph)*Math.sin(th), target.y+r*Math.cos(ph), target.z+r*Math.sin(ph)*Math.cos(th));
+    cam.lookAt(target);
+  };
+  apply();
+  return {renderer,scene,cam,group,labels,target,sph,apply,instances:[],kind:"webgl"};
+}
+
+function renderWebGL(sc,data){
+  const {group,labels}=sc;
+  while(group.children.length){ const c=group.children.pop(); group.remove(c); if(c.geometry)c.geometry.dispose(); }
+  while(labels.children.length){ const c=labels.children.pop(); labels.remove(c); if(c.material&&c.material.map)c.material.map.dispose(); }
+  sc.instances.length=0;
+  // ستون‌ها
+  const geo=new THREE.BoxGeometry(1,1,1);
+  const mat=new THREE.MeshStandardMaterial({metalness:.15,roughness:.55});
+  const inst=new THREE.InstancedMesh(geo,mat,Math.max(data.pts.length,1));
+  inst.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(data.pts.length,1)*3),3);
+  const dummy=new THREE.Object3D();
+  data.pts.forEach((p,i)=>{
+    dummy.position.set(p.x,p.h/2,p.z); dummy.scale.set(p.w,p.h,p.w); dummy.updateMatrix();
+    inst.setMatrixAt(i,dummy.matrix);
+    inst.setColorAt(i,new THREE.Color(p.c));
+  });
+  inst.count=data.pts.length; inst.instanceMatrix.needsUpdate=true;
+  if(inst.instanceColor) inst.instanceColor.needsUpdate=true;
+  group.add(inst); sc.instances.push({mesh:inst,rows:data.pts});
+  // نشانگر فروشگاه‌ها
+  data.sts.forEach(p=>{
+    const pole=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,p.h,8),
+      new THREE.MeshStandardMaterial({color:0xffffff,emissive:0xffffff,emissiveIntensity:.7}));
+    pole.position.set(p.x,p.h/2,p.z); group.add(pole);
+    const cap=new THREE.Mesh(new THREE.SphereGeometry(.14,12,12),
+      new THREE.MeshStandardMaterial({color:0xffffff,emissive:0x2ed3a0,emissiveIntensity:.95}));
+    cap.position.set(p.x,p.h,p.z); group.add(cap);
+    const ring=new THREE.Mesh(new THREE.RingGeometry(.2,.28,24),
+      new THREE.MeshBasicMaterial({color:0x2ed3a0,transparent:true,opacity:.5,side:THREE.DoubleSide}));
+    ring.rotation.x=-Math.PI/2; ring.position.set(p.x,.03,p.z); group.add(ring);
+    const cvs=document.createElement("canvas"); cvs.width=512; cvs.height=96;
+    const ctx=cvs.getContext("2d");
+    ctx.fillStyle="rgba(5,10,16,.75)";
+    if(ctx.roundRect) { ctx.beginPath(); ctx.roundRect(4,18,504,60,16); ctx.fill(); }
+    ctx.font="bold 42px Vazirmatn, Tahoma"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillStyle="#e8eef5"; ctx.fillText(p.s.name.replace("مایلی ",""),256,50);
+    const tex=new THREE.CanvasTexture(cvs); tex.anisotropy=4;
+    const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));
+    const ls=Math.max(2.2,(sc.sph?sc.sph.r:24)*0.155);
+    spr.scale.set(ls,ls*0.19,1); spr.position.set(p.x,p.h+.45,p.z); labels.add(spr);
+    p.s._3d=[p.x,p.z];
+  });
+  if(!MAP.fitted){
+    const hr=Math.max(5,...data.pts.map(p=>Math.hypot(p.x,p.z)),...data.sts.map(p=>Math.hypot(p.x,p.z)));
+    const mh=Math.max(1,...data.sts.map(p=>p.h));
+    const r=clamp(hr*1.8+mh*0.75+3,12,120);
+    sc.sph.r=r; sc.sph.ph=Math.PI/3.7; sc.sph.th=Math.PI/4.3;
+    sc.target.set(0,mh*0.25,0);
+    if(sc.scene.fog){ sc.scene.fog.near=r*0.9; sc.scene.fog.far=r*4.2; }
+    sc.apply(); MAP.fitted=true;
+  }
+}
+
+/* ---------- engine: Canvas2D (بدون WebGL) ---------- */
+function project2D(p, v){
+  const ca=Math.cos(v.th), sa=Math.sin(v.th), el=v.el;
+  const ux=p.x*ca - p.z*sa;
+  const uz=p.x*sa + p.z*ca;
+  return {x:v.cx + ux*v.sc, y:v.cy - (uz*Math.sin(el) + (p.h||0)*Math.cos(el))*v.sc, depth:uz};
+}
+function fit2D(data, w, h){
+  const v=MAP.view; v.el=0.62;
+  const items=[...data.pts.map(p=>({x:p.x,z:p.z,h:p.h*1.30})),
+               ...data.sts.map(p=>({x:p.x,z:p.z,h:p.h*1.30}))];
+  let minX=1e9,maxX=-1e9,minY=1e9,maxY=-1e9;
+  items.forEach(p=>{
+    const a=project2D({x:p.x,z:p.z,h:0},{th:v.th,el:v.el,sc:1,cx:0,cy:0});
+    const b=project2D(p,{th:v.th,el:v.el,sc:1,cx:0,cy:0});
+    minX=Math.min(minX,a.x,b.x); maxX=Math.max(maxX,a.x,b.x);
+    minY=Math.min(minY,a.y,b.y); maxY=Math.max(maxY,a.y,b.y);
+  });
+  const padX=w*0.06, padY=h*0.13;
+  const sc=Math.min((w-2*padX)/Math.max(maxX-minX,.5),(h-2*padY)/Math.max(maxY-minY,.5));
+  v.sc=Math.max(sc,.4);
+  v.cx=w/2 - v.sc*(minX+maxX)/2;
+  v.cy=h/2 - v.sc*(minY+maxY)/2;
+}
+function render2D(data){
+  const cv=MAP.canvas, ctx=MAP.ctx2d, v=MAP.view;
+  const w=cv.clientWidth, h=cv.clientHeight;
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="#05080c"; ctx.fillRect(0,0,w,h);
+  if(!MAP.fitted){ fit2D(data,w,h); MAP.fitted=true; }
+  // کف
+  const g=24;
+  ctx.strokeStyle="rgba(22,50,74,.55)"; ctx.lineWidth=1;
+  for(let i=-g;i<=g;i+=2){
+    const a=project2D({x:i*1.0,z:-g,h:0},v), b=project2D({x:i*1.0,z:g,h:0},v);
+    const c=project2D({x:-g,z:i*1.0,h:0},v), d=project2D({x:g,z:i*1.0,h:0},v);
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(c.x,c.y); ctx.lineTo(d.x,d.y); ctx.stroke();
+  }
+  // مرتب‌سازی بر اساس عمق (دورترها اول)
+  const items=[...data.pts.map(p=>({...p,kind:"c"})),...data.sts.map(p=>({...p,kind:"s"}))];
+  items.forEach(it=>{
+    it.base=project2D({x:it.x,z:it.z,h:0},v);
+    it.proj=project2D({x:it.x,z:it.z,h:it.h*1.30},v);
+  });
+  items.sort((a,b)=>b.proj.depth-a.proj.depth);
+  items.forEach(it=>{
+    const bx=it.proj.x, by=it.base.y;
+    const topY=it.proj.y;
+    const pw=Math.max(2.4,it.w*v.sc*1.5);
+    if(it.kind==="c"){
+      ctx.fillStyle=it.c; ctx.globalAlpha=.92;
+      ctx.fillRect(bx-pw/2, topY, pw, by-topY);
+      ctx.globalAlpha=1;
+      ctx.fillStyle="rgba(255,255,255,.16)";
+      ctx.fillRect(bx-pw/2, topY, pw, Math.max(1.5,pw*.28));
+      it._sx=bx; it._sy=(topY+by)/2; it._top=topY; it._base=by;
+    } else {
+      ctx.strokeStyle="rgba(255,255,255,.95)"; ctx.lineWidth=1.6;
+      ctx.beginPath(); ctx.moveTo(bx,by); ctx.lineTo(bx,topY); ctx.stroke();
+      ctx.fillStyle="#2ed3a0"; ctx.beginPath(); ctx.arc(bx,topY,4.6,0,7); ctx.fill();
+      ctx.strokeStyle="rgba(46,211,160,.5)"; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.ellipse(bx,by,pw*1.6,pw*.7,0,0,7); ctx.stroke();
+      ctx.fillStyle="rgba(232,238,245,.95)";
+      ctx.font="600 11px Vazirmatn, Tahoma"; ctx.textAlign="center";
+      ctx.fillText(it.s.name.replace("مایلی ",""), bx, topY-9);
+      it._sx=bx; it._sy=topY;
+    }
+  });
+  MAP.items=items;
+  byId("mapInfo").textContent=`${fa(data.pts.length)} آگهی · ${fa(data.sts.length)} فروشگاه · ${data.city} · رندر بدون WebGL`;
+}
+
+
+/* ---------- engine: نقشه کلاسیک ۲بعدی (نگه‌داشتنِ نمای اولیه) ---------- */
+const FV = {cx:0, cz:0, sc:40, fitted:false, rot:0};
+function flatFit(data, w, h){
+  let minX=1e9,maxX=-1e9,minZ=1e9,maxZ=-1e9;
+  const push=(x,z)=>{minX=Math.min(minX,x);maxX=Math.max(maxX,x);minZ=Math.min(minZ,z);maxZ=Math.max(maxZ,z);};
+  data.pts.forEach(p=>push(p.x,p.z)); data.sts.forEach(p=>push(p.x,p.z));
+  if(minX>maxX){minX=-1;maxX=1;minZ=-1;maxZ=1;}
+  const pad=0.10;
+  FV.sc=Math.min(w*(1-2*pad)/Math.max(maxX-minX,1e-3), h*(1-2*pad)/Math.max(maxZ-minZ,1e-3));
+  FV.cx=(minX+maxX)/2; FV.cz=(minZ+maxZ)/2; FV.fitted=true;
+}
+function fpt(x,z,w,h){ return {x:w/2+(x-FV.cx)*FV.sc, y:h/2+(z-FV.cz)*FV.sc}; }
+function renderFlat(data){
+  const cv=MAP.canvas, ctx=MAP.ctx2d, w=cv.clientWidth, h=cv.clientHeight;
+  ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,w,h);
+  const dark=document.documentElement.dataset.theme!=="light";
+  ctx.fillStyle=dark?"#070b10":"#eef1f4"; ctx.fillRect(0,0,w,h);
+  if(!FV.fitted || !isFinite(FV.sc) || FV.sc<=0) flatFit(data,w,h);
+  if(!isFinite(FV.sc) || FV.sc<=0) FV.sc=40;
+  if(!isFinite(FV.cx)) FV.cx=0; if(!isFinite(FV.cz)) FV.cz=0;
+  const S=FV.sc, half=Math.max(w,h)/S;
+  // شبکه‌ی خیابان‌مانند — تعداد خطوط همیشه محدود می‌ماند (جلوگیری از حلقه‌ی بی‌پایان در زوم شدید)
+  let step = S>90?0.5 : S>40?1 : S>15?2 : 5;
+  let guard=0;
+  while((2*half)/step > 160 && guard++ < 60) step *= 2;
+  ctx.strokeStyle=dark?"rgba(46,211,160,.07)":"rgba(20,80,60,.10)"; ctx.lineWidth=1;
+  const x0=Math.floor((FV.cx-half)/step)*step, x1=FV.cx+half, z0=Math.floor((FV.cz-half)/step)*step, z1=FV.cz+half;
+  const MAXL=170;
+  let k=0;
+  for(let x=x0;x<=x1 && k<MAXL;x+=step,k++){ const a=fpt(x,z0,w,h), b=fpt(x,z1,w,h);
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+  k=0;
+  for(let z=z0;z<=z1 && k<MAXL;z+=step,k++){ const a=fpt(x0,z,w,h), b=fpt(x1,z,w,h);
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+  // برچسب محله‌ها (مرکز ثقل آگهی‌های هر محله)
+  const byNb={};
+  data.pts.forEach(p=>{ const nb=p.row&&p.row[2]; if(!nb) return;
+    (byNb[nb]=byNb[nb]||{x:0,z:0,n:0}); byNb[nb].x+=p.x; byNb[nb].z+=p.z; byNb[nb].n++; });
+  ctx.textAlign="center"; ctx.font="600 11px Vazirmatn, Tahoma";
+  Object.entries(byNb).forEach(([nb,o])=>{
+    if(o.n<4) return;
+    const pt=fpt(o.x/o.n,o.z/o.n,w,h);
+    if(pt.x<0||pt.y<0||pt.x>w||pt.y>h) return;
+    ctx.fillStyle=dark?"rgba(180,200,220,.34)":"rgba(30,50,70,.42)";
+    ctx.fillText(nb.replace(/‌/g," "), pt.x, pt.y);
+  });
+  // آگهی‌ها
+  MAP.items=[];
+  data.pts.forEach(p=>{
+    const pt=fpt(p.x,p.z,w,h);
+    const r=clamp(1.8+Math.sqrt(p.row[5])*0.30,2.2,7.5);
+    if(pt.x<-20||pt.y<-20||pt.x>w+20||pt.y>h+20) return;
+    ctx.beginPath(); ctx.arc(pt.x,pt.y,r,0,6.2832);
+    ctx.fillStyle=p.c; ctx.globalAlpha=.86; ctx.fill(); ctx.globalAlpha=1;
+    MAP.items.push({kind:"c",row:p.row,_sx:pt.x,_sy:pt.y});
+  });
+  // فروشگاه‌ها
+  data.sts.forEach(p=>{
+    const pt=fpt(p.x,p.z,w,h);
+    ctx.beginPath(); ctx.arc(pt.x,pt.y,9,0,6.2832);
+    ctx.fillStyle="rgba(46,211,160,.16)"; ctx.fill();
+    ctx.beginPath(); ctx.arc(pt.x,pt.y,4.2,0,6.2832);
+    ctx.fillStyle="#ffffff"; ctx.strokeStyle="#2ed3a0"; ctx.lineWidth=2.2; ctx.fill(); ctx.stroke();
+    ctx.font="700 11.5px Vazirmatn, Tahoma"; ctx.textAlign="center";
+    const lbl=p.s.name.replace("مایلی ","");
+    const tw=ctx.measureText(lbl).width;
+    ctx.fillStyle=dark?"rgba(7,11,16,.78)":"rgba(255,255,255,.86)";
+    if(ctx.roundRect){ ctx.beginPath(); ctx.roundRect(pt.x-tw/2-5, pt.y+7, tw+10, 16, 6); ctx.fill(); }
+    ctx.fillStyle=dark?"#e8eef5":"#12212e"; ctx.fillText(lbl, pt.x, pt.y+19);
+    MAP.items.push({kind:"s",s:p.s,_sx:pt.x,_sy:pt.y});
+  });
+  // قطب‌نما + مقیاس
+  ctx.save();
+  ctx.strokeStyle=dark?"rgba(230,240,250,.55)":"rgba(20,40,60,.5)"; ctx.fillStyle=ctx.strokeStyle;
+  ctx.lineWidth=1.4; ctx.beginPath(); ctx.moveTo(w-34,h-64); ctx.lineTo(w-34,h-88); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(w-34,h-92); ctx.lineTo(w-39,h-82); ctx.lineTo(w-29,h-82); ctx.closePath(); ctx.fill();
+  ctx.font="600 10px Vazirmatn, Tahoma"; ctx.textAlign="center"; ctx.fillText("N", w-34, h-50);
+  // مقیاس واقعی: هر واحد صحنه = data.kmPerUnit کیلومتر
+  const kmU=data.kmPerUnit||1;
+  const nice=[0.1,0.2,0.25,0.5,1,2,5,10,20,50];
+  let km=nice[0];
+  for(const c of nice){ if(S*c/kmU>=45 && S*c/kmU<=130){ km=c; break; } km=c; }
+  const px=Math.round(S*km/kmU);
+  const sx=w-40-px, sy=h-26;
+  ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(sx+px,sy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sx,sy-5); ctx.lineTo(sx,sy+5); ctx.moveTo(sx+px,sy-5); ctx.lineTo(sx+px,sy+5); ctx.stroke();
+  ctx.textAlign="center"; ctx.font="600 10px Vazirmatn, Tahoma";
+  ctx.fillText(km<1?fa(km*1000)+" متر":fa(km)+" کیلومتر", sx+px/2, sy-10);
+  ctx.restore();
+  const hint=byId("mapHint");
+  if(hint) hint.textContent="کشیدن = جابه‌جایی نقشه · اسکرول = زوم · کلیک روی نشانگر = تحلیل فروشگاه";
+  byId("mapInfo").textContent=`${fa(data.pts.length)} آگهی · ${fa(data.sts.length)} فروشگاه · ${data.city} · نقشه کلاسیک`;
+  byId("mapMode").textContent="Canvas2D";
+}
+
+/* ---------- مدیریت نقشه ---------- */
+function mapEl2D(){
+  let cv = byId("gl2d");
+  if(!cv){
+    cv = document.createElement("canvas"); cv.id = "gl2d";
+    cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0";
+    const wr = byId("mapWrap");
+    wr.insertBefore(cv, wr.firstChild);
+    attachMapInput(cv);
+  }
+  return cv;
+}
+function use2D(){
+  const gl = byId("gl"); if(gl) gl.style.display = "none";
+  const cv = mapEl2D(); cv.style.display = "block";
+  MAP.canvas = cv; MAP.ctx2d = cv.getContext("2d"); MAP.mode = "2d"; MAP.fitted = false; FV.fitted = false;
+  byId("mapMode").textContent = "Canvas2D";
+  return cv;
+}
+function use3D(){
+  const old = byId("gl");
+  const cv = document.createElement("canvas"); cv.id = "gl";
+  cv.style.cssText = "position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0";
+  old.parentNode.replaceChild(cv, old);
+  MAP.three = initWebGL(cv);
+  MAP.canvas = cv; MAP.mode = "webgl"; MAP.fitted = false;
+  cv.style.display = "block";
+  const c2 = byId("gl2d"); if(c2) c2.style.display = "none";
+  attachMapInput(cv);
+  byId("mapMode").textContent = "WebGL";
+  return cv;
+}
+function setMapHint(){
+  const flat = MAP.viewMode === "2d";
+  byId("mHeight").style.display = flat ? "none" : "";
+  byId("mHeightLbl").style.display = flat ? "none" : "";
+  byId("mapHint").textContent = MAP.glDead
+    ? "این محیط WebGL ندارد؛ نقشه‌ی کلاسیک ۲بعدی فعال است · کشیدن = جابه‌جایی · اسکرول = زوم · کلیک = تحلیل فروشگاه"
+    : (flat ? "کشیدن = جابه‌جایی نقشه · اسکرول = زوم · کلیک روی نشانگر = تحلیل فروشگاه"
+            : "کشیدن = چرخش · اسکرول = زوم · کلیک روی نشانگر = تحلیل فروشگاه");
+}
+function mapSetView(v, silent){
+  v = (v === "2d") ? "2d" : "3d";
+  if(v === "3d" && MAP.glDead) v = "2d";          // این محیط WebGL ندارد
+  if(v === "3d"){
+    try{ use3D(); }
+    catch(e){
+      MAP.glDead = true; v = "2d";
+      if(!silent) console.warn("WebGL در دسترس نیست؛ نقشه‌ی کلاسیک فعال شد:", e && e.message);
+      use2D();
+    }
+  } else use2D();
+  MAP.viewMode = v;
+  document.querySelectorAll("#mView button").forEach(b=>b.classList.toggle("on", b.dataset.v === v));
+  setMapHint();
+  MAP.fitted = false; FV.fitted = false;
+  mapResize();
+  mapBuild();
+}
+function mapBuild(){
+  if(!MAP.canvas) mapSetView(MAP.viewMode, true);
+  const data = computeScene();
+  if(!data){ byId("mapInfo").textContent = "برای این شهر آگهی‌ای موجود نیست"; return; }
+  MAP.data = data;
+  byId("tip").classList.remove("on");
+  if(MAP.mode === "webgl"){
+    try{
+      renderWebGL(MAP.three, data);
+      byId("mapInfo").textContent = `${fa(data.pts.length)} آگهی · ${fa(data.sts.length)} فروشگاه · ${data.city} · نقشه سه‌بعدی`;
+      mapResize();
+    }catch(e){
+      MAP.glDead = true;
+      MAP.viewMode = "2d";
+      document.querySelectorAll("#mView button").forEach(b=>b.classList.toggle("on", b.dataset.v === "2d"));
+      use2D(); mapResize(); renderFlat(data);
+    }
+  } else {
+    mapResize();
+    if(MAP.viewMode === "2d") renderFlat(data);
+    else render2D(data);
+  }
+}
+function mapResize(){
+  const w = byId("mapWrap").clientWidth || 600, h = byId("mapWrap").clientHeight || 420;
+  if(MAP.mode === "webgl" && MAP.three){
+    MAP.three.renderer.setSize(w, h, false);
+    MAP.three.cam.aspect = w / h; MAP.three.cam.updateProjectionMatrix();
+  } else if(MAP.mode === "2d" && MAP.canvas){
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    MAP.canvas.width = Math.round(w * dpr); MAP.canvas.height = Math.round(h * dpr);
+    MAP.canvas.style.width = w + "px"; MAP.canvas.style.height = h + "px";
+    MAP.ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if(MAP.data){ if(MAP.viewMode === "2d") renderFlat(MAP.data); else render2D(MAP.data); }
+  }
+  MAP.fitted = true;
+}
+function mapFallback(){ use2D(); mapResize(); if(MAP.data) renderFlat(MAP.data); }
+function mapRender(){
+  if(MAP.mode === "webgl" && MAP.three) MAP.three.renderer.render(MAP.three.scene, MAP.three.cam);
+  else if(MAP.data){ if(MAP.viewMode === "2d") renderFlat(MAP.data); else render2D(MAP.data); }
+}
+function mapLoop(){
+  requestAnimationFrame(mapLoop);
+  if(MAP.mode === "webgl" && MAP.three){
+    const {cam, target, sph} = MAP.three;
+    cam.position.set(target.x + sph.r*Math.sin(sph.ph)*Math.sin(sph.th),
+                     target.y + sph.r*Math.cos(sph.ph),
+                     target.z + sph.r*Math.sin(sph.ph)*Math.cos(sph.th));
+    cam.lookAt(target);
+    mapRender();
+  }
+}
+function attachMapInput(cv){
+  if(cv._bound) return; cv._bound = true;
+  let drag=false, px=0, py=0, moved=0;
+  cv.addEventListener("pointerdown", e=>{ drag=true; px=e.clientX; py=e.clientY; moved=0;
+    try{ cv.setPointerCapture(e.pointerId); }catch(_){} cv.style.cursor="grabbing"; });
+  cv.addEventListener("pointerup", e=>{ drag=false; cv.style.cursor="grab"; if(moved<5) mapClick(e); });
+  cv.addEventListener("pointerleave", ()=>{ byId("tip").classList.remove("on"); });
+  cv.addEventListener("pointermove", e=>{
+    if(drag){
+      const dx=e.clientX-px, dy=e.clientY-py; px=e.clientX; py=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+      if(MAP.viewMode === "2d"){ FV.cx -= dx/FV.sc; FV.cz -= dy/FV.sc; mapRender(); }
+      else if(MAP.mode === "webgl"){ const sp=MAP.three.sph; sp.th-=dx*.006; sp.ph=clamp(sp.ph-dy*.005,.15,Math.PI/2.15); MAP.three.apply(); }
+      else { MAP.view.th+=dx*.006; MAP.view.el=clamp(MAP.view.el+dy*.004,.15,1.25); mapRender(); }
+    } else mapHover(e);
+  });
+  cv.addEventListener("wheel", e=>{
+    e.preventDefault();
+    const sgn = Math.sign(e.deltaY);
+    if(MAP.viewMode === "2d"){
+      const r = cv.getBoundingClientRect();
+      const mx = e.clientX - r.left, my = e.clientY - r.top;
+      const wx = FV.cx + (mx - r.width/2)/FV.sc, wz = FV.cz + (my - r.height/2)/FV.sc;
+      FV.sc = clamp(FV.sc * (1 - sgn*0.14), 4, 4000);
+      FV.cx = wx - (mx - r.width/2)/FV.sc; FV.cz = wz - (my - r.height/2)/FV.sc;
+      mapRender();
+    } else if(MAP.mode === "webgl"){
+      MAP.three.sph.r = clamp(MAP.three.sph.r*(1+sgn*.09), 4, 90); MAP.three.apply();
+    } else {
+      MAP.view.sc = clamp(MAP.view.sc*(1-sgn*.1), .2, 200); mapRender();
+    }
+  }, {passive:false});
+  cv.style.cursor = "grab";
+}
+function nearestStore(sx,sy){
+  let best=null,bd=1e9;
+  (MAP.items||[]).forEach(it=>{
+    if(it.kind!=="s"||it._sx===undefined) return;
+    const d=Math.hypot(it._sx-sx,it._sy-sy);
+    if(d<bd){bd=d;best=it;}
+  });
+  return bd<52?best:null;
+}
+function mapHover(e){
+  const cv=MAP.canvas, r=cv.getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const tip=byId("tip");
+  if(MAP.mode==="webgl"){
+    const ndc=new THREE.Vector2((mx/r.width)*2-1,-(my/r.height)*2+1);
+    const rc=new THREE.Raycaster();
+    const meshes=(MAP.three.instances||[]).map(i=>i.mesh);
+    const hit=rc.intersectObjects(meshes,false)[0];
+    if(hit&&hit.instanceId!==undefined){
+      const ent=MAP.three.instances.find(i=>i.mesh===hit.object);
+      const p=ent&&ent.rows[hit.instanceId];
+      if(p){ const rr=p.row;
+        tip.innerHTML=`<b>${rr[12]||"آگهی مغازه"}</b><br><span class="muted">${rr[2]||""} · ${fa1(rr[5])} م² · ${money(rr[9])} تومان/م²</span><br><span class="muted">اجاره ${money(rr[8])} · ودیعه ${money(rr[7])}</span>`;
+        tip.style.left=(e.clientX+14)+"px"; tip.style.top=(e.clientY+12)+"px"; tip.classList.add("on");
+        cv.style.cursor="pointer"; return;
+      }
+    }
+    // نشانگر فروشگاه
+    let best=null,bd=1e9;
+    (MAP.data?MAP.data.sts:[]).forEach(p=>{
+      const v=new THREE.Vector3(p.x,0,p.z).project(MAP.three.cam);
+      const sxx=r.left+(v.x*.5+.5)*r.width, syy=r.top+(-v.y*.5+.5)*r.height;
+      const d=Math.hypot(sxx-e.clientX,syy-e.clientY);
+      if(d<bd){bd=d;best=p;}
+    });
+    if(best&&bd<50){ showStoreTip(best.s,e,tip); cv.style.cursor="pointer"; MAP.hover=best.s.id; return; }
+    MAP.hover=null; tip.classList.remove("on"); cv.style.cursor="grab"; return;
+  }
+  // ۲بعدی
+  const st=nearestStore(mx,my);
+  if(st){ showStoreTip(st.s,e,tip); cv.style.cursor="pointer"; MAP.hover=st.s.id; return; }
+  let best=null,bd=1e9;
+  (MAP.items||[]).forEach(it=>{
+    if(it.kind!=="c"||it._sx===undefined) return;
+    const d=Math.hypot(it._sx-mx,it._sy-my);
+    if(d<bd){bd=d;best=it;}
+  });
+  if(best&&bd<(MAP.viewMode==="2d"?8:10)){
+    const rr=best.row;
+    tip.innerHTML=`<b>${rr[12]||"آگهی مغازه"}</b><br><span class="muted">${rr[2]||""} · ${fa1(rr[5])} م² · ${money(rr[9])} تومان/م²</span><br><span class="muted">اجاره ${money(rr[8])} · ودیعه ${money(rr[7])}</span>`;
+    tip.style.left=(e.clientX+14)+"px"; tip.style.top=(e.clientY+12)+"px"; tip.classList.add("on");
+    cv.style.cursor="pointer"; MAP.hoverRow=rr; return;
+  }
+  MAP.hoverRow=null; MAP.hover=null; tip.classList.remove("on"); cv.style.cursor="grab";
+}
+function showStoreTip(s,e,tip){
+  tip.innerHTML=`<b>${s.name}</b><br><span class="muted">${s.verdict.label} · امتیاز ${fa(s.scores.total)}</span><br><span class="muted">اجاره مؤثر ${money(s.deal.eff)} · صدک ${ok(s.market.pct)?fa(s.market.pct*100):"—"}</span>`;
+  tip.style.left=(e.clientX+14)+"px"; tip.style.top=(e.clientY+12)+"px"; tip.classList.add("on");
+}
+function mapClick(e){
+  if(MAP.hover){ openStore(MAP.hover); return; }
+  if(MAP.mode==="2d"&&MAP.hoverRow){ window.open(MAP.hoverRow[11],"blank"); }
+}
+function focusStore(st){
+  MAP.fitted=true;
+  byId("mCity").value=st.city;
+  mapBuild();
+  const p=(MAP.data?MAP.data.sts:[]).find(x=>x.s.id===st.id);
+  if(!p) return;
+  if(MAP.viewMode==="2d"){ FV.cx=p.x; FV.cz=p.z; FV.sc=Math.min(byId("mapWrap").clientWidth,byId("mapWrap").clientHeight)/2.2; renderFlat(MAP.data); }
+  else if(MAP.mode==="webgl"){ MAP.three.target.set(p.x,.8,p.z); MAP.three.sph.r=9; MAP.three.apply(); }
+  else { MAP.view.cx=MAP.canvas.clientWidth/2 - (p.x*Math.cos(MAP.view.th)-p.z*Math.sin(MAP.view.th))*MAP.view.sc;
+         MAP.view.cy=MAP.canvas.clientHeight*0.7;
+         MAP.view.sc=Math.min(MAP.canvas.clientWidth,MAP.canvas.clientHeight)/(MAP.data.extent*0.9);
+         render2D(MAP.data); }
+}
+
+/* ================= expansion ================= */
+function costFor(cityObj, area){
+  // cost150 quantiles → scale with area^gamma ; fallback to psqm
+  if(!cityObj) return null;
+  const k150=cityObj.cost150;
+  const scale=Math.pow(area/150, GAMMA);
+  return {p25:k150[0]*scale, p50:k150[1]*scale, p75:k150[2]*scale};
+}
+function syncNb(){
+  const c=byId("xCity").value;
+  const nb=Object.keys((CITIES[c]||{}).nbh||{}).sort();
+  byId("xNb").innerHTML=`<option value="">— کل شهر —</option>`+nb.map(n=>`<option>${n}</option>`).join("");
+}
+function runExpand(){
+  const city=byId("xCity").value, nb=byId("xNb").value;
+  const area=+byId("xArea").value||150, sales=+byId("xSales").value||3e9, rtsMax=(+byId("xRts").value)/100;
+  const co=CITIES[city];
+  if(!co) return;
+  let psqm, nRef;
+  if(nb && co.nbh[nb]){ const h=co.nbh[nb]; psqm=h.psqm; nRef=h.n; }
+  else { psqm=co.psqm[1]; nRef=co.n; }
+  // اجاره برای متراژ انتخابی: psqm × area × (area/area_med)^(gamma-1) تنظیم‌شده
+  const refArea=co.area_med||100;
+  const mid=psqm*area*Math.pow(area/refArea, GAMMA-1);
+  const lo=co.psqm[0]*area*Math.pow(area/refArea, GAMMA-1);
+  const hi=co.psqm[2]*area*Math.pow(area/refArea, GAMMA-1);
+  const maxRent=rtsMax*sales;
+  const share=(()=>{
+    const rows=LIST.filter(r=>r[1]===city&&(!nb||r[2]===nb)&&r[5]>=area*0.5&&r[5]<=area*2);
+    if(!rows.length) return null;
+    return rows.filter(r=>r[6]<=maxRent).length/rows.length;
+  })();
+  const impliedRts=mid/sales;
+  const verdictTag = mid<=maxRent
+     ? `<span class="tag t-good">اقتصادی است</span>`
+     : mid<=maxRent*1.35 ? `<span class="tag t-warn">مرزی — نیاز به چانه‌زنی</span>`
+     : `<span class="tag t-bad">اجاره‌ی بازار بالاتر از سقف شماست</span>`;
+  byId("xStats").innerHTML=[
+    [`بازه‌ی اجاره‌ی بازار`, `${money(lo)} – ${money(hi)}`],
+    [`میانه‌ی برآوردی`, money(mid)],
+    [`نسبت اجاره به فروش`, pct(impliedRts)],
+    [`سقف اجاره‌ی شما (${fa(rtsMax*100)}٪)`, money(maxRent)],
+    [`سهم آگهی‌های زیر سقف`, share!==null?pct(share):"—"]
+  ].map(([l,v])=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`).join("")
+   + `<div class="stat" style="grid-column:1/-1;display:flex;align-items:center;gap:10px">${verdictTag}
+      <span class="small muted">${mid<=maxRent?"با فروش پیش‌بینی‌شده، اجاره‌ی میانه‌ی این منطقه زیر سقف قابل‌تحمل شماست.":"یا فروش را بالاتر ببرید یا متراژ/محله را تغییر دهید؛ در این محدوده بازار گران‌تر از سقف شماست."}
+      مرجع: ${fa(nRef)} آگهی مغازه${nb?" در محله‌ی "+nb:" در شهر "+city}.</span></div>`;
+
+  // nb table
+  const nbs=Object.entries(co.nbh||{}).map(([k,v])=>{
+    const c=v.psqm*area*Math.pow(area/(co.area_med||100),GAMMA-1);
+    return {name:k,c,n:v.n,rts:c/sales};
+  }).sort((a,b)=>a.c-b.c);
+  byId("xNbTable").innerHTML=`<thead><tr><th>محله</th><th>تعداد آگهی</th><th>اجاره‌ی برآوردی</th><th>اجاره/فروش</th><th>وضعیت</th></tr></thead><tbody>`+
+    nbs.map(r=>`<tr><td>${r.name}</td><td class="num">${fa(r.n)}</td><td class="num">${money(r.c)}</td>
+      <td class="num">${pct(r.rts)}</td>
+      <td>${r.c<=maxRent?'<span class="tag t-good">زیر سقف</span>':r.c<=maxRent*1.35?'<span class="tag t-warn">مرزی</span>':'<span class="tag t-bad">بالای سقف</span>'}</td></tr>`).join("")+`</tbody>`;
+
+  // candidates
+  const floorEff=Math.max(mid*0.30, 1e6);
+  const cand=LIST.filter(r=>r[1]===city&&(!nb||r[2]===nb)&&r[5]>=area*0.55&&r[5]<=area*1.9
+      &&r[6]>=floorEff&&r[6]<=maxRent*1.25)
+    .map(r=>({r,ratio:r[6]/maxRent,val:r[9]/mid*area}))
+    .sort((a,b)=>a.val-b.val)
+    .slice(0,25);
+  byId("xCandNote").textContent=cand.length?`${fa(cand.length)} آگهی با ارزش نسبی بهتر — متراژ ${fa(area*0.55)}–${fa(area*1.9)} م²`:"آگهی مناسبی پیدا نشد";
+  byId("xCand").innerHTML=`<thead><tr><th>عنوان</th><th>محله</th><th>متراژ</th><th>اجاره‌ی مؤثر</th><th>ودیعه</th><th>تومان/م²</th><th>نسبت به سقف شما</th><th></th></tr></thead><tbody>`+
+    cand.map(o=>{const r=o.r;return `<tr>
+      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis">${r[12]||"—"}</td>
+      <td class="small">${r[2]||"—"}</td><td class="num">${fa1(r[5])}</td>
+      <td class="num">${money(r[6])}</td><td class="num">${money(r[7])}</td><td class="num">${fa(r[9])}</td>
+      <td class="num" style="color:${o.ratio<0.8?"var(--good)":"var(--warn)"}">${pct(o.ratio)}</td>
+      <td><a href="${r[11]}" target="_blank" rel="noopener">دیوار ↗</a></td></tr>`}).join("")+`</tbody>`;
+
+  // city comparison
+  const rows=Object.entries(CITIES).map(([cn,c])=>{
+    const cc=c.psqm[1]*area*Math.pow(area/(c.area_med||100),GAMMA-1);
+    const sh=(()=>{const rr=LIST.filter(r=>r[1]===cn&&r[5]>=area*0.5&&r[5]<=area*2);
+      return rr.length?rr.filter(r=>r[6]<=maxRent).length/rr.length:null})();
+    return {cn,cc,sh,n:c.n};
+  }).sort((a,b)=>a.cc-b.cc);
+  byId("xCityTable").innerHTML=`<thead><tr><th>شهر</th><th>تعداد آگهی مغازه</th><th>اجاره‌ی برآوردی</th><th>اجاره/فروش</th><th>سهم زیر سقف</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr data-city="${r.cn}" style="cursor:pointer" class="${r.cn===city?"":""}">
+      <td>${r.cn} ${r.cn===city?'<span class="tag t-mid">انتخاب‌شده</span>':""}</td>
+      <td class="num">${fa(r.n)}</td><td class="num">${money(r.cc)}</td><td class="num">${pct(r.cc/sales)}</td>
+      <td class="num">${r.sh!==null?pct(r.sh):"—"}</td></tr>`).join("")+`</tbody>`;
+  byId("xCityTable").querySelectorAll("tbody tr").forEach(tr=>tr.onclick=()=>{
+    byId("xCity").value=tr.dataset.city; syncNb(); runExpand();
+  });
+}
+
+
+/* ================= trend & inflation ================= */
+function trendSnapshot(){
+  const t = D.trend;
+  if(!t || !t.snapshots || !t.snapshots.length) return null;
+  return t.snapshots[t.snapshots.length-1];
+}
+function renderTrend(){
+  const t = D.trend; const snap = trendSnapshot();
+  if(!t || !snap){ byId("tStats").innerHTML='<div class="card"><div class="bd">داده‌ی روند موجود نیست.</div></div>'; return; }
+  const md = snap.median || {};
+  const cityRows = snap.by_city || [];
+  const teh = cityRows.find(r=>r.city==="تهران") || cityRows[0] || {};
+  const yields = cityRows.filter(r=>ok(r.gross_yield)).map(r=>r.gross_yield).sort((a,b)=>a-b);
+  const medYield = yields.length?yields[Math.floor(yields.length/2)]:null;
+  const myStores = STORES.map(s=>({n:s.name,c:s.city,psqm:s.psqm}));
+  const medStorePsqm = myStores.length?[...myStores].sort((a,b)=>a.psqm-b.psqm)[Math.floor(myStores.length/2)].psqm:null;
+  byId("tStats").innerHTML = [
+    ["میانه‌ی اجاره به ازای هر متر (ماهانه)", money(md.rent_psqm)],
+    ["میانه‌ی ودیعه به ازای هر متر", money(md.dep_psqm)],
+    ["میانه‌ی قیمت فروش هر متر", money(md.sale_psqm)],
+    ["بازده ناخالص سالانه (میانه شهرها)", medYield===null?"—":pct(medYield)],
+    ["اجاره‌ی متری فروشگاه‌های شما (میانه)", medStorePsqm?money(medStorePsqm):"—"]
+  ].map(([k,v])=>`<div class="card"><div class="bd"><div class="small muted">${k}</div><div style="font-size:20px;font-weight:800;margin-top:4px">${v}</div></div></div>`).join("");
+
+  // تورم
+  const pts = (t.inflation&&t.inflation.points)||[];
+  byId("tInfl").innerHTML = `<thead><tr><th>دوره</th><th>اجاره (نقطه‌به‌نقطه)</th><th>اجاره (سالانه)</th><th>تورم عمومی</th></tr></thead><tbody>`+
+    pts.map(p=>`<tr><td>${p.period}</td><td class="num">${p.rent_yoy?fa1(p.rent_yoy)+"٪":"—"}</td>
+      <td class="num">${p.rent_annual?fa1(p.rent_annual)+"٪":"—"}</td>
+      <td class="num">${p.cpi_yoy?fa1(p.cpi_yoy)+"٪":"—"}</td></tr>`).join("")+`</tbody>`;
+
+  // شهرها برای فیلتر
+  const cities = ["همه شهرها", ...cityRows.map(r=>r.city)];
+  byId("tCity").innerHTML = cities.map(c=>`<option>${c}</option>`).join("");
+  byId("tCity").value = "تهران";
+  byId("tSearch").value = "";
+  byId("tCity").onchange = paintTrendTable;
+  byId("tSearch").oninput = paintTrendTable;
+  paintTrendTable();
+
+  // مفروضات + پیش‌بینی
+  const a = t.assumptions || {};
+  byId("tAssum").innerHTML = `تورم اجاره‌ی رسمی (نقطه‌به‌نقطه): <b>${fa1(a.rent_yoy)}٪</b> · تورم عمومی: <b>${fa1(a.cpi_yoy)}٪</b><br>${a.note||""}`;
+  byId("tHorizon").onchange = paintTrendProj;
+  paintTrendProj();
+
+  // پوشش
+  byId("tCover").innerHTML = `
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+      <div class="stat"><b>${fa(snap.n)}</b><span>آگهی در عکس فوری آخر</span></div>
+      <div class="stat"><b>${fa(t.covered_days||0)} روز</b><span>بازه‌ی واقعی داده</span></div>
+      <div class="stat"><b>${(t.months||[]).length}</b><span>عکس فوری ثبت‌شده</span></div>
+      <div class="stat"><b style="color:${t.growth_available?"var(--good)":"var(--warn)"}">${t.growth_available?"فعال":"نیاز به اسکرپ بعدی"}</b><span>رشد اندازه‌گیری‌شده</span></div>
+    </div>
+    <p class="small muted" style="margin:10px 0 0">رشد «اندازه‌گیری‌شده» وقتی فعال می‌شود که داده‌ی اسکرپ با فاصله‌ی حداقل سه هفته دوباره اضافه شود؛ آن‌وقت ستون تغییر واقعی هر محله خودکار پر می‌شود. تا آن موقع، ستون رشد برآوردی با تورم رسمی اجاره محاسبه می‌شود و به‌عنوان «برآورد» برچسب خورده است.</p>`;
+}
+function paintTrendTable(){
+  const snap = trendSnapshot(); if(!snap) return;
+  const city = byId("tCity").value, q = (byId("tSearch").value||"").trim();
+  const rYoy = ((D.trend.assumptions||{}).rent_yoy||0)/100;
+  let rows = (snap.by_nb||[]).filter(r=> (city==="همه شهرها"||r.city===city) && (!q||r.nb.includes(q)));
+  rows.sort((a,b)=>(b.n||0)-(a.n||0));
+  rows = rows.slice(0,120);
+  byId("tTable").innerHTML = `<thead><tr><th>محله</th><th>شهر</th><th>آگهی</th><th>اجاره/م²</th><th>ودیعه/م²</th><th>فروش/م²</th><th>بازده ناخالص</th><th>اجاره ۱۲ ماه قبل (برآورد)</th></tr></thead><tbody>`+
+    rows.map(r=>{
+      const back = r.rent_psqm? r.rent_psqm/(1+rYoy) : null;
+      return `<tr>
+        <td><b>${r.nb}</b></td><td class="small muted">${r.city}</td>
+        <td class="num">${fa(r.n)}</td>
+        <td class="num">${money(r.rent_psqm)}</td>
+        <td class="num">${money(r.dep_psqm)}</td>
+        <td class="num">${money(r.sale_psqm)}</td>
+        <td class="num">${ok(r.gross_yield)?pct(r.gross_yield):"—"}</td>
+        <td class="num small muted">${back?money(back):"—"}</td></tr>`;
+    }).join("")+`</tbody>`;
+}
+function paintTrendProj(){
+  const snap = trendSnapshot(); if(!snap) return;
+  const h = +byId("tHorizon").value;
+  const a = D.trend.assumptions||{};
+  const rY = (a.rent_yoy||0)/100, cY = (a.cpi_yoy||0)/100;
+  const rows = (snap.by_city||[]).slice(0,14).filter(r=>r.rent_psqm);
+  const f = (v, k)=>{ const nom=v*Math.pow(1+rY,k); const real=v*Math.pow((1+rY)/(1+cY),k); return {nom,real}; };
+  byId("tProj").innerHTML = `<table><thead><tr><th>شهر</th><th>اجاره/م² امروز</th><th>${fa(h)} ماه بعد (اسمی)</th><th>به قیمت امروز (واقعی)</th></tr></thead><tbody>`+
+    rows.map(r=>{ const x=f(r.rent_psqm,h/12); return `<tr><td><b>${r.city}</b></td>
+      <td class="num">${money(r.rent_psqm)}</td>
+      <td class="num">${money(x.nom)}</td>
+      <td class="num" style="color:${x.real<r.rent_psqm?"var(--bad)":"var(--good)"}">${money(x.real)}</td></tr>`; }).join("")+`</tbody>`;
+}
+
+
+/* ---------------- units + quality tables ---------------- */
+function renderUnits(){
+  const u = D.units||{}; const q = D.quality||{};
+  byId("uVerdict").innerHTML = `واحد رسمی پروژه: <b style="color:var(--good)">${u.verdict||"تومان"}</b>`;
+  const rowsChecks = (u.checks||[]).map(c=>`<tr><td>${c.k}</td><td class="num">${c.v}</td></tr>`).join("");
+  const ev = (u.evidence||[]).map(c=>`<tr><td>${c.k}</td><td class="num small">${c.v}</td></tr>`).join("");
+  byId("mUnits").innerHTML = `
+    <table style="margin-bottom:10px"><thead><tr><th>جزء</th><th>واحد</th></tr></thead><tbody>${rowsChecks}</tbody></table>
+    <div class="small muted" style="margin:2px 0 8px">شواهد عددی:</div>
+    <table style="margin-bottom:8px"><tbody>${ev}</tbody></table>
+    <div class="small muted" style="line-height:1.9">${u.rial_quoted_share||""}<br>${u.note||""}</div>`;
+  const meta = (q.meta||{}), emp = (q.empirical||{});
+  const lab = (sec,k)=> (QLBL[sec]&&QLBL[sec][k])||k;
+  const rows = [];
+  Object.entries(meta.floor||{}).forEach(([k,o])=>rows.push(["طبقه", lab("floor",k), o.v, o.src==="emp"?"تجربی":o.src==="ref"?"مرجع":"عرف بازار", o.note]));
+  Object.entries(meta.position||{}).forEach(([k,o])=>rows.push(["موقعیت", lab("position",k), o.v, o.src==="emp"?"تجربی":o.src==="ref"?"مرجع":"عرف بازار", o.note]));
+  rows.push(["نبش","نبش / دو بر", meta.corner.v, "تجربی", meta.corner.note]);
+  Object.entries(meta.frontage||{}).forEach(([k,o])=>rows.push(["ویترین", lab("frontage",k), o.v, "عرف بازار", o.note]));
+  Object.entries(meta.visibility||{}).forEach(([k,o])=>rows.push(["دید", lab("visibility",k), o.v, "عرف بازار", o.note]));
+  byId("mQual").innerHTML = `<thead><tr><th>مؤلفه</th><th>حالت</th><th>ضریب</th><th>منبع</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td class="small muted">${r[0]}</td><td>${r[1]}</td><td class="num"><b>${fa1(r[2]*100)}٪</b></td>
+      <td class="small ${r[3]==="تجربی"?"":"muted"}">${r[3]}</td></tr>`).join("")+`</tbody>`;
+}
+
+/* ================= method tab ================= */
+function renderMethod(){
+  const v=META.val||{};
+  byId("mMethod").innerHTML=`
+    <p style="margin:0 0 10px">هدف: پاسخ به دو سؤال — «اجاره‌ی فعلی من چقدر منطقی است؟» و «در این شهر/محله با این فروش، چه اجاره‌ای منطقی است؟»</p>
+    <h4 style="font-size:12.5px;margin:12px 0 6px">۱) هم‌مقیاس‌سازی همه‌ی آگهی‌ها</h4>
+    <ul style="margin:0;padding-inline-start:18px;font-size:12.5px;color:var(--muted)">
+      <li>هزینه‌ی مؤثر ماهانه = اجاره + ودیعه × <code>${fa1(META.rahn_rate*100)}٪</code> (هزینه‌ی فرصت ودیعه)</li>
+      <li>تبدیل به معادل همکف با ضریب طبقه (زیرزمین ۰.۵۵ … طبقه ۴+ ۰.۴۸)</li>
+      <li>هم‌مقیاس‌سازی متراژ: <code>هزینه = k × متراژ^${fa1(GAMMA)}</code> — کشش γ از رگرسیون هابر روی خود بازار برآورد شده (نه دستی)</li>
+      <li>حذف آلودگی: آگهی‌های اداری/مطب، انبار/کارخانه، مسکونی و مقادیر تایپی از مجموعه‌ی مشابه‌ها کنار گذاشته می‌شوند</li>
+    </ul>
+    <h4 style="font-size:12.5px;margin:12px 0 6px">۲) ارزش‌گذاری سه‌لایه</h4>
+    <ul style="margin:0;padding-inline-start:18px;font-size:12.5px;color:var(--muted)">
+      <li><b>لایه‌ی محلی:</b> میانه‌ی وزنی آگهی‌های اطراف با کرنل فاصله (با پهنای تطبیقی) و کرنل تشابه متراژ — مقاوم به داده‌ی پرت</li>
+      <li><b>لایه‌ی شاخص لوکیشن:</b> از ${fa(META.n_sale)} آگهی <i>فروش</i> استفاده می‌کنیم؛ قیمت فروش هر متر مربع در سطح محله، پراکسی کیفیت لوکیشن است. مدل <code>log k = α(شهر) + β·ΔLQ + w·r(محلی)</code> با β برآوردی ${fa1(META.beta_lq)}</li>
+      <li><b>لایه‌ی شهر/محله:</b> پیشین تجربی-بیزی با انقباض — جاهایی که آگهی کم است، تخمین به سمت شهر جمع می‌شود و از فروپاشی جلوگیری می‌شود</li>
+    </ul>
+    <h4 style="font-size:12.5px;margin:12px 0 6px">۳) امتیازدهی</h4>
+    <ul style="margin:0;padding-inline-start:18px;font-size:12.5px;color:var(--muted)">
+      <li><b>ارزش اجاره:</b> فاصله‌ی اجاره‌ی شما از میانه و از سقف باند طبیعی بازار (چارک ۷۵) + صدک جایگاه</li>
+      <li><b>نسبت اجاره به فروش:</b> معیار طلایی خرده‌فروشی؛ ۶۰٪ وزن بر بنچمارک مطلق (۲–۶٪ سالم)، ۴۰٪ نسبت به میانه‌ی پرتفوی خودتان (${pct(META.internal_median_rts)})</li>
+      <li><b>ودیعه:</b> هزینه‌ی نقدینگی ودیعه نسبت به عرف بازار (${fa1(META.market_dep_months)} ماه)</li>
+      <li><b>ریسک قرارداد:</b> فاصله‌ی تمدید + سقف افزایش سالانه</li>
+      <li><b>کیفیت بازار لوکیشن:</b> رقابت اطراف (سوپرمارکت/میوه)، عمق داده و شاخص کیفیت لوکیشن</li>
+      <li>در قراردادهای درصدی/ترکیبی، وزن «نسبت اجاره به فروش» بیشتر می‌شود چون اجاره‌ی ثابت بازار مرجع درستی نیست</li>
+    </ul>
+    <div class="hr"></div>
+    <div class="small muted">وزن‌های فعلی: ${Object.entries(META.weights).map(([k,w])=>`${SUB_LABELS[k==="deposit"?"dep":k]||k} ${fa(w*100)}٪`).join(" · ")}</div>`;
+  byId("mVal").innerHTML=`
+    <div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">
+      <div class="stat"><b>${v.mdape?pct(v.mdape):"—"}</b><span>میانه‌ی خطای مطلق مدل</span></div>
+      <div class="stat"><b>${v.baseline?pct(v.baseline):"—"}</b><span>مبنای ساده (میانه‌ی شهر)</span></div>
+      <div class="stat"><b>${v.within35?pct(v.within35):"—"}</b><span>پیش‌بینی داخل ±۳۵٪</span></div>
+      <div class="stat"><b>${fa(v.n||0)}</b><span>آگهی هولد-اوت</span></div>
+    </div>
+    <p class="small muted" style="margin:10px 0 0">روش: هر آگهی از مجموعه‌ی مشابه‌ها حذف و قیمت واقعی‌اش بازتولید می‌شود. خطا در سطح <i>هر آگهی</i> اندازه‌گیری شده؛ آگهی‌های اجاره در ایران پراکندگی ذاتی زیادی دارند (نه دو مغازه شبیه هم‌اند)، بنابراین خطای ۴۰–۵۰٪ در سطح آگهی طبیعی است و برای قضاوت در سطح «بازار محله» خطا بسیار کمتر است.</p>`;
+  // coverage
+  const cov=Object.entries(CITIES).sort((a,b)=>b[1].n-a[1].n);
+  byId("mCover").innerHTML=`<thead><tr><th>شهر</th><th>آگهی مغازه</th><th>کل آگهی</th><th>کیفیت پوشش</th></tr></thead><tbody>`+
+    cov.map(([c,o])=>`<tr><td>${c}</td><td class="num">${fa(o.n)}</td><td class="num">${fa(o.n_all)}</td>
+      <td>${o.n>=120?'<span class="tag t-good">خوب</span>':o.n>=50?'<span class="tag t-mid">متوسط</span>':'<span class="tag t-warn">کم — نیاز به اسکرپ بیشتر</span>'}</td></tr>`).join("")+`</tbody>`;
+  byId("mFlags").innerHTML=`<thead><tr><th>فروشگاه</th><th>شهر</th><th>اعتماد</th><th>هشدارها</th></tr></thead><tbody>`+
+    STORES.map(s=>`<tr><td><b>${s.name}</b></td><td>${s.city}</td>
+      <td class="num">${fa(s.scores.conf)}٪</td>
+      <td style="white-space:normal;max-width:640px" class="small">${s.flags.length?s.flags.join(" · "):'<span class="dim">—</span>'}</td></tr>`).join("")+`</tbody>`;
+}
+
+/* ================= tabs / init ================= */
+function setTab(name){
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.classList.toggle("on",b.dataset.tab===name));
+  document.querySelectorAll("main > section").forEach(s=>s.hidden=(s.id!=="tab-"+name));
+  if(name==="map"){ setTimeout(()=>{ mapResize(); mapBuild(); },60); }
+  if(name==="store"){ renderDetail(); }
+  if(name==="trend"){ renderTrend(); }
+}
+function openStore(id){ currentStore=id; renderList(); setTab("store"); }
+function initSelects(){
+  const cities=[...Object.keys(CITIES)].sort();
+  byId("mCity").innerHTML=cities.map(c=>`<option>${c}</option>`).join("");
+  byId("mCity").value="تهران";
+  byId("xCity").innerHTML=cities.map(c=>`<option>${c}</option>`).join("");
+  byId("xCity").value="تهران";
+}
+window.addEventListener("DOMContentLoaded",()=>{
+  renderKpis(); renderOverview(); renderList(); renderDetail(); initSelects(); renderMethod();
+  try{ renderTrend(); }catch(e){ console.warn("trend", e); }
+  try{ renderUnits(); }catch(e){ console.warn("units", e); }
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+  byId("themeBtn").onclick=()=>{
+    const r=document.documentElement;
+    r.dataset.theme = r.dataset.theme==="dark"?"light":"dark";
+    if(MAP.mode==="webgl"&&MAP.three){ MAP.three.scene.background=new THREE.Color(r.dataset.theme==="dark"?0x05080c:0xdfe6ee); }
+  };
+  byId("csvBtn").onclick=()=>{
+    const head=["نام","شهر","محله","متراژ","ساختار","اجاره مؤثر","درصد فروش","فروش ماهانه","نسبت اجاره به فروش","برآورد بازار","صدک","اختلاف با میانه","امتیاز","گرید","اعتماد","وضعیت","هشدارها"];
+    const rows=STORES.map(s=>[s.name,s.city,s.nb,s.area,s.deal.structure,s.deal.eff,
+      s.deal.pct??"",s.deal.sales??"",s.rts??"",s.market.fair??"",s.market.pct??"",
+      s.market.gap_med??"",s.scores.total,s.scores.grade,s.scores.conf,s.verdict.label,(s.flags||[]).join(" | ")]);
+    const csv="\ufeff"+[head,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+    a.download="divar_store_analysis.csv"; a.click();
+  };
+  byId("mCity").onchange=()=>{MAP.fitted=false; FV.fitted=false; mapBuild();};
+  byId("mMode").onchange=()=>{MAP.fitted=false; FV.fitted=false; mapBuild();};
+  byId("mHeight").oninput=()=>{ mapBuild(); };
+  document.querySelectorAll("#mView button").forEach(b=>b.onclick=()=>mapSetView(b.dataset.v));
+  window.addEventListener("resize",()=>{ mapResize(); });
+  mapSetView("3d", true);
+  mapLoop();
+  byId("xCity").onchange=()=>{syncNb(); runExpand();};
+  byId("xNb").onchange=runExpand;
+  byId("xArea").oninput=runExpand; byId("xSales").oninput=runExpand;
+  byId("xRts").oninput=()=>{byId("xRtsLbl").textContent=fa(+byId("xRts").value)+"٪"; runExpand();};
+  byId("xGo").onclick=runExpand;
+  runExpand();
+  // mobile menu safety
+  currentStore=currentStore||[...STORES].sort((a,b)=>b.scores.total-a.scores.total)[0].id;
+});
+</script>
+</body>
+</html>
