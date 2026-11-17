@@ -1,0 +1,5 @@
+# Live Divar collector + auto-refreshing map (divar_live.py, live_map_server.py)
+# Pinned: divar_live.py uses divar-mcp internals (map viewport, ad-page parser).
+divar-mcp==0.3.1
+httpx>=0.27
+# Optional, only if Divar shows a bot-check page: pip install "divar-mcp[browser]==0.3.1" && patchright install chromium
