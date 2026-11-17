@@ -1,0 +1,5 @@
+# live Divar collector output (regenerated automatically)
+live_data/
+live_data_demo/
+__pycache__/
+*.pyc
